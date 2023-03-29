@@ -1,22 +1,49 @@
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
-import {Button, Checkbox, Col, Form, Input} from 'antd';
+import {Button, Checkbox, Col, Form, Input, message} from 'antd';
 import './index.css'
-import {Link} from "react-router-dom";
+import {Link, Navigate} from "react-router-dom";
 import axios from "axios";
 import {ROOT_URL} from "../../../utils/constant";
-import {loader} from "../../../services/session";
+import React, {useState} from "react";
+import Cookies from 'js-cookie';
 const Login = () => {
+    const [success,setSuccess] = useState(false)
+    const [messageApi, contextHolder] = message.useMessage();
+    const [handleClick, setHandleClick] = useState(()=>{});
+    const msgSuccess = () => {
+        messageApi.open({
+            type: 'success',
+            content: '登录成功',
+        });
+    };
+
+    const errorWrong = () => {
+        messageApi.open({
+            type: 'error',
+            content: '登录失败，用户名或密码不正确',
+        });
+    };
+    const errorNull = () => {
+        messageApi.open({
+            type: 'error',
+            content: '登录失败，网络出错',
+        });
+    };
     const onFinish = (values) => {
-        console.log('Received values of form: ', values);
-        // const loginData = {
-        //     username: values.username,
-        //     password: values.password,
-        // }
         const url = `${ROOT_URL}/user/login`;
         axios.post(url,values,{withCredentials:true}).then(response => {
-            console.log(response);
+            if (response.data.result){
+                // if (values.remember){
+                //     Cookies.set('auth', response.data.token, { expires: 7 });
+                // }
+                setHandleClick(msgSuccess);
+                setTimeout(()=>{setSuccess(true)},1000);
+            }else {
+                setHandleClick(errorWrong)
+            }
         }).catch(error => {
             console.log(error);
+            setHandleClick(errorNull)
         })
     };
     return (
@@ -66,26 +93,21 @@ const Login = () => {
                 </Form.Item>
                 <Form.Item>
                     <Form.Item name="remember" valuePropName="checked" noStyle>
-                        <Checkbox>Remember me</Checkbox>
+                        <Checkbox>7天免密登录</Checkbox>
                     </Form.Item>
 
                     <Link className="login-form-forgot" to={'/'}>
-                        Forgot password
+                        忘记密码
                     </Link>
                 </Form.Item>
 
                 <Form.Item>
-                    <Button type="primary" htmlType="submit" className="login-form-button">
-                        Log in
+                    <Button type="primary" htmlType="submit" className="login-form-button" onClick={handleClick}>
+                        登录
                     </Button>
                 </Form.Item>
-                <Form.Item>
-                    <Link to={`/user/register`}>
-                        <Button>
-                            注册
-                        </Button>
-                    </Link>
-                </Form.Item>
+                {contextHolder}
+                {success && <Navigate to="/" />}
             </Form>
         </Col>
     );

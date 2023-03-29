@@ -21,7 +21,7 @@ const User = () => {
                 <Row  align={`middle`} style={{height:'100%'}} justify={`center`}>
                     <Col xs={{ span: 0}} lg={{ span: 7}} style={{height:'100%'}}>
                         <Spin size={"large"} spinning={loading}>
-                            <Image src={bg} fallback={imageFallback} style={{height:"80vh"}}/>
+                            <Image src={bg} fallback={imageFallback} style={{height:"82vh"}}/>
                         </Spin>
                     </Col>
                     <Col xs={{ span: 24}} lg={{ span: 12}}>

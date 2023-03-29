@@ -9,7 +9,7 @@ export const MyHeader = ({menu})=>{
     const {Header} = Layout;
     return(
             <Header className={'header'}>
-                <Row align={`middle`} className={`vh-10`}>
+                <Row align={`middle`} style={{height:"8vh"}}>
                     <Col span={logoWidth} style={{height:"80%"}}>
                         <Link to={`/`}>
                             <img className={`logo`} src={logo} alt={`logo`}/>
