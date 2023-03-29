@@ -9,13 +9,13 @@ export const MyHeader = ({menu})=>{
     const {Header} = Layout;
     return(
             <Header className={'header'}>
-                <Row>
-                    <Col span={logoWidth} className={'h-100'}>
+                <Row align={`middle`} className={`vh-10`}>
+                    <Col span={logoWidth} style={{height:"80%"}}>
                         <Link to={`/`}>
                             <img className={`logo`} src={logo} alt={`logo`}/>
                         </Link>
                     </Col>
-                    <Col span={6} offset={16} className={'h-100 vertical'}>
+                    <Col span={6} offset={16}>
                         {menu}
                     </Col>
                 </Row>

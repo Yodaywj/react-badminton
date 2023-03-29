@@ -1,7 +1,6 @@
 import React, {useState} from 'react';
 import {Layout, Menu} from 'antd';
 import '../../styles/layout.css'
-import './index.css'
 import {MyHeader} from "../../layout/header";
 import {MyFooter} from "../../layout/footer";
 import {CaretDownOutlined} from "@ant-design/icons";

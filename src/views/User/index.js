@@ -14,11 +14,11 @@ const User = () => {
     return (
         <Layout>
             <MyHeader/>
-            <Content className={`content-minHeight`}>
-                <Row  align={`middle`} style={{height:'100%'}}>
-                    <Col xs={{ span: 0}} lg={{ span: 8, offset:4}} style={{height:'100%'}}>
+            <Content className={`vh-80-w-100`}>
+                <Row  align={`middle`} style={{height:'100%'}} justify={`center`}>
+                    <Col xs={{ span: 0}} lg={{ span: 7}} style={{height:'100%'}}>
                         <Spin spinning={loading}>
-                            <Image src={bg} fallback={imageFallback} height={1050}/>
+                            <Image src={bg} fallback={imageFallback} style={{height:"80vh"}}/>
                         </Spin>
                     </Col>
                     <Col xs={{ span: 24}} lg={{ span: 12}}>
@@ -35,7 +35,7 @@ const User = () => {
                     </Col>
                 </Row>
             </Content>
-            <MyFooter className={`footer`}/>
+            <MyFooter/>
         </Layout>
     )
 };
