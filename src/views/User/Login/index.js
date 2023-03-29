@@ -66,7 +66,7 @@ const Login = () => {
                         },
                         {
                             message: '用户名格式不正确',
-                            // pattern: /^[a-zA-Z]\w{7,14}$/,
+                            pattern: /^[a-zA-Z]\w{7,14}$/,
                         },
                     ]}
                 >
@@ -80,7 +80,7 @@ const Login = () => {
                             message: 'Please input your Password!',
                         },
                         {
-                          // pattern: /^(?=.*[a-zA-Z])(?=.*\d)[a-zA-Z\d]{8,15}$/,
+                          pattern: /^(?=.*[a-zA-Z])(?=.*\d)[a-zA-Z\d]{8,15}$/,
                           message:'密码格式不正确',
                         },
                     ]}

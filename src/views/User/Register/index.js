@@ -204,9 +204,9 @@ const Register = () => {
                     tooltip="What do you want others to call you?"
                     rules={[
                         {
-                            message: '昵称仅允许由6-12位数字、字母下划线组成',
+                            message: '昵称仅允许由3-12位数字、字母下划线组成',
                             whitespace: true,
-                            pattern: /^\w{6,12}$/,
+                            pattern: /^\w{3,12}$/,
                         },
                     ]}
                 >

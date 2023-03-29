@@ -11,3 +11,14 @@
 .content-minHeight{
     min-height: 1050px;
 }
+.v-100{
+    height: 100vh;
+    width: 100vw;
+}
+.vh-80-w-100{
+    height: 82vh;
+    width: 100%;
+}
+.vh-10{
+    height: 10vh;
+}
