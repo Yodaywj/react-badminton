@@ -9,20 +9,23 @@ import NavUser from "./components/navigation";
 
 const User = () => {
     const {Content} = Layout;
-    const [loading,setLoading] = useState(false);
+    const [loading,setLoading] = useState(true);
+    useEffect(() => {
+        setLoading(false);
+    }, []);
 
     return (
-        <Layout>
+        <div>
             <MyHeader/>
             <Content className={`vh-80-w-100`}>
                 <Row  align={`middle`} style={{height:'100%'}} justify={`center`}>
                     <Col xs={{ span: 0}} lg={{ span: 7}} style={{height:'100%'}}>
-                        <Spin spinning={loading}>
+                        <Spin size={"large"} spinning={loading}>
                             <Image src={bg} fallback={imageFallback} style={{height:"80vh"}}/>
                         </Spin>
                     </Col>
                     <Col xs={{ span: 24}} lg={{ span: 12}}>
-                        <Space direction="vertical" size="large" style={{ display: 'flex'}}>
+                        <Space direction="vertical" size="middle" style={{ display: 'flex'}}>
                             <Row justify={'center'}>
                                 <Col span={7}>
                                     <NavUser/>
@@ -35,8 +38,12 @@ const User = () => {
                     </Col>
                 </Row>
             </Content>
-            <MyFooter/>
-        </Layout>
+            <Row>
+                <Col xs={{span:0}} lg={{ span: 24}}>
+                    <MyFooter/>
+                </Col>
+            </Row>
+        </div>
     )
 };
 

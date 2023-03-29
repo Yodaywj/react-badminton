@@ -1,15 +1,12 @@
 import axios from 'axios';
 
-const registerService = (url,data,message)=> {
-    axios.post(url, data)
+export const registerService = (url,data) => {
+    return axios.get(url,data)
         .then(response => {
-            console.log(response.data);
-            console.log(response)
+            return response.data;
         })
         .catch(error => {
-            console.log(error);
-            message = error;
+            console.error(error);
+            return null;
         });
-}
-
-export default registerService;
+};

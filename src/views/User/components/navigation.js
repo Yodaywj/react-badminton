@@ -1,7 +1,7 @@
-import {AppstoreOutlined, CaretLeftOutlined, IdcardOutlined, MailOutlined, SettingOutlined} from '@ant-design/icons';
+import {CaretLeftOutlined, IdcardOutlined, MailOutlined} from '@ant-design/icons';
 import { Menu } from 'antd';
 import {useEffect, useState} from 'react';
-import {Navigate, useNavigate} from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 const items = [
     {
         label: '登录',
@@ -33,7 +33,7 @@ const NavUser = () => {
     };
     return (
         <>
-            <Menu onClick={onClick} selectedKeys={[current]} mode="horizontal" items={items}  style={{borderRadius:'15px'}}/>
+            <Menu onClick={onClick} selectedKeys={[current]} mode="horizontal" items={items}  style={{borderRadius:'15px',background:'#f5f5f5'}}/>
         </>
     );
 };
