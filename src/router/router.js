@@ -6,7 +6,7 @@ import Test from "../views/Test";
 import User from "../views/User";
 import Success from "../views/User/components/success";
 import Login from "../views/User/Login";
-import {loader as homeLoader} from "../services/session";
+import {loader as userDataLoader} from "../services/session";
 
 
 const router = createBrowserRouter([
@@ -14,16 +14,13 @@ const router = createBrowserRouter([
         path: "/",
         element: <Home />,
         errorElement: <ErrorPage />,
-        loader: homeLoader,
+        loader: userDataLoader,
     },
     {
         path: "/user",
         element: <User/>,
+        loader: userDataLoader,
         children:[
-            {
-                index:false,
-                element:<User/>,
-            },
             {
                 path:"register",
                 element: <Register/>,

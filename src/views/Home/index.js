@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {Button, Col, Image, Layout, Row, Typography} from 'antd';
+import {Button, Card, Col, Image, Layout, Row, Typography} from 'antd';
 import '../../styles/layout.css'
 import {MyHeader} from "../../layout/header";
 import {MyFooter} from "../../layout/footer";
@@ -7,25 +7,18 @@ import {Link, useLoaderData} from "react-router-dom";
 import {logoutService} from "../../services/logoutService";
 import {ROOT_URL} from "../../utils/constant";
 import shuttlecock from "../../assets/shuttlecock-blue.svg"
+import manage from "../../assets/badminton-management.svg"
 import './index.css'
-import Paragraph from "antd/es/skeleton/Paragraph";
 
 const {Content} = Layout;
 
 const Home = () => {
     const {user} = useLoaderData();
-    const [logout, setLogout] = useState(user.username !== '未登录');
-    const [usernameInfo, setUsernameInfo] = useState(user.username)
-    const { Title,Text} = Typography;
-    const handleLogout = ()=> {
-        logoutService(`${ROOT_URL}/user/logout`);
-        setLogout(false);
-        setUsernameInfo("未登录")
-    }
+    const {Title, Text} = Typography;
 
     return (
-        <Layout className={`v-100`}>
-            <MyHeader/>
+        <Layout>
+            <MyHeader user = {user}/>
             <Content className={`content-home`}>
                 <Row className={`content-home-intro`}>
                     <Col span={24}>
@@ -38,20 +31,33 @@ const Home = () => {
                             </Title>
                         </Row>
                         <Row justify={"center"}>
-                            <Text>
+                            <Text strong={false} className={`text-secondary text-size-4`}>
                                 用于羽毛球馆数字化管理的智慧门店
                             </Text>
                         </Row>
                     </Col>
                 </Row>
-                <Row>
-                    <Link to={'/user'}>
-                        {usernameInfo}
-                    </Link>
-                    {logout && <Button onClick={handleLogout}>退出登录</Button>}
+                <Row className={`content-home-second`}>
+                    <Card
+                        title="Card title"
+                        bordered={false}
+                        style={{
+                            width: 300,
+                        }}
+                    >
+                        <p>Card content</p>
+                        <p>Card content</p>
+                        <p>Card content</p>
+                    </Card>
+                </Row>
+                <Row justify={"center"} className={`content-home-third`}>
+                    <Image src={manage} preview={false}/>
+                </Row>
+                <Row justify={"center"}>
+
                 </Row>
             </Content>
-            <MyFooter className={`footer-bottom`}/>
+            <MyFooter/>
         </Layout>
     );
 };

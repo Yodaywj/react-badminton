@@ -4,10 +4,11 @@ import {MyFooter} from "../../layout/footer";
 import bg from '../../assets/badminton-court-rg.png'
 import {imageFallback} from "../../utils/constant";
 import {useEffect, useRef, useState} from "react";
-import {Outlet} from "react-router-dom";
+import {Outlet, useLoaderData} from "react-router-dom";
 import NavUser from "./components/navigation";
 
 const User = () => {
+    const {user} = useLoaderData()
     const {Content} = Layout;
     const [loading,setLoading] = useState(true);
     useEffect(() => {
@@ -16,12 +17,12 @@ const User = () => {
 
     return (
         <div>
-            <MyHeader/>
+            <MyHeader user={user}/>
             <Content className={`vh-80-w-100`}>
                 <Row  align={`middle`} style={{height:'100%'}} justify={`center`}>
                     <Col xs={{ span: 0}} lg={{ span: 7}} style={{height:'100%'}}>
                         <Spin size={"large"} spinning={loading}>
-                            <Image src={bg} fallback={imageFallback} style={{height:"82vh"}}/>
+                            <Image src={bg} fallback={imageFallback} style={{height:"82vh"}} preview={false}/>
                         </Spin>
                     </Col>
                     <Col xs={{ span: 24}} lg={{ span: 12}}>

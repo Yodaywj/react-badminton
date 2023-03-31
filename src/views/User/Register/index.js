@@ -64,11 +64,7 @@ const Register = () => {
         drawCaptcha(200, 50, code, canvasRef)
     }, [code]);
     const [form] = Form.useForm();
-    const handleRegister = () => {
-        handleClick();
-        form.resetFields();
-    }
-    //Transfer the information of form
+//Transfer the information of form
     const onFinish = (values) => {
         if (values.captcha.toUpperCase() === code.toUpperCase()) {
             const newUser = {
@@ -204,9 +200,9 @@ const Register = () => {
                     tooltip="What do you want others to call you?"
                     rules={[
                         {
-                            message: '昵称仅允许由3-12位数字、字母下划线组成',
+                            message: '昵称仅允许由3-12位汉字、数字、字母和下划线组成',
                             whitespace: true,
-                            pattern: /^\w{3,12}$/,
+                            pattern: /^[\u4e00-\u9fa5a-zA-Z0-9_]{3,12}$/,
                         },
                     ]}
                 >
