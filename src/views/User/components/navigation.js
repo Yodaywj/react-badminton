@@ -23,20 +23,28 @@ const items = [
     },
 ];
 const NavUser = () => {
-    const userNav = useSelector(state => state.userNav.value)
-    const dispatch = useDispatch()
+    const [current, setCurrent] = useState()
     const navigate = useNavigate();
+    const useNav = useSelector(state => state.userNav.value)
+    const dispatch = useDispatch()
     useEffect(
         ()=>{
-            navigate(userNav)
-        },[userNav]
+            navigate(current)
+        },[current]
     )
+    useEffect(() => {
+        if (useNav === '/user/login'){
+            setCurrent(useNav);
+            dispatch(change('/user'))
+        }
+    }, [useNav]);
+
     const onClick = (e) => {
-        dispatch(change(e.key));
+        setCurrent(e.key);
     };
     return (
         <>
-            <Menu onClick={onClick} selectedKeys={[userNav]} mode="horizontal" items={items}  style={{borderRadius:'15px',background:'#f5f5f5'}}/>
+            <Menu onClick={onClick} selectedKeys={[current]} mode="horizontal" items={items}  style={{borderRadius:'15px',background:'#f5f5f5'}}/>
         </>
     );
 };
