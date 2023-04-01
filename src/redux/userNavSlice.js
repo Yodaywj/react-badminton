@@ -3,7 +3,7 @@ import { createSlice } from '@reduxjs/toolkit'
 export const userNavSlice = createSlice({
     name: 'userNav',
     initialState: {
-        value: '/user/login',
+        value: '/user',
     },
     reducers: {
         login: (state) => {
