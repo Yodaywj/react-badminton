@@ -7,6 +7,8 @@ import User from "../views/User";
 import Success from "../views/User/components/success";
 import Login from "../views/User/Login";
 import {loader as userDataLoader} from "../services/session";
+import {BulletinBoard} from "../views/Manage/BulletinBoard";
+import Manage from "../views/Manage";
 
 
 const router = createBrowserRouter([
@@ -28,11 +30,21 @@ const router = createBrowserRouter([
             {
                 path:"success",
                 element: <Success/>,
-                errorElement: <ErrorPage/>,
             },
             {
                 path:"login",
                 element: <Login/>,
+            },
+        ],
+    },
+    {
+        path: "/manage",
+        element: <Manage />,
+        loader: userDataLoader,
+        children:[
+            {
+                path:"bulletin-board",
+                element: <BulletinBoard/>,
             },
         ],
     },

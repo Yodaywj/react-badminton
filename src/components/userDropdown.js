@@ -9,11 +9,11 @@ import {ROOT_URL} from "../utils/constant";
 export const UserDropdown = ({user})=> {
     let items = [{}];
     const [login, setLogin] = useState(user.username === '未登录');
-    const [usernameInfo, setUsernameInfo] = useState(user.username)
+    console.log(user)
+
     const handleLogin = () => {
         logoutService(`${ROOT_URL}/user/logout`);
         setLogin(true);
-        setUsernameInfo("未登录")
     }
     if (login){
         items = [
@@ -35,21 +35,43 @@ export const UserDropdown = ({user})=> {
             },
         ];
     }else {
-        items = [
-            {
-                key: '1',
-                label: `用户: ${user.username}`,
-            },
-            {
-                key: '2',
-                label: `昵称: ${user.nickname}`,
-            },
-            {
-                key: '3',
-                label: '退出登录',
-                onClick: handleLogin,
-            },
-        ];
+        if (user.privilege === 'root'){
+            items = [
+                {
+                    key: '1',
+                    label: `用户: ${user.username}`,
+                },
+                {
+                    key: '2',
+                    label: `昵称: ${user.nickname}`,
+                },
+                {
+                    key: '3',
+                    label: <Link to={`/manage/bulletin-board`}>公告板</Link>
+                },
+                {
+                    key: '4',
+                    label: '退出登录',
+                    onClick: handleLogin,
+                },
+            ];
+        }else {
+            items = [
+                {
+                    key: '1',
+                    label: `用户: ${user.username}`,
+                },
+                {
+                    key: '2',
+                    label: `昵称: ${user.nickname}`,
+                },
+                {
+                    key: '3',
+                    label: '退出登录',
+                    onClick: handleLogin,
+                },
+            ];
+        }
     }
     return (
         <Dropdown

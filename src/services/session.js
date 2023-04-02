@@ -16,6 +16,5 @@ export async function loader() {
         console.log(error);
         user = {username: '未登录'}
     })
-    console.log(user)
     return {user};
 }

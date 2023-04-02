@@ -3,9 +3,7 @@ import {Button, Card, Col, Image, Layout, Row, Typography} from 'antd';
 import '../../styles/layout.css'
 import {MyHeader} from "../../layout/header";
 import {MyFooter} from "../../layout/footer";
-import {Link, useLoaderData} from "react-router-dom";
-import {logoutService} from "../../services/logoutService";
-import {ROOT_URL} from "../../utils/constant";
+import {useLoaderData} from "react-router-dom";
 import shuttlecock from "../../assets/shuttlecock-blue.svg"
 import manage from "../../assets/badminton-management.svg"
 import './index.css'
