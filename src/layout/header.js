@@ -1,9 +1,9 @@
 import React from 'react';
-import {Col, Row, Layout, Avatar, Dropdown} from "antd";
+import {Col, Row, Layout, Avatar, Switch} from "antd";
 import logo from "../assets/badminton-icon.svg";
 import '../styles/header.css'
 import {Link} from "react-router-dom";
-import {GithubOutlined, UserOutlined} from "@ant-design/icons";
+import {GithubOutlined} from "@ant-design/icons";
 import {UserDropdown} from "../components/userDropdown";
 
 export const MyHeader = ({user}) => {

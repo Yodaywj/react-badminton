@@ -46,6 +46,12 @@ const Home = () => {
                         <p>Card content</p>
                         <p>Card content</p>
                         <p>Card content</p>
+                        <p>Card content</p>
+                        <p>Card content</p>
+                        <p>Card content</p>
+                        <p>Card content</p>
+                        <p>Card content</p>
+                        <p>Card content</p>
                     </Card>
                 </Row>
                 <Row justify={"center"} className={`content-home-third`}>

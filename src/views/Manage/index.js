@@ -1,13 +1,11 @@
-import { LaptopOutlined, NotificationOutlined, UserOutlined } from '@ant-design/icons';
-import { Breadcrumb, Layout, Menu, theme } from 'antd';
-import React from 'react';
-import {useLoaderData} from "react-router-dom";
+import {LaptopOutlined, NotificationOutlined, ScheduleOutlined, SlidersFilled, UserOutlined} from '@ant-design/icons';
+import {Breadcrumb, Layout, Menu, Switch, theme} from 'antd';
+import React, {useState} from 'react';
+import {Outlet, useLoaderData} from "react-router-dom";
 import {MyHeader} from "../../layout/header";
-const { Header, Content, Sider } = Layout;
-const items1 = ['1', '2', '3'].map((key) => ({
-    key,
-    label: `nav ${key}`,
-}));
+import {ManageHeader} from "./components/ManageHeader";
+import MyEditor from "../../utils/MyEditor";
+const {Content, Sider } = Layout;
 const items2 = [UserOutlined, LaptopOutlined, NotificationOutlined].map((icon, index) => {
     const key = String(index + 1);
     return {
@@ -24,6 +22,40 @@ const items2 = [UserOutlined, LaptopOutlined, NotificationOutlined].map((icon, i
     };
 });
 const Manage = () => {
+    const [collapsed, setCollapsed] = useState(false);
+    const [siderTheme, setSiderTheme] = useState('light');
+    const [mode, setMode] = useState('inline');
+    const changeTheme = (value) => {
+        setSiderTheme(value ? 'dark' : 'light');
+    };
+    const changeMode = (value) => {
+        setMode(value ? 'vertical' : 'inline');
+    };
+    const items = [
+        {
+            key: 1,
+            icon: <SlidersFilled />,
+            label: <><Switch
+                checked={siderTheme === 'dark'}
+                onChange={changeTheme}
+                checkedChildren="深色"
+                unCheckedChildren="浅色"
+                style={{marginRight:`8px`}}
+            /><Switch
+                checked={mode === 'vertical'}
+                onChange={changeMode}
+                checkedChildren="展开"
+                unCheckedChildren="收起"
+            /></>,
+        },
+    ]
+    const mainItems = [
+        {
+            key : 1,
+            icon : <ScheduleOutlined />,
+            label : `公告牌`
+        },
+    ]
     const {user} = useLoaderData();
     const {
         token: { colorBgContainer },
@@ -33,45 +65,47 @@ const Manage = () => {
             <MyHeader user = {user}/>
             <Layout>
                 <Sider
+                    collapsible collapsed={collapsed} onCollapse={(value) => setCollapsed(value)}
                     width={200}
                     style={{
                         background: colorBgContainer,
                     }}
                 >
                     <Menu
-                        mode="inline"
-                        defaultSelectedKeys={['1']}
-                        defaultOpenKeys={['sub1']}
+                        theme={siderTheme}
+                        mode={`inline`}
                         style={{
-                            height: '100%',
+                            height: '6%',
                             borderRight: 0,
                         }}
-                        items={items2}
+                        items={items}
+                        selectable={false}
+                    />
+                    <Menu
+                        theme={siderTheme}
+                        mode={mode}
+                        style={{
+                            height: '94%',
+                            borderRight: 0,
+                        }}
+                        items={mainItems}
                     />
                 </Sider>
                 <Layout
                     style={{
                         padding: '0 24px 24px',
+                        minHeight : '92vh'
                     }}
                 >
-                    <Breadcrumb
-                        style={{
-                            margin: '16px 0',
-                        }}
-                    >
-                        <Breadcrumb.Item>Home</Breadcrumb.Item>
-                        <Breadcrumb.Item>List</Breadcrumb.Item>
-                        <Breadcrumb.Item>App</Breadcrumb.Item>
-                    </Breadcrumb>
                     <Content
                         style={{
                             padding: 24,
-                            margin: 0,
+                            margin: '24px 0 0 0',
                             minHeight: 280,
                             background: colorBgContainer,
                         }}
                     >
-                        Content
+                        <Outlet/>
                     </Content>
                 </Layout>
             </Layout>
