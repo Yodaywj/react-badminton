@@ -1,4 +1,4 @@
-import {Button, Card, Input, List} from 'antd';
+import {Button, Card, Input, List, Badge} from 'antd';
 import {DeleteOutlined, EditOutlined, SaveOutlined} from "@ant-design/icons";
 import React, {useEffect, useState} from "react";
 import ReactQuill from "react-quill";
@@ -6,7 +6,7 @@ import {useLoaderData} from "react-router-dom";
 import {ROOT_URL} from "../../../utils/constant";
 import axios from "axios";
 const BulletinBoard = () => {
-    const {data} = useLoaderData();
+    let {data} = useLoaderData();
     const newData = data.map(item => ({ ...item, editing: false }));
     const [loading, setLoading] = useState(true);
     const [bulletins ,setBulletins] = useState(newData);
@@ -62,9 +62,26 @@ const BulletinBoard = () => {
         })
         setBulletins(bulletins.filter(item => item.id !== id))
     }
-    const handleAdd =  ()=> {
-        
-        // setBulletins([...bulletins,{id:7,content:`7`,title:`7`}])
+    const handleAdd =  async ()=> {
+        const urlAdd = `${ROOT_URL}/bulletin-board/add`
+        const urlShow = `${ROOT_URL}/bulletin-board/show`
+        await axios.put(urlAdd).then(response => {
+            console.log(response);
+        }).catch(error => {
+            console.log(error)
+        })
+        await axios.get(urlShow,{withCredentials:true}).then(response => {
+            console.log(response);
+            const newData = response.data.bulletin;
+            let addedItems = newData.filter((item) => !data.some((oldItem) => oldItem.id === item.id));
+            data = newData;
+            addedItems = addedItems.map(item => ({ ...item, editing: true }));
+            setBulletins(bulletins.concat(addedItems))
+            console.log(bulletins)
+        }).catch(error => {
+            console.log(error)
+        })
+
     }
     useEffect(() => {
         setLoading(false);
@@ -88,34 +105,35 @@ const BulletinBoard = () => {
                 dataSource={bulletins}
                 renderItem={(item) => (
                     <List.Item>
-                        <Card
-                            loading={loading}
-                            title={item.editing?
-                                <Input
-                                    key={`${item.id}input`}
-                                    showCount maxLength={20}
-                                    value={item.title}
-                                    onChange={(event) => { handleInput(event, item.id) }}
-                                />: item.title}
-                            actions={[
-                                item.editing?
-                                    <SaveOutlined
-                                        key={`${item.id}save`}
-                                        onClick={()=>handleSave(item.id,item.content,item.title)}
-                                    />:<EditOutlined key={`${item.id}edit`} onClick={()=>handleEdit(item.id)}/>,
-                                <DeleteOutlined key={`${item.id}delete`} onClick={()=>handleDelete(item.id)}/>,
-                            ]}
-                        >
-                            {item.editing?
-                                <ReactQuill
-                                    theme="snow"
-                                    value={item.content}
-                                    onChange={(value) => { handleQuill(value, item.id) }}
-                                />
-                                :
-                                <div dangerouslySetInnerHTML={{__html:item.content}} />
-                            }
-                        </Card>
+                        <Badge.Ribbon text={item.time}>
+                            <Card
+                                loading={loading}
+                                title={item.editing?
+                                    <Input
+                                        key={`${item.id}input`}
+                                        value={item.title}
+                                        onChange={(event) => { handleInput(event, item.id) }}
+                                    />: item.title}
+                                actions={[
+                                    item.editing?
+                                        <SaveOutlined
+                                            key={`${item.id}save`}
+                                            onClick={()=>handleSave(item.id,item.content,item.title)}
+                                        />:<EditOutlined key={`${item.id}edit`} onClick={()=>handleEdit(item.id)}/>,
+                                    <DeleteOutlined key={`${item.id}delete`} onClick={()=>handleDelete(item.id)}/>,
+                                ]}
+                            >
+                                {item.editing?
+                                    <ReactQuill
+                                        theme="snow"
+                                        value={item.content}
+                                        onChange={(value) => { handleQuill(value, item.id) }}
+                                    />
+                                    :
+                                    <div dangerouslySetInnerHTML={{__html:item.content}} />
+                                }
+                            </Card>
+                        </Badge.Ribbon>
                     </List.Item>
                 )}
             />

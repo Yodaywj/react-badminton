@@ -6,14 +6,12 @@ export async function loader() {
     let user = null;
 
     await axios.get(url,{withCredentials:true}).then(response => {
-        console.log(response);
         if (response.data.result){
             user = response.data.user;
         }else {
             user = {username: '未登录'}
         }
-    }).catch(error => {
-        console.log(error);
+    }).catch(() => {
         user = {username: '未登录'}
     })
     return {user};
