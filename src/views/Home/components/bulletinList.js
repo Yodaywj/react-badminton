@@ -22,11 +22,10 @@ export default function BulletinList ({bulletins}){
                 <List.Item>
                     <Badge.Ribbon text={item.time}>
                         <Card
-                            style={{minHeight:`300px`}}
                             title={item.title}
                         >
                             {
-                                <div dangerouslySetInnerHTML={{__html:item.content}} />
+                                <div style={{minHeight:`200px`}} dangerouslySetInnerHTML={{__html:item.content}} />
                             }
                         </Card>
                     </Badge.Ribbon>

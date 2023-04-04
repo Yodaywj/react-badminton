@@ -171,7 +171,7 @@ const BulletinBoard = () => {
                                         onChange={(value) => { handleQuill(value, item.id) }}
                                     />
                                     :
-                                    <div dangerouslySetInnerHTML={{__html:item.content}} />
+                                    <div style={{minHeight:`200px`}} dangerouslySetInnerHTML={{__html:item.content}} />
                                 }
                             </Card>
                         </Badge.Ribbon>
