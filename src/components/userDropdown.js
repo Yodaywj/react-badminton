@@ -1,18 +1,33 @@
-import {Avatar, Dropdown} from "antd";
+import {Avatar, Dropdown, message} from "antd";
 import {UserOutlined} from "@ant-design/icons";
 import React, {useState} from "react";
 import {Link} from "react-router-dom";
-import {logoutService} from "../services/logoutService";
 import {ROOT_URL} from "../utils/constant";
+import axios from "axios";
 
 
 export const UserDropdown = ({user})=> {
     let items = [{}];
+    const [messageApi, contextHolder] = message.useMessage();
     const [login, setLogin] = useState(user.username === '未登录');
-    console.log(user)
 
-    const handleLogin = () => {
-        logoutService(`${ROOT_URL}/user/logout`);
+    const handleLogin = async () => {
+        const url = `${ROOT_URL}/user/logout`
+        let message;
+        let result;
+        await axios.delete(url,{withCredentials:true})
+            .then(response => {
+                message = response.data.message;
+                result = response.data.result;
+            })
+            .catch(error => {
+                result = false;
+                message = error.message;
+            });
+        messageApi.open({
+            type:result? 'success':'error',
+            content: message,
+        })
         setLogin(true);
     }
     if (login){
@@ -82,6 +97,7 @@ export const UserDropdown = ({user})=> {
         >
             <div className={`badge-1 relative`}>
                 <Avatar size={35} className={`Avatar-user all-center`} icon={<UserOutlined/>}/>
+                {contextHolder}
             </div>
         </Dropdown>
     )

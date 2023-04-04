@@ -8,6 +8,7 @@ import Success from "../views/User/components/success";
 import Login from "../views/User/Login";
 import {loader as userDataLoader} from "../services/session";
 import {loader as bulletinDataLoader} from "../services/bulletinLoader";
+import {loader as homeLoader} from "../services/homeLoader"
 import BulletinBoard from "../views/Manage/BulletinBoard";
 import Manage from "../views/Manage";
 
@@ -17,7 +18,7 @@ const router = createBrowserRouter([
         path: "/",
         element: <Home />,
         errorElement: <ErrorPage />,
-        loader: userDataLoader,
+        loader: homeLoader,
     },
     {
         path: "/user",

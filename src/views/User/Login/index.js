@@ -55,7 +55,10 @@ const Login = () => {
                     handleCaptchaClick();
                 }
             }).catch(error => {
-                console.log(error);
+                messageApi.open({
+                    type: 'error',
+                    content: error.message,
+                })
                 handleCaptchaClick();
             })
         }else {

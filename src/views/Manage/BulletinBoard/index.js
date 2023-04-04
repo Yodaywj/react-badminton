@@ -1,4 +1,4 @@
-import {Button, Card, Input, List, Badge} from 'antd';
+import {Button, Card, Input, List, Badge, message} from 'antd';
 import {DeleteOutlined, EditOutlined, SaveOutlined} from "@ant-design/icons";
 import React, {useEffect, useState} from "react";
 import ReactQuill from "react-quill";
@@ -10,6 +10,7 @@ const BulletinBoard = () => {
     const newData = data.map(item => ({ ...item, editing: false }));
     const [loading, setLoading] = useState(true);
     const [bulletins ,setBulletins] = useState(newData);
+    const [messageApi, contextHolder] = message.useMessage();
     const handleEdit = (id)=> {
         setBulletins(bulletins.map((item)=>{
             if (item.id === id) {
@@ -23,9 +24,22 @@ const BulletinBoard = () => {
         const url = `${ROOT_URL}/bulletin-board/save`;
         const data = {id:id, content:content,title:title}
         axios.post(url, data).then(response => {
-            console.log(response);
+            if (response.data.result){
+                messageApi.open({
+                    type: 'success',
+                    content: response.data.message,
+                })
+            }else {
+                messageApi.open({
+                    type: 'error',
+                    content: response.data.message,
+                })
+            }
         }).catch(error => {
-            console.log(error)
+            messageApi.open({
+                type: 'error',
+                content: error.message,
+            })
         })
         setBulletins(bulletins.map((item)=>{
             if (item.id === id) {
@@ -56,9 +70,22 @@ const BulletinBoard = () => {
     const handleDelete = async (id)=> {
         const url = `${ROOT_URL}/bulletin-board/delete/${id}`
         await axios.delete(url).then(response => {
-            console.log(response);
+            if (response.data.result){
+                messageApi.open({
+                    type: 'success',
+                    content: response.data.message,
+                })
+            }else {
+                messageApi.open({
+                    type: 'error',
+                    content: response.data.message,
+                })
+            }
         }).catch(error => {
-            console.log(error)
+            messageApi.open({
+                type: 'error',
+                content: error.message,
+            })
         })
         setBulletins(bulletins.filter(item => item.id !== id))
     }
@@ -66,20 +93,34 @@ const BulletinBoard = () => {
         const urlAdd = `${ROOT_URL}/bulletin-board/add`
         const urlShow = `${ROOT_URL}/bulletin-board/show`
         await axios.put(urlAdd).then(response => {
-            console.log(response);
+            if (response.data.result){
+                messageApi.open({
+                    type: 'success',
+                    content: response.data.message,
+                })
+            }else {
+                messageApi.open({
+                    type: 'error',
+                    content: response.data.message,
+                })
+            }
         }).catch(error => {
-            console.log(error)
+            messageApi.open({
+                type: 'error',
+                content: error.message,
+            })
         })
         await axios.get(urlShow,{withCredentials:true}).then(response => {
-            console.log(response);
             const newData = response.data.bulletin;
             let addedItems = newData.filter((item) => !data.some((oldItem) => oldItem.id === item.id));
             data = newData;
             addedItems = addedItems.map(item => ({ ...item, editing: true }));
             setBulletins(bulletins.concat(addedItems))
-            console.log(bulletins)
         }).catch(error => {
-            console.log(error)
+            messageApi.open({
+                type: 'error',
+                content: error.message,
+            })
         })
 
     }
@@ -138,6 +179,7 @@ const BulletinBoard = () => {
                 )}
             />
             <Button type={'primary'} onClick={handleAdd}>新增公告</Button>
+            {contextHolder}
         </>
     );
 }

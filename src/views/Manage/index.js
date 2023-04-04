@@ -1,10 +1,8 @@
 import {LaptopOutlined, NotificationOutlined, ScheduleOutlined, SlidersFilled, UserOutlined} from '@ant-design/icons';
-import {Breadcrumb, Layout, Menu, Switch, theme} from 'antd';
+import {Layout, Menu, Switch, theme} from 'antd';
 import React, {useState} from 'react';
 import {Outlet, useLoaderData} from "react-router-dom";
 import {MyHeader} from "../../layout/header";
-import {ManageHeader} from "./components/ManageHeader";
-import MyEditor from "../../utils/MyEditor";
 const {Content, Sider } = Layout;
 const items2 = [UserOutlined, LaptopOutlined, NotificationOutlined].map((icon, index) => {
     const key = String(index + 1);

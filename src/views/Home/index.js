@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {Button, Card, Col, Image, Layout, Row, Typography} from 'antd';
+import {Badge, Button, Card, Col, Image, Input, Layout, List, Row, Typography} from 'antd';
 import '../../styles/layout.css'
 import {MyHeader} from "../../layout/header";
 import {MyFooter} from "../../layout/footer";
@@ -7,11 +7,14 @@ import {useLoaderData} from "react-router-dom";
 import shuttlecock from "../../assets/shuttlecock-blue.svg"
 import manage from "../../assets/badminton-management.svg"
 import './index.css'
+import {DeleteOutlined, EditOutlined, SaveOutlined} from "@ant-design/icons";
+import ReactQuill from "react-quill";
+import BulletinList from "./components/bulletinList";
 
 const {Content} = Layout;
 
 const Home = () => {
-    const {user} = useLoaderData();
+    const {user, bulletins} = useLoaderData();
     const {Title, Text} = Typography;
 
     return (
@@ -36,23 +39,9 @@ const Home = () => {
                     </Col>
                 </Row>
                 <Row className={`content-home-second`}>
-                    <Card
-                        title="Card title"
-                        bordered={false}
-                        style={{
-                            width: 300,
-                        }}
-                    >
-                        <p>Card content</p>
-                        <p>Card content</p>
-                        <p>Card content</p>
-                        <p>Card content</p>
-                        <p>Card content</p>
-                        <p>Card content</p>
-                        <p>Card content</p>
-                        <p>Card content</p>
-                        <p>Card content</p>
-                    </Card>
+                    <Col span={24}>
+                        <BulletinList bulletins={bulletins}/>
+                    </Col>
                 </Row>
                 <Row justify={"center"} className={`content-home-third`}>
                     <Image src={manage} preview={false}/>

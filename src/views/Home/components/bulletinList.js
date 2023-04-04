@@ -1,0 +1,37 @@
+import {Badge, Card, List} from "antd";
+import React from "react";
+
+export default function BulletinList ({bulletins}){
+    return(
+        <List
+            grid={{
+                gutter: 16,
+                xs: 1,
+                sm: 2,
+                md: 4,
+                lg: 4,
+                xl: 6,
+                xxl: 3,
+            }}
+            pagination={{
+                simple : true,
+                pageSize : 8,
+            }}
+            dataSource={bulletins}
+            renderItem={(item) => (
+                <List.Item>
+                    <Badge.Ribbon text={item.time}>
+                        <Card
+                            style={{minHeight:`300px`}}
+                            title={item.title}
+                        >
+                            {
+                                <div dangerouslySetInnerHTML={{__html:item.content}} />
+                            }
+                        </Card>
+                    </Badge.Ribbon>
+                </List.Item>
+            )}
+        />
+    )
+}
