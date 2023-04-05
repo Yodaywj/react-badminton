@@ -1,25 +1,11 @@
-import {LaptopOutlined, NotificationOutlined, ScheduleOutlined, SlidersFilled, UserOutlined} from '@ant-design/icons';
+import {ScheduleOutlined, SlidersFilled, SnippetsOutlined} from '@ant-design/icons';
 import {Layout, Menu, Switch, theme} from 'antd';
 import React, {useState} from 'react';
-import {Outlet, useLoaderData} from "react-router-dom";
+import {Link, Outlet, useLoaderData} from "react-router-dom";
 import {MyHeader} from "../../layout/header";
 const {Content, Sider } = Layout;
-const items2 = [UserOutlined, LaptopOutlined, NotificationOutlined].map((icon, index) => {
-    const key = String(index + 1);
-    return {
-        key: `sub${key}`,
-        icon: React.createElement(icon),
-        label: `subnav ${key}`,
-        children: new Array(4).fill(null).map((_, j) => {
-            const subKey = index * 4 + j + 1;
-            return {
-                key: subKey,
-                label: `option${subKey}`,
-            };
-        }),
-    };
-});
 const Manage = () => {
+    const {user} = useLoaderData();
     const [collapsed, setCollapsed] = useState(false);
     const [siderTheme, setSiderTheme] = useState('light');
     const [mode, setMode] = useState('inline');
@@ -48,18 +34,22 @@ const Manage = () => {
         },
     ]
     const mainItems = [
-        {
+        user.privilege?{
             key : 1,
             icon : <ScheduleOutlined />,
-            label : `公告牌`
-        },
+            label : <Link to={`bulletin-board`}>公告牌</Link>
+        }:{},
+        {
+            key : 3,
+            icon: <SnippetsOutlined />,
+            label: <Link to={`stadium`}>我的场馆</Link>,
+        }
     ]
-    const {user} = useLoaderData();
     const {
         token: { colorBgContainer },
     } = theme.useToken();
     return (
-        <Layout>
+        <Layout style={{ minHeight: '100vh' }}>
             <MyHeader user = {user}/>
             <Layout>
                 <Sider
@@ -67,13 +57,16 @@ const Manage = () => {
                     width={200}
                     style={{
                         background: colorBgContainer,
+                        position: 'fixed',
+                        top: '8vh',
+                        left: '0',
                     }}
                 >
                     <Menu
                         theme={siderTheme}
                         mode={`inline`}
                         style={{
-                            height: '6%',
+                            height: '50px',
                             borderRight: 0,
                         }}
                         items={items}
@@ -83,8 +76,8 @@ const Manage = () => {
                         theme={siderTheme}
                         mode={mode}
                         style={{
-                            height: '94%',
                             borderRight: 0,
+                            minHeight: '92vh'
                         }}
                         items={mainItems}
                     />
@@ -92,7 +85,7 @@ const Manage = () => {
                 <Layout
                     style={{
                         padding: '0 24px 24px',
-                        minHeight : '92vh'
+                        marginLeft: '200px',
                     }}
                 >
                     <Content

@@ -11,6 +11,7 @@ import {loader as bulletinDataLoader} from "../services/bulletinLoader";
 import {loader as homeLoader} from "../services/homeLoader"
 import BulletinBoard from "../views/Manage/BulletinBoard";
 import Manage from "../views/Manage";
+import Stadium from "../views/Manage/Stadium";
 
 
 const router = createBrowserRouter([
@@ -47,6 +48,11 @@ const router = createBrowserRouter([
             {
                 path:"bulletin-board",
                 element: <BulletinBoard/>,
+                loader: bulletinDataLoader,
+            },
+            {
+                path:"stadium",
+                element: <Stadium/>,
                 loader: bulletinDataLoader,
             },
         ],

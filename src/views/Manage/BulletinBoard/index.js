@@ -5,6 +5,7 @@ import ReactQuill from "react-quill";
 import {useLoaderData} from "react-router-dom";
 import {ROOT_URL} from "../../../utils/constant";
 import axios from "axios";
+import 'react-quill/dist/quill.snow.css';
 const BulletinBoard = () => {
     let {data} = useLoaderData();
     const newData = data.map(item => ({ ...item, editing: false }));
