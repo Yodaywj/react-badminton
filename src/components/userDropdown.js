@@ -66,7 +66,7 @@ export const UserDropdown = ({user})=> {
                 },
                 {
                     key: '4',
-                    label: '退出登录',
+                    label: <Link to={`/`}>退出登录</Link>,
                     onClick: handleLogin,
                 },
             ];

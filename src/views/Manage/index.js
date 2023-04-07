@@ -34,11 +34,11 @@ const Manage = () => {
         },
     ]
     const mainItems = [
-        user.privilege?{
+        user.privilege === 'root'?{
             key : 1,
             icon : <ScheduleOutlined />,
             label : <Link to={`bulletin-board`}>公告牌</Link>
-        }:{},
+        }:null,
         {
             key : 3,
             icon: <SnippetsOutlined />,
@@ -96,7 +96,7 @@ const Manage = () => {
                             background: colorBgContainer,
                         }}
                     >
-                        <Outlet/>
+                        <Outlet />
                     </Content>
                 </Layout>
             </Layout>

@@ -9,6 +9,7 @@ import Login from "../views/User/Login";
 import {loader as userDataLoader} from "../services/session";
 import {loader as bulletinDataLoader} from "../services/bulletinLoader";
 import {loader as homeLoader} from "../services/homeLoader"
+import {loader as stadiumLoader} from "../services/stadiumLoader"
 import BulletinBoard from "../views/Manage/BulletinBoard";
 import Manage from "../views/Manage";
 import Stadium from "../views/Manage/Stadium";
@@ -53,13 +54,13 @@ const router = createBrowserRouter([
             {
                 path:"stadium",
                 element: <Stadium/>,
-                loader: bulletinDataLoader,
+                loader: stadiumLoader,
             },
         ],
     },
     {
         path:"/test",
-        element:<Test/>
+        element:<Manage/>
     },
 ]);
 

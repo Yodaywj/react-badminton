@@ -93,7 +93,7 @@ const BulletinBoard = () => {
     const handleAdd =  async ()=> {
         const urlAdd = `${ROOT_URL}/bulletin-board/add`
         const urlShow = `${ROOT_URL}/bulletin-board/show`
-        await axios.put(urlAdd).then(response => {
+        await axios.post(urlAdd).then(response => {
             if (response.data.result){
                 messageApi.open({
                     type: 'success',
@@ -142,7 +142,7 @@ const BulletinBoard = () => {
                 }}
                 pagination={{
                     simple : true,
-                    pageSize : 8,
+                    pageSize : 6,
                 }}
                 dataSource={bulletins}
                 renderItem={(item) => (
