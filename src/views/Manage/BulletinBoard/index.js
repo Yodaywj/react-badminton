@@ -78,7 +78,7 @@ const BulletinBoard = () => {
                 })
             }else {
                 messageApi.open({
-                    type: 'error3',
+                    type: 'error',
                     content: response.data.message,
                 })
             }
