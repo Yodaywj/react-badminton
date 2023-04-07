@@ -6,7 +6,7 @@ import axios from "axios";
 import cities from '../../../../utils/cities'
 const options = cities;
 
-const CollectionCreateForm =  ({open, onCreate, onCancel, stadium,name,stadiumData}) => {
+const CollectionCreateForm =  ({open, onCreate, onCancel, stadium,name}) => {
     const [form] = Form.useForm();
 
 
@@ -34,7 +34,14 @@ const CollectionCreateForm =  ({open, onCreate, onCancel, stadium,name,stadiumDa
                 form={form}
                 layout="vertical"
                 name="form_in_modal"
-                // initialValues={}
+                initialValues={{
+                    stadiumName : stadium.stadiumName,
+                    area : name==='新增场馆'?[]:[stadium.province,stadium.city],
+                    courtNumber:stadium.courtNumber,
+                    address:stadium.address,
+                    phone:stadium.phone,
+                    remarks:stadium.remarks,
+                }}
             >
                 <Form.Item
                     name="stadiumName"
@@ -126,7 +133,6 @@ const CollectionCreateForm =  ({open, onCreate, onCancel, stadium,name,stadiumDa
 const EditStadium = ({stadium,name,stadiumData,setData}) => {
     const [messageApi, contextHolder] = message.useMessage();
     const [open, setOpen] = useState(false);
-    const [initialValues, setInitialValues] = useState([]);
 
     const onCreate = async (values) => {
         const {area:[province,city], ...rest} = values;

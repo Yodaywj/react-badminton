@@ -1,9 +1,11 @@
-import {Descriptions, List, Space} from 'antd';
+import {Button, Descriptions, List, message, Row, Space} from 'antd';
 import React, {useState} from 'react';
 import stadium from '../../../assets/badminton-stadium.png'
 import {LikeOutlined, MessageOutlined, StarOutlined} from "@ant-design/icons";
 import EditStadium from "./components/EditStadium";
 import {useLoaderData} from "react-router-dom";
+import axios from "axios";
+import {ROOT_URL} from "../../../utils/constant";
 
 const IconText = ({icon, text}) => (
     <Space>
@@ -14,6 +16,28 @@ const IconText = ({icon, text}) => (
 const Stadium = () => {
     const {data} = useLoaderData();
     const [stadiumData, setStadiumData] = useState(data);
+    const [messageApi, contextHolder] = message.useMessage();
+    const deleteStadium = async (id)=>{
+        await axios.delete(`${ROOT_URL}/stadium/delete/${id}`).then(response => {
+            if (response.data.result){
+                messageApi.open({
+                    type: 'success',
+                    content: response.data.message,
+                })
+                setStadiumData(stadiumData.filter(item=>item.id!==id))
+            }else {
+                messageApi.open({
+                    type: 'error',
+                    content: response.data.message,
+                })
+            }
+        }).catch(error => {
+            messageApi.open({
+                type: 'error',
+                content: error.message,
+            })
+        })
+    }
     return (
         <>
             <List
@@ -45,7 +69,14 @@ const Stadium = () => {
                                 <Descriptions
                                     title={`我的场馆 ${stadiumData.indexOf(item) + 1}`}
                                     bordered
-                                    extra={<EditStadium stadium={item} name={'编辑'} stadiumData={stadiumData} setData={setStadiumData}/>}
+                                    extra={
+                                    <Row>
+                                        <Space size={"middle"}>
+                                            <Button onClick={()=>deleteStadium(item.id)}>删除</Button>
+                                            <EditStadium stadium={item} name={'编辑'} stadiumData={stadiumData} setData={setStadiumData}/>
+                                        </Space>
+                                    </Row>
+                                    }
                                     column={{
                                         xxl: 4,
                                         xl: 3,
@@ -67,7 +98,8 @@ const Stadium = () => {
                     </List.Item>
                 )}
             />
-            <EditStadium name={'新增场馆'} stadium={{province:null}} stadiumData={stadiumData} setData={setStadiumData}/>
+            <EditStadium name={'新增场馆'} stadium={{}} stadiumData={stadiumData} setData={setStadiumData}/>
+            {contextHolder}
         </>
     );
 }
