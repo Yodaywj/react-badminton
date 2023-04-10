@@ -1,13 +1,12 @@
 import {Button, Cascader, Form, Input, InputNumber, message, Modal, Row} from 'antd';
-import {useEffect, useState} from 'react';
+import {useState} from 'react';
 import TextArea from "antd/es/input/TextArea";
 import {ROOT_URL} from "../../../../utils/constant";
 import axios from "axios";
 import cities from '../../../../utils/cities'
 const options = cities;
 
-const CollectionCreateForm =  ({open, onCreate, onCancel, stadium,name}) => {
-    const [form] = Form.useForm();
+const CollectionCreateForm =  ({open, onCreate, onCancel, name, form}) => {
 
 
     return (
@@ -34,14 +33,6 @@ const CollectionCreateForm =  ({open, onCreate, onCancel, stadium,name}) => {
                 form={form}
                 layout="vertical"
                 name="form_in_modal"
-                initialValues={{
-                    stadiumName : stadium.stadiumName,
-                    area : name==='新增场馆'?[]:[stadium.province,stadium.city],
-                    courtNumber:stadium.courtNumber,
-                    address:stadium.address,
-                    phone:stadium.phone,
-                    remarks:stadium.remarks,
-                }}
             >
                 <Form.Item
                     name="stadiumName"
@@ -132,6 +123,7 @@ const CollectionCreateForm =  ({open, onCreate, onCancel, stadium,name}) => {
 const EditStadium = ({stadium,name,stadiumData,setData}) => {
     const [messageApi, contextHolder] = message.useMessage();
     const [open, setOpen] = useState(false);
+    const [form] = Form.useForm();
 
     const onCreate = async (values) => {
         const {area:[province,city], ...rest} = values;
@@ -175,8 +167,7 @@ const EditStadium = ({stadium,name,stadiumData,setData}) => {
                         content: response.data.message,
                     })
                     values = {...values,id: response.data.id,owner:response.data.username}
-                    setData([...stadiumData,{...values}]);
-                    // console.log(response)
+                    setData([{...values},...stadiumData]);
                 }else {
                     messageApi.open({
                         type: 'error',
@@ -199,16 +190,22 @@ const EditStadium = ({stadium,name,stadiumData,setData}) => {
                 type="primary"
                 onClick={() => {
                     setOpen(true);
+                    form.setFieldsValue({
+                        stadiumName : stadium.stadiumName,
+                        area : name==='新增场馆'?[]:[stadium.province,stadium.city],
+                        courtNumber:stadium.courtNumber,
+                        address:stadium.address,
+                        phone:stadium.phone,
+                        remarks:stadium.remarks,
+                    })
                 }}
             >
                 {name}
             </Button>
             <CollectionCreateForm
+                form={form}
                 name={name}
-                stadium={stadium}
                 open={open}
-                stadiumData={stadiumData}
-                setData={setData}
                 onCreate={onCreate}
                 onCancel={() => {
                     setOpen(false);

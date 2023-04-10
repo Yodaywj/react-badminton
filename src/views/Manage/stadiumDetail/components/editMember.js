@@ -1,14 +1,16 @@
 import {Button, Col, DatePicker, Drawer, Form, Input, InputNumber, message, Row, Space} from 'antd';
 import ReactQuill from "react-quill";
 import React from "react";
-import dayjs from 'dayjs';
+import dayjs from 'dayjs/locale/zh-cn';
 import customParseFormat from 'dayjs/plugin/customParseFormat'
 import axios from "axios";
 import {ROOT_URL} from "../../../../utils/constant";
+import locale from "antd/locale/zh_CN";
 
 dayjs.extend(customParseFormat);
 const EditMember = ({editing,setEditing,newMembers,setNewMembers}) => {
     const [messageApi, contextHolder] = message.useMessage();
+    const [form] = Form.useForm();
     const onClose = () => {
         setEditing([false,{}]);
     };
@@ -71,7 +73,7 @@ const EditMember = ({editing,setEditing,newMembers,setNewMembers}) => {
         }
         setEditing([false,{}]);
     }
-    const [form] = Form.useForm();
+
     const fillForm = ()=>{
         form.setFieldsValue({
             balance:editing[1].balance,
@@ -164,6 +166,7 @@ const EditMember = ({editing,setEditing,newMembers,setNewMembers}) => {
                                 ]}
                             >
                                 <DatePicker.RangePicker
+                                    locale={locale}
                                     style={{
                                         width: '100%',
                                     }}

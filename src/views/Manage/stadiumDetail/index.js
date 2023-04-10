@@ -1,4 +1,4 @@
-import {Button, Tabs} from 'antd';
+import {Tabs} from 'antd';
 import {useLoaderData} from "react-router-dom";
 import Member from "./components/member";
 

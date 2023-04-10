@@ -61,6 +61,7 @@ const Stadium = () => {
                 size="large"
                 pagination={{
                     pageSize: 3,
+                    showQuickJumper:true,
                 }}
                 dataSource={stadiumData}
                 renderItem={(item) => (
@@ -88,9 +89,9 @@ const Stadium = () => {
                                     extra={
                                     <Row>
                                         <Space size={"middle"}>
+                                            <EditStadium stadium={item} name={'编辑'} stadiumData={stadiumData} setData={setStadiumData}/>
                                             <Button onClick={()=>showConfirm(item.id)}>删除</Button>
                                             <Link to={`../stadium/${item.id}`}><Button>管理</Button></Link>
-                                            <EditStadium stadium={item} name={'编辑'} stadiumData={stadiumData} setData={setStadiumData}/>
                                         </Space>
                                     </Row>
                                     }

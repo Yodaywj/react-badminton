@@ -40,10 +40,10 @@ const Login = () => {
             content: '验证码错误',
         });
     };
-    const onFinish = (values) => {
+    const onFinish = async (values) => {
         if (values.captcha.toUpperCase() === code.toUpperCase()) {
             const url = `${ROOT_URL}/user/login`;
-            axios.post(url,values,{withCredentials:true}).then(response => {
+            await axios.post(url,values,{withCredentials:true}).then(response => {
                 if (response.data.result){
                     // if (values.remember){
                     //     Cookies.set('auth', response.data.token, { expires: 7 });

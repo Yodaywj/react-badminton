@@ -143,7 +143,7 @@ const Member = ({members,stadiumId}) => {
                 type="primary"
 
             >
-                Add a row
+                添加会员
             </Button>
             <EditMember editing={editing} setEditing={setEditing} newMembers={newMembers} setNewMembers={setNewMembers}/>
         </>
