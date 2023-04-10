@@ -8,12 +8,12 @@ const Manage = () => {
     const {user} = useLoaderData();
     const [collapsed, setCollapsed] = useState(false);
     const [siderTheme, setSiderTheme] = useState('light');
-    const [mode, setMode] = useState('inline');
+    const [mode, setMode] = useState(true);
     const changeTheme = (value) => {
         setSiderTheme(value ? 'dark' : 'light');
     };
     const changeMode = (value) => {
-        setMode(value ? 'vertical' : 'inline');
+        setMode(!value);
     };
     const items = [
         {
@@ -26,10 +26,10 @@ const Manage = () => {
                 unCheckedChildren="浅色"
                 style={{marginRight:`8px`}}
             /><Switch
-                checked={mode === 'vertical'}
+                checked={mode === false}
                 onChange={changeMode}
-                checkedChildren="展开"
-                unCheckedChildren="收起"
+                checkedChildren="收起"
+                unCheckedChildren="展开"
             /></>,
         },
     ]
@@ -43,6 +43,11 @@ const Manage = () => {
             key : 3,
             icon: <SnippetsOutlined />,
             label: <Link to={`stadium`}>我的场馆</Link>,
+        },
+        {
+            key : 4,
+            icon: <SnippetsOutlined />,
+            label: <Link to={`stadium`}>我的场馆</Link>,
         }
     ]
     const {
@@ -50,7 +55,7 @@ const Manage = () => {
     } = theme.useToken();
     return (
         <Layout style={{ minHeight: '100vh' }}>
-            <MyHeader user = {user}/>
+            {mode && <MyHeader user={user}/>}
             <Layout>
                 <Sider
                     collapsible collapsed={collapsed} onCollapse={(value) => setCollapsed(value)}
@@ -58,7 +63,7 @@ const Manage = () => {
                     style={{
                         background: colorBgContainer,
                         position: 'fixed',
-                        top: '8vh',
+                        top: mode ? '8vh' : `0vh`,
                         left: '0',
                     }}
                 >
@@ -74,7 +79,7 @@ const Manage = () => {
                     />
                     <Menu
                         theme={siderTheme}
-                        mode={mode}
+                        mode={`inline`}
                         style={{
                             borderRight: 0,
                             minHeight: '92vh'
@@ -85,7 +90,7 @@ const Manage = () => {
                 <Layout
                     style={{
                         padding: '0 24px 24px',
-                        marginLeft: '200px',
+                        marginLeft: collapsed? '80px':'200px',
                     }}
                 >
                     <Content

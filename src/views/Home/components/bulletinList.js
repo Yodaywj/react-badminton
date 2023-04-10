@@ -15,7 +15,7 @@ export default function BulletinList ({bulletins}){
             }}
             pagination={{
                 simple : true,
-                pageSize : 8,
+                pageSize : 6,
             }}
             dataSource={bulletins}
             renderItem={(item) => (

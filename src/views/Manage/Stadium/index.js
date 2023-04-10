@@ -1,9 +1,9 @@
-import {Button, Descriptions, List, message, Row, Space} from 'antd';
+import {Button, Descriptions, List, message, Modal, Row, Space} from 'antd';
 import React, {useState} from 'react';
 import stadium from '../../../assets/badminton-stadium.png'
-import {LikeOutlined, MessageOutlined, StarOutlined} from "@ant-design/icons";
+import {ExclamationCircleFilled, LikeOutlined, MessageOutlined, StarOutlined} from "@ant-design/icons";
 import EditStadium from "./components/EditStadium";
-import {useLoaderData} from "react-router-dom";
+import {Link, useLoaderData} from "react-router-dom";
 import axios from "axios";
 import {ROOT_URL} from "../../../utils/constant";
 
@@ -17,6 +17,22 @@ const Stadium = () => {
     const {data} = useLoaderData();
     const [stadiumData, setStadiumData] = useState(data);
     const [messageApi, contextHolder] = message.useMessage();
+    const { confirm } = Modal;
+    const showConfirm = (id) => {
+        confirm({
+            title: '删除场馆',
+            icon: <ExclamationCircleFilled />,
+            content: '确定删除该场馆吗？',
+            okText:`确认`,
+            cancelText:`取消`,
+            centered:true,
+            onOk() {
+                deleteStadium(id)
+            },
+            onCancel() {
+            },
+        });
+    };
     const deleteStadium = async (id)=>{
         await axios.delete(`${ROOT_URL}/stadium/delete/${id}`).then(response => {
             if (response.data.result){
@@ -72,7 +88,8 @@ const Stadium = () => {
                                     extra={
                                     <Row>
                                         <Space size={"middle"}>
-                                            <Button onClick={()=>deleteStadium(item.id)}>删除</Button>
+                                            <Button onClick={()=>showConfirm(item.id)}>删除</Button>
+                                            <Link to={`../stadium/${item.id}`}><Button>管理</Button></Link>
                                             <EditStadium stadium={item} name={'编辑'} stadiumData={stadiumData} setData={setStadiumData}/>
                                         </Space>
                                     </Row>

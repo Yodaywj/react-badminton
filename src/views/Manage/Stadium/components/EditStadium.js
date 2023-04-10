@@ -74,7 +74,6 @@ const CollectionCreateForm =  ({open, onCreate, onCancel, stadium,name}) => {
                             options={options}
                             placeholder="请选择"
                             style={{width:`200px`}}
-                            onChange={(e)=>console.log(e)}
                         />
                     </Form.Item>
                     <Form.Item
@@ -177,6 +176,7 @@ const EditStadium = ({stadium,name,stadiumData,setData}) => {
                     })
                     values = {...values,id: response.data.id,owner:response.data.username}
                     setData([...stadiumData,{...values}]);
+                    // console.log(response)
                 }else {
                     messageApi.open({
                         type: 'error',

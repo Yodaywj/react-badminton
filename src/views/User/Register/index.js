@@ -15,7 +15,7 @@ import generateCode from "../../../utils/captcha";
 import drawCaptcha from "../../../utils/generateCaptchaImage";
 import {ROOT_URL} from "../../../utils/constant";
 import axios from "axios";
-import {Link, Navigate, redirect} from "react-router-dom";
+import {Navigate} from "react-router-dom";
 
 const {Option} = Select;
 const formItemLayout = {
