@@ -117,7 +117,7 @@ const EditMember = ({editing,setEditing,newMembers,setNewMembers}) => {
                                     },
                                 ]}
                             >
-                                <InputNumber style={{width:`100%`}} placeholder="请输入用户名"/>
+                                <Input style={{width:`100%`}} placeholder="请输入用户名"/>
                             </Form.Item>
                         </Col>
                     </Row>}

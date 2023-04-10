@@ -4,12 +4,12 @@ import EditMember from "./editMember";
 import axios from "axios";
 import {ROOT_URL} from "../../../../utils/constant";
 
-const Member = ({members}) => {
-    const stadium = members[0].stadiumId;
+const Member = ({members,stadiumId}) => {
     const [open, setOpen] = useState(false);
     const [editing, setEditing] = useState([false,{}]);
     const [drawerContent , setDrawerContent] = useState('')
     const [drawerMemberName , setDrawerMemberName] = useState('')
+    const [newMembers,setNewMembers] = useState(members);
     const showDrawer = (remarks,memberName) => {
         setDrawerContent(remarks);
         setDrawerMemberName(memberName)
@@ -21,14 +21,24 @@ const Member = ({members}) => {
     const onClose = () => {
         setOpen(false);
     }
-    const levelFilter = members.map((item)=>{
+    const [levelFilter,setLevelFilter] = useState(newMembers.map((item)=>{
         item = {text:item.level,value: item.level}
         return item;
-    })
-    const memberNameFilter = members.map((item)=>{
+    }))
+    const [memberNameFilter,setMemberNameFilter] = useState(newMembers.map((item)=>{
         item = {text:item.memberName,value: item.memberName}
         return item;
-    })
+    }))
+    useEffect(()=>{
+        setMemberNameFilter(newMembers.map((item)=>{
+            item = {text:item.memberName,value: item.memberName}
+            return item;
+        }));
+        setLevelFilter(newMembers.map((item)=>{
+            item = {text:item.level,value: item.level}
+            return item;
+        }))
+    },[newMembers])
     const columns = [
         {
             title: '用户名',
@@ -67,7 +77,6 @@ const Member = ({members}) => {
             dataIndex: 'action',
         },
     ];
-    const [newMembers,setNewMembers] = useState(members);
     const confirmDelete = (memberName,stadiumId) => {
         axios.delete(`${ROOT_URL}/member/delete/${stadiumId}/${memberName}`,{
             data: {
@@ -119,10 +128,9 @@ const Member = ({members}) => {
     const [tableMembers,setTableMembers] = useState(updateMembers());
     useEffect(()=>{
         setTableMembers(updateMembers());
-        console.log(tableMembers)
     },[newMembers])
     const handleAdd = ()=>{
-        setEditing([true,'register',stadium])
+        setEditing([true,'register',stadiumId])
     }
     return (
         <>

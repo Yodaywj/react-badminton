@@ -6,12 +6,12 @@ const onChange = (key) => {
     console.log(key);
 };
 const StadiumDetail = () => {
-    const {members} = useLoaderData();
+    const {members,stadiumId} = useLoaderData();
     const items = [
         {
             label: '会员管理',
             key: '1',
-            children: <Member members={members}/>,
+            children: <Member members={members} stadiumId={stadiumId}/>,
         },
         {
             label: '场地管理',
