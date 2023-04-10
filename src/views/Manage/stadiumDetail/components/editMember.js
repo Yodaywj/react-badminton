@@ -1,4 +1,4 @@
-import {Button, Col, DatePicker, Drawer, Form, Input, InputNumber, message, Row, Select, Space} from 'antd';
+import {Button, Col, DatePicker, Drawer, Form, Input, InputNumber, message, Row, Space} from 'antd';
 import ReactQuill from "react-quill";
 import React from "react";
 import dayjs from 'dayjs';
@@ -15,36 +15,60 @@ const EditMember = ({editing,setEditing,newMembers,setNewMembers}) => {
     const handleSubmit = ()=> {
         form.submit();
     }
-    const onFinish = (values)=> {
+    const onFinish = async (values)=> {
         const startTime = values.dateTime[0].format(`YYYY-MM-DD`);
         const expiredTime = values.dateTime[1].format(`YYYY-MM-DD`);
         delete values.dateTime;
-        const member = {...values, memberName: editing[1].memberName, stadiumId:editing[1].stadiumId, startTime:startTime,expiredTime:expiredTime}
-        axios.patch(`${ROOT_URL}/member/edit`,member).then(response=>{
-            if (response.data.result){
-                setNewMembers(newMembers.map(item=>{
-                    if (item.memberName === editing[1].memberName){
-                        return member;
-                    }else {
-                        return item;
-                    }
-                }))
-                messageApi.open({
-                    type: 'success',
-                    content: response.data.message,
-                })
-            }else {
+        if (editing[1]==='register'){
+            const member = {...values, stadiumId:editing[2], startTime:startTime,expiredTime:expiredTime}
+            await axios.post(`${ROOT_URL}/member/add`,member).then(response=>{
+                if (response.data.result){
+                    setNewMembers([member,...newMembers])
+                    console.log(newMembers)
+                    messageApi.open({
+                        type: 'success',
+                        content: response.data.message,
+                    })
+                }else {
+                    messageApi.open({
+                        type: 'error',
+                        content: response.data.message,
+                    })
+                }
+            }).catch(error=>{
                 messageApi.open({
                     type: 'error',
-                    content: response.data.message,
+                    content: error.message,
                 })
-            }
-        }).catch(error=>{
-            messageApi.open({
-                type: 'error',
-                content: error.message,
             })
-        })
+        }else {
+            const member = {...values, memberName: editing[1].memberName, stadiumId:editing[1].stadiumId, startTime:startTime,expiredTime:expiredTime}
+            await axios.patch(`${ROOT_URL}/member/edit`,member).then(response=>{
+                if (response.data.result){
+                    setNewMembers(newMembers.map(item=>{
+                        if (item.memberName === editing[1].memberName){
+                            return member;
+                        }else {
+                            return item;
+                        }
+                    }))
+                    messageApi.open({
+                        type: 'success',
+                        content: response.data.message,
+                    })
+                }else {
+                    messageApi.open({
+                        type: 'error',
+                        content: response.data.message,
+                    })
+                }
+            }).catch(error=>{
+                messageApi.open({
+                    type: 'error',
+                    content: error.message,
+                })
+            })
+        }
         setEditing([false,{}]);
     }
     const [form] = Form.useForm();
@@ -60,7 +84,7 @@ const EditMember = ({editing,setEditing,newMembers,setNewMembers}) => {
         <>
             {contextHolder}
             <Drawer
-                title={`编辑${editing[1].memberName}的会员信息`}
+                title={editing[1]==='register'?`新增会员`:`编辑${editing[1].memberName}的会员信息`}
                 width={720}
                 onClose={onClose}
                 open={editing[0]}
@@ -69,9 +93,9 @@ const EditMember = ({editing,setEditing,newMembers,setNewMembers}) => {
                 }}
                 extra={
                     <Space>
-                        <Button type="link" onClick={fillForm}>
+                        {editing[1]!=='register'&&<Button type="link" onClick={fillForm}>
                             填写原信息
-                        </Button>
+                        </Button>}
                         <Button onClick={()=>form.resetFields()}>重置</Button>
                         <Button onClick={handleSubmit} type="primary">
                             提交
@@ -81,6 +105,22 @@ const EditMember = ({editing,setEditing,newMembers,setNewMembers}) => {
             >
                 <Form layout="vertical" onFinish={onFinish} form={form}
                 >
+                    {editing[1]==='register'&&<Row gutter={16}>
+                        <Col span={24}>
+                            <Form.Item
+                                name="memberName"
+                                label="用户名"
+                                rules={[
+                                    {
+                                        required: true,
+                                        message: '请输入用户名',
+                                    },
+                                ]}
+                            >
+                                <InputNumber style={{width:`100%`}} placeholder="请输入用户名"/>
+                            </Form.Item>
+                        </Col>
+                    </Row>}
                     <Row gutter={16}>
                         <Col span={12}>
                             <Form.Item

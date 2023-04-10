@@ -5,6 +5,7 @@ import axios from "axios";
 import {ROOT_URL} from "../../../../utils/constant";
 
 const Member = ({members}) => {
+    const stadium = members[0].stadiumId;
     const [open, setOpen] = useState(false);
     const [editing, setEditing] = useState([false,{}]);
     const [drawerContent , setDrawerContent] = useState('')
@@ -118,9 +119,10 @@ const Member = ({members}) => {
     const [tableMembers,setTableMembers] = useState(updateMembers());
     useEffect(()=>{
         setTableMembers(updateMembers());
+        console.log(tableMembers)
     },[newMembers])
     const handleAdd = ()=>{
-
+        setEditing([true,'register',stadium])
     }
     return (
         <>
