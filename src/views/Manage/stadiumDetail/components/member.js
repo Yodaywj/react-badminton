@@ -1,11 +1,78 @@
-import {Avatar, Button, Descriptions, Drawer, message, Popconfirm, Row, Space, Table, Tag} from 'antd';
+import {Avatar, Button, Descriptions, Drawer, message, Popconfirm, Table, Tag} from 'antd';
 import React, {useEffect, useState} from "react";
 import EditMember from "./editMember";
 import axios from "axios";
 import {ROOT_URL} from "../../../../utils/constant";
 import {UserOutlined} from "@ant-design/icons";
-
+import { MenuOutlined } from '@ant-design/icons';
+import { DndContext } from '@dnd-kit/core';
+import {
+    arrayMove,
+    SortableContext,
+    useSortable,
+    verticalListSortingStrategy,
+} from '@dnd-kit/sortable';
+import { CSS } from '@dnd-kit/utilities';
+const Row = ({ children, ...props }) => {
+    const {
+        attributes,
+        listeners,
+        setNodeRef,
+        setActivatorNodeRef,
+        transform,
+        transition,
+        isDragging,
+    } = useSortable({
+        id: props['data-row-key'],
+    });
+    const style = {
+        ...props.style,
+        transform: CSS.Transform.toString(
+            transform && {
+                ...transform,
+                scaleY: 1,
+            },
+        )?.replace(/translate3d\(([^,]+),/, 'translate3d(0,'),
+        transition,
+        ...(isDragging
+            ? {
+                position: 'relative',
+                zIndex: 9999,
+            }
+            : {}),
+    };
+    return (
+        <tr {...props} ref={setNodeRef} style={style} {...attributes}>
+            {React.Children.map(children, (child) => {
+                if (child.key === 'sort') {
+                    return React.cloneElement(child, {
+                        children: (
+                            <MenuOutlined
+                                ref={setActivatorNodeRef}
+                                style={{
+                                    touchAction: 'none',
+                                    cursor: 'move',
+                                }}
+                                {...listeners}
+                            />
+                        ),
+                    });
+                }
+                return child;
+            })}
+        </tr>
+    );
+};
 const Member = ({members,stadiumId}) => {
+    const onDragEnd = ({ active, over }) => {
+        if (active.id !== over?.id) {
+            setTableMembers((previous) => {
+                const activeIndex = previous.findIndex((i) => i.memberName === active.id);
+                const overIndex = previous.findIndex((i) => i.memberName === over?.id);
+                return arrayMove(previous, activeIndex, overIndex);
+            });
+        }
+    };
     const [open, setOpen] = useState(false);
     const [showInfo, setShowInfo] = useState(false)
     const [editing, setEditing] = useState([false,{}]);
@@ -61,6 +128,9 @@ const Member = ({members,stadiumId}) => {
         }))
     },[newMembers])
     const columns = [
+        {
+            key: 'sort',
+        },
         {
             title: '用户名',
             dataIndex: 'tableMemberName',
@@ -175,7 +245,18 @@ const Member = ({members,stadiumId}) => {
                 </Descriptions>:<h3>{userInfo.message}</h3>
                 }
             </Drawer>
-            <Table columns={columns} dataSource={tableMembers} rowKey={`memberName`} pagination={{showQuickJumper:true}}/>
+            <DndContext onDragEnd={onDragEnd}>
+                <SortableContext
+                    items={tableMembers.map((i) => i.memberName)}
+                    strategy={verticalListSortingStrategy}
+                >
+                    <Table  components={{
+                        body: {
+                            row: Row,
+                        },
+                    }} columns={columns} dataSource={tableMembers} rowKey={`memberName`} pagination={{showQuickJumper:true}}/>
+                </SortableContext>
+            </DndContext>
             <Button
                 onClick={handleAdd}
                 type="primary"
