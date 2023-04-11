@@ -1,8 +1,10 @@
-import {Button, Drawer, message, Popconfirm, Table, Tag} from 'antd';
-import {useEffect, useState} from "react";
+import {Avatar, Button, Descriptions, Drawer, message, Popconfirm, Row, Space, Table, Tag} from 'antd';
+import React, {useEffect, useState} from "react";
 import EditMember from "./editMember";
 import axios from "axios";
 import {ROOT_URL} from "../../../../utils/constant";
+import {UserOutlined} from "@ant-design/icons";
+import Title from "antd/es/skeleton/Title";
 
 const Member = ({members,stadiumId}) => {
     const [open, setOpen] = useState(false);
@@ -10,11 +12,27 @@ const Member = ({members,stadiumId}) => {
     const [drawerContent , setDrawerContent] = useState('')
     const [drawerMemberName , setDrawerMemberName] = useState('')
     const [newMembers,setNewMembers] = useState(members);
+    const [userExist,setUserExist] = useState(false);
+    const [userInfo,setUserInfo] = useState({})
     const showDrawer = (remarks,memberName) => {
         setDrawerContent(remarks);
-        setDrawerMemberName(memberName)
+        setDrawerMemberName(`${memberName}的备注`)
         setOpen(true);
     };
+    const showUserInfo = async (memberName)=> {
+        await axios.get(`${ROOT_URL}/user/showUserInfo/?memberName=${memberName}`).then(response => {
+            if (response.data.user){
+                setUserExist(true);
+                setUserInfo(response.data.user);
+            }else {
+                setUserExist(false);
+                setUserInfo({message:`该会员非本站注册用户`,username:memberName})
+            }
+        }).catch(error => {
+            message.error(error.message);
+        })
+        setOpen(true);
+    }
     const handleEdit = (item)=> {
         setEditing([true,item]);
     }
@@ -26,7 +44,7 @@ const Member = ({members,stadiumId}) => {
         return item;
     }))
     const [memberNameFilter,setMemberNameFilter] = useState(newMembers.map((item)=>{
-        item = {text:item.memberName,value: item.memberName}
+        item = {text:item.tableMemberName,value: item.tableMemberName}
         return item;
     }))
     useEffect(()=>{
@@ -42,7 +60,7 @@ const Member = ({members,stadiumId}) => {
     const columns = [
         {
             title: '用户名',
-            dataIndex: 'memberName',
+            dataIndex: 'tableMemberName',
             filters: memberNameFilter,
             filterSearch: true,
             onFilter: (value, record) => record.memberName.indexOf(value) === 0,
@@ -99,6 +117,7 @@ const Member = ({members,stadiumId}) => {
             const {remarks, memberName} = item
             item = {
                 ...item,
+                tableMemberName: <Button type={"link"} onClick={()=>showUserInfo(memberName)}>{memberName}</Button>,
                 preRemarks: remarks,
                 remarks:
                     <Tag style={{cursor: `pointer`}} color={"geekblue"} onClick={() => showDrawer(remarks, memberName)}>
@@ -134,10 +153,22 @@ const Member = ({members,stadiumId}) => {
     }
     return (
         <>
-            <Drawer title={`${drawerMemberName} 备注`} placement="right" onClose={onClose} open={open} closable={false}>
+            <Drawer title={`${drawerMemberName}`} placement="right" onClose={onClose} open={open} closable={false}>
                 <div dangerouslySetInnerHTML={{__html: drawerContent}}/>
             </Drawer>
-            <Table columns={columns} dataSource={tableMembers} rowKey={`memberName`}/>
+            <Drawer title={<><Avatar style={{marginRight:'15px'}} icon={<UserOutlined/>}/>用户ID: {userInfo.username}</>} placement="right" onClose={onClose} open={open} closable={false}>
+                {userExist? <Descriptions
+                    bordered
+                    column={1}
+                >
+                    <Descriptions.Item label="昵称">{userInfo.nickname}</Descriptions.Item>
+                    <Descriptions.Item label="手机">{userInfo.phone}</Descriptions.Item>
+                    <Descriptions.Item label="邮箱">{userInfo.mail}</Descriptions.Item>
+                    <Descriptions.Item label="性别">{userInfo.gender}</Descriptions.Item>
+                </Descriptions>:<h3>{userInfo.message}</h3>
+                }
+            </Drawer>
+            <Table columns={columns} dataSource={tableMembers} rowKey={`memberName`} pagination={{showQuickJumper:true}}/>
             <Button
                 onClick={handleAdd}
                 type="primary"

@@ -1,7 +1,8 @@
 import {Button, Col, DatePicker, Drawer, Form, Input, InputNumber, message, Row, Space} from 'antd';
 import ReactQuill from "react-quill";
 import React from "react";
-import dayjs from 'dayjs/locale/zh-cn';
+import dayjs from 'dayjs';
+import 'dayjs/locale/zh-cn';
 import customParseFormat from 'dayjs/plugin/customParseFormat'
 import axios from "axios";
 import {ROOT_URL} from "../../../../utils/constant";
