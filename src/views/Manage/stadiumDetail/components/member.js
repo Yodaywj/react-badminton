@@ -4,10 +4,10 @@ import EditMember from "./editMember";
 import axios from "axios";
 import {ROOT_URL} from "../../../../utils/constant";
 import {UserOutlined} from "@ant-design/icons";
-import Title from "antd/es/skeleton/Title";
 
 const Member = ({members,stadiumId}) => {
     const [open, setOpen] = useState(false);
+    const [showInfo, setShowInfo] = useState(false)
     const [editing, setEditing] = useState([false,{}]);
     const [drawerContent , setDrawerContent] = useState('')
     const [drawerMemberName , setDrawerMemberName] = useState('')
@@ -31,7 +31,10 @@ const Member = ({members,stadiumId}) => {
         }).catch(error => {
             message.error(error.message);
         })
-        setOpen(true);
+        setShowInfo(true);
+    }
+    const closeInfo = ()=>{
+        setShowInfo(false)
     }
     const handleEdit = (item)=> {
         setEditing([true,item]);
@@ -156,7 +159,11 @@ const Member = ({members,stadiumId}) => {
             <Drawer title={`${drawerMemberName}`} placement="right" onClose={onClose} open={open} closable={false}>
                 <div dangerouslySetInnerHTML={{__html: drawerContent}}/>
             </Drawer>
-            <Drawer title={<><Avatar style={{marginRight:'15px'}} icon={<UserOutlined/>}/>用户ID: {userInfo.username}</>} placement="right" onClose={onClose} open={open} closable={false}>
+            <Drawer title={<><Avatar style={{marginRight:'15px'}} icon={<UserOutlined/>}/>用户ID: {userInfo.username}</>}
+                    placement="right"
+                    onClose={closeInfo}
+                    open={showInfo}
+                    closable={false}>
                 {userExist? <Descriptions
                     bordered
                     column={1}
