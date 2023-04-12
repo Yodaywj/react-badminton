@@ -1,9 +1,9 @@
-import {Avatar, Button, Descriptions, Drawer, message, Popconfirm, Table, Tag} from 'antd';
+import {Avatar, Button, Descriptions, Drawer, message, Popconfirm, Table, Tag, Modal} from 'antd';
 import React, {useEffect, useState} from "react";
 import EditMember from "./editMember";
 import axios from "axios";
 import {ROOT_URL} from "../../../../utils/constant";
-import {UserOutlined} from "@ant-design/icons";
+import {ExclamationCircleFilled, UserOutlined} from "@ant-design/icons";
 import { MenuOutlined } from '@ant-design/icons';
 import { DndContext } from '@dnd-kit/core';
 import {
@@ -13,6 +13,8 @@ import {
     verticalListSortingStrategy,
 } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
+
+const {confirm} = Modal
 const Row = ({ children, ...props }) => {
     const {
         attributes,
@@ -64,6 +66,18 @@ const Row = ({ children, ...props }) => {
     );
 };
 const Member = ({members,stadiumId}) => {
+    const [selectedRowKeys, setSelectedRowKeys] = useState([]);
+    const [open, setOpen] = useState(false);
+    const [showInfo, setShowInfo] = useState(false)
+    const [editing, setEditing] = useState([false,{}]);
+    const [drawerContent , setDrawerContent] = useState('')
+    const [drawerMemberName , setDrawerMemberName] = useState('')
+    const [newMembers,setNewMembers] = useState(members);
+    const [userExist,setUserExist] = useState(false);
+    const [userInfo,setUserInfo] = useState({})
+    const onSelectChange = (newSelectedRowKeys) => {
+        setSelectedRowKeys(newSelectedRowKeys);
+    };
     const onDragEnd = ({ active, over }) => {
         if (active.id !== over?.id) {
             setTableMembers((previous) => {
@@ -73,14 +87,6 @@ const Member = ({members,stadiumId}) => {
             });
         }
     };
-    const [open, setOpen] = useState(false);
-    const [showInfo, setShowInfo] = useState(false)
-    const [editing, setEditing] = useState([false,{}]);
-    const [drawerContent , setDrawerContent] = useState('')
-    const [drawerMemberName , setDrawerMemberName] = useState('')
-    const [newMembers,setNewMembers] = useState(members);
-    const [userExist,setUserExist] = useState(false);
-    const [userInfo,setUserInfo] = useState({})
     const showDrawer = (remarks,memberName) => {
         setDrawerContent(remarks);
         setDrawerMemberName(`${memberName}的备注`)
@@ -168,16 +174,21 @@ const Member = ({members,stadiumId}) => {
             dataIndex: 'action',
         },
     ];
-    const confirmDelete = (memberName,stadiumId) => {
-        axios.delete(`${ROOT_URL}/member/delete/${stadiumId}/${memberName}`,{
-            data: {
-                memberName:memberName,
-                stadiumId:stadiumId,
-            }
-        }).then(response=>{
+    const rowSelection = {
+        selectedRowKeys,
+        onChange: onSelectChange,
+        selections: [
+            Table.SELECTION_ALL,
+            Table.SELECTION_INVERT,
+            Table.SELECTION_NONE,
+        ],
+    };
+    const confirmDelete = async (memberName,stadiumId) => {
+        memberName = [memberName]
+        await axios.delete(`${ROOT_URL}/member/delete/${stadiumId}/${memberName}`).then(response=>{
             if (response.data.result){
                 message.success(response.data.message);
-                setTableMembers(tableMembers.filter(item=>item.memberName!==memberName))
+                setTableMembers(tableMembers.filter(item=>item.memberName!==memberName[0]))
             }else {
                 message.error(response.data.message);
             }
@@ -224,6 +235,29 @@ const Member = ({members,stadiumId}) => {
     const handleAdd = ()=>{
         setEditing([true,'register',stadiumId])
     }
+    const handleDeleteAll = (selectedRowKeys,stadiumId)=>{
+        confirm({
+            title: '一键删除会员信息',
+            icon: <ExclamationCircleFilled />,
+            content: `确认删除 ${selectedRowKeys} 的会员信息吗?`,
+            okText: '确认',
+            okType: 'danger',
+            cancelText: '取消',
+            centered: true,
+            onOk() {
+                axios.delete(`${ROOT_URL}/member/delete/${stadiumId}/${selectedRowKeys}`).then(response=>{
+                    if (response.data.result){
+                        message.success(response.data.message);
+                        setTableMembers(tableMembers.filter(item=>!selectedRowKeys.some(RowKey=>RowKey === item.memberName)))
+                    }else {
+                        message.error(response.data.message);
+                    }
+                }).catch(error=>{
+                    message.error(error.message);
+                })
+            },
+        });
+    }
     return (
         <>
             <Drawer title={`${drawerMemberName}`} placement="right" onClose={onClose} open={open} closable={false}>
@@ -250,20 +284,31 @@ const Member = ({members,stadiumId}) => {
                     items={tableMembers.map((i) => i.memberName)}
                     strategy={verticalListSortingStrategy}
                 >
-                    <Table  components={{
+                    <Table
+                        rowSelection={rowSelection}
+                        components={tableMembers.length !== 0?{
                         body: {
                             row: Row,
                         },
-                    }} columns={columns} dataSource={tableMembers} rowKey={`memberName`} pagination={{showQuickJumper:true}}/>
+                    }:{}} columns={columns} dataSource={tableMembers} rowKey={`memberName`} pagination={{showQuickJumper:true}}/>
                 </SortableContext>
             </DndContext>
             <Button
                 onClick={handleAdd}
                 type="primary"
-
+                style={{marginRight:`15px`}}
             >
                 添加会员
             </Button>
+            {selectedRowKeys.length !== 0 &&
+                <Button
+                    onClick={()=>handleDeleteAll(selectedRowKeys,stadiumId)}
+                    type="default"
+                    danger={true}
+                >
+                    一键删除
+                </Button>
+            }
             <EditMember editing={editing} setEditing={setEditing} newMembers={newMembers} setNewMembers={setNewMembers}/>
         </>
     )

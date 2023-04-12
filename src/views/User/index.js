@@ -1,7 +1,7 @@
 import {MyHeader} from "../../layout/header";
 import {Col, Image, Layout, Row, Space, Spin} from "antd";
 import {MyFooter} from "../../layout/footer";
-import bg from '../../assets/badminton-court-rg.png'
+import bg from '../../assets/badminton-court-2d.png'
 import {imageFallback} from "../../utils/constant";
 import {useEffect, useRef, useState} from "react";
 import {Outlet, useLoaderData} from "react-router-dom";

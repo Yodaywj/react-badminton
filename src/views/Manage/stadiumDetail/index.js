@@ -1,12 +1,9 @@
-import {Tabs} from 'antd';
-import {useLoaderData} from "react-router-dom";
+import {Button, Tabs} from 'antd';
+import {Link, useLoaderData} from "react-router-dom";
 import Member from "./components/member";
-
-const onChange = (key) => {
-    console.log(key);
-};
+import Courts from "./components/courts";
 const StadiumDetail = () => {
-    const {members,stadiumId} = useLoaderData();
+    const {members,stadiumId,courtNumber} = useLoaderData();
     const items = [
         {
             label: '会员管理',
@@ -16,11 +13,12 @@ const StadiumDetail = () => {
         {
             label: '场地管理',
             key: '2',
-            children: 'Tab 2',
+            children: <Courts courtNumber={courtNumber} stadiumId={stadiumId}/>,
         },
     ]
     return (
         <Tabs
+            tabBarExtraContent={{left:<Link to={'/manage/stadium'}><Button style={{marginRight:`20px`}}>返回</Button></Link>}}
             defaultActiveKey="1"
             items={items}
         />
