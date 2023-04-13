@@ -1,0 +1,7 @@
+.tag-btn{
+    transition: 0.35s;
+}
+.tag-btn:hover{
+    opacity: 0.65;
+    cursor: pointer;
+}

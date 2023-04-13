@@ -1,9 +1,10 @@
-import {Button, Cascader, Form, Input, InputNumber, message, Modal, Row} from 'antd';
+import {Button, Cascader, Form, Input, InputNumber, message, Modal, Row, Tag} from 'antd';
 import {useState} from 'react';
 import TextArea from "antd/es/input/TextArea";
 import {ROOT_URL} from "../../../../utils/constant";
 import axios from "axios";
 import cities from '../../../../utils/cities'
+import deleteCourts from "../../../../services/deleteCourts";
 const options = cities;
 
 const CollectionCreateForm =  ({open, onCreate, onCancel, name, form}) => {
@@ -68,6 +69,7 @@ const CollectionCreateForm =  ({open, onCreate, onCancel, name, form}) => {
                         />
                     </Form.Item>
                     <Form.Item
+                        extra={<Tag style={{marginTop:`3px`}} color={`red`}>更改场地数量将重置场地状态</Tag>}
                         name="courtNumber"
                         label="场地数量"
                         rules={[
@@ -134,6 +136,15 @@ const EditStadium = ({stadium,name,stadiumData,setData}) => {
             ...rest
         };
         if (name === '编辑'){
+            if (stadium.courtNumber !== values.courtNumber){
+                await deleteCourts(values.id);
+            }
+            await axios.post(`${ROOT_URL}/courts/pushNewCourts`, {stadiumId:values.id,number:values.courtNumber}).catch(error => {
+                messageApi.open({
+                    type: 'error',
+                    content: error.message,
+                })
+            })
             await axios.post(`${ROOT_URL}/stadium/modify`,values).then(response => {
                 if (response.data.result){
                     messageApi.open({
@@ -160,13 +171,15 @@ const EditStadium = ({stadium,name,stadiumData,setData}) => {
                 })
             })
         }else if (name === '新增场馆'){
+            let id;
             await axios.post(`${ROOT_URL}/stadium/add`,values,{withCredentials:true}).then(response => {
                 if (response.data.result){
+                    id = response.data.id
                     messageApi.open({
                         type: 'success',
                         content: response.data.message,
                     })
-                    values = {...values,id: response.data.id,owner:response.data.username}
+                    values = {...values,id: id,owner:response.data.username}
                     setData([{...values},...stadiumData]);
                 }else {
                     messageApi.open({
@@ -175,6 +188,12 @@ const EditStadium = ({stadium,name,stadiumData,setData}) => {
                     })
                 }
             }).catch(error => {
+                messageApi.open({
+                    type: 'error',
+                    content: error.message,
+                })
+            })
+            await axios.post(`${ROOT_URL}/courts/pushNewCourts`, {stadiumId:id,number:values.courtNumber}).catch(error => {
                 messageApi.open({
                     type: 'error',
                     content: error.message,

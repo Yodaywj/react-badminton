@@ -2,7 +2,6 @@ import {createBrowserRouter} from "react-router-dom";
 import ErrorPage from "../views/ErrorPage";
 import Home from "../views/Home";
 import Register from "../views/User/Register";
-import Test from "../views/Test";
 import User from "../views/User";
 import Success from "../views/User/components/success";
 import Login from "../views/User/Login";
@@ -11,11 +10,13 @@ import {loader as bulletinDataLoader} from "../services/bulletinLoader";
 import {loader as homeLoader} from "../services/homeLoader"
 import {loader as stadiumLoader} from "../services/stadiumLoader"
 import {loader as stadiumDetailLoader} from "../services/stadiumDetailLoader"
+import {loader as bookingLoader} from "../services/bookingLoader"
 import BulletinBoard from "../views/Manage/BulletinBoard";
 import Manage from "../views/Manage";
 import Stadium from "../views/Manage/Stadium";
 import {MyFooter} from "../layout/footer";
 import StadiumDetail from "../views/Manage/stadiumDetail";
+import Booking from "../views/booking";
 
 
 const router = createBrowserRouter([
@@ -29,6 +30,7 @@ const router = createBrowserRouter([
         path: "/user",
         element: <User/>,
         loader: userDataLoader,
+        errorElement:<ErrorPage/>,
         children:[
             {
                 path:"register",
@@ -48,6 +50,7 @@ const router = createBrowserRouter([
         path: "/manage",
         element: <Manage />,
         loader: userDataLoader,
+        errorElement:<ErrorPage/>,
         children:[
             {
                 path:"bulletin-board",
@@ -60,14 +63,21 @@ const router = createBrowserRouter([
                 loader: stadiumLoader,
             },
             {
-                path:"stadium/:stadiumId/:courtNumber",
+                path:"stadium/:stadiumId",
                 element: <StadiumDetail/>,
                 loader: stadiumDetailLoader,
             },
         ],
     },
     {
+        path:"booking",
+        element:<Booking/>,
+        errorElement:<ErrorPage/>,
+        loader: bookingLoader,
+    },
+    {
         path:"/test",
+        errorElement:<ErrorPage/>,
         element:<MyFooter/>
     },
 ]);

@@ -193,7 +193,6 @@ const Register = () => {
                 >
                     <Input.Password/>
                 </Form.Item>
-
                 <Form.Item
                     name="nickname"
                     label="Nickname"
@@ -208,25 +207,6 @@ const Register = () => {
                 >
                     <Input/>
                 </Form.Item>
-                <Form.Item
-                    name="phone"
-                    label="Phone Number"
-                    rules={[
-                        {
-                            required: true,
-                            message: '手机格式不正确',
-                            pattern: /^\d{10,15}$/,
-                        },
-                    ]}
-                >
-                    <Input
-                        addonBefore={prefixSelector}
-                        style={{
-                            width: '100%',
-                        }}
-                    />
-                </Form.Item>
-
                 <Form.Item label="Captcha" extra="Click to change, no case sensitive">
                     <Row gutter={8}>
                         <Col span={12}>

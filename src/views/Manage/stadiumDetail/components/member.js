@@ -13,6 +13,7 @@ import {
     verticalListSortingStrategy,
 } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
+import './member.css'
 
 const {confirm} = Modal
 const Row = ({ children, ...props }) => {
@@ -204,12 +205,12 @@ const Member = ({members,stadiumId}) => {
                 tableMemberName: <Button type={"link"} onClick={()=>showUserInfo(memberName)}>{memberName}</Button>,
                 preRemarks: remarks,
                 remarks:
-                    <Tag style={{cursor: `pointer`}} color={"geekblue"} onClick={() => showDrawer(remarks, memberName)}>
+                    <Tag className={`tag-btn`} color={"geekblue"} onClick={() => showDrawer(remarks, memberName)}>
                         详情
                     </Tag>,
                 action:
                     <>
-                        <Tag style={{cursor: `pointer`}} color={"blue"} onClick={() => handleEdit(item)}>
+                        <Tag className={`tag-btn`} color={"blue"} onClick={() => handleEdit(item)}>
                             编辑
                         </Tag>
                         <Popconfirm
@@ -219,7 +220,7 @@ const Member = ({members,stadiumId}) => {
                             okText="确认"
                             cancelText="取消"
                         >
-                            <Tag style={{cursor: `pointer`}} color={"magenta"}>
+                            <Tag className={`tag-btn`} color={"magenta"}>
                                 删除
                             </Tag>
                         </Popconfirm>

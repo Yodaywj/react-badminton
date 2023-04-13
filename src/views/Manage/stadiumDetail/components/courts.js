@@ -1,85 +1,234 @@
 import courtImage from "../../../../assets/badminton-court-2d.png";
-import {Button, Col, Descriptions, Image, Row} from "antd";
-import { Avatar, List, Space } from 'antd';
+import {Button, Col, Descriptions, Form, Image, Statistic, Modal, Row, Radio, InputNumber, message, Tag} from "antd";
+import {List} from 'antd';
 import React, {useState} from 'react';
-import {LikeOutlined, MessageOutlined, StarOutlined} from "@ant-design/icons";
-import axios from "axios";
-import {ROOT_URL} from "../../../../utils/constant";
-const IconText = ({ icon, text }) => (
-    <Space>
-        {React.createElement(icon)}
-        {text}
-    </Space>
-);
-
-const Courts = ({courtNumber,stadiumId}) => {
-    const data = Array.from({
-        length: courtNumber,
-    }).map((_, i) => ({
-        state: '空闲',
-        name: `场地 ${i+1}`,
-        countdown: '00:00:00',
-        nextBooking: '无',
-        light:false,
-    }));
-    axios.post(`${ROOT_URL}/courts/pushNewCourts`,{stadiumId:stadiumId, number:courtNumber}).then(response=>{
-        console.log(response);
-    }).catch(error=>{
-        console.log(error);
+import switchLight from "../../../../services/switchLight";
+import setNewCourt from "../../../../services/setNewCourt";
+import dateSubtract from "../../../../utils/dateSubtract";
+const Courts = ({data,stadiumId}) => {
+    const [form] = Form.useForm();
+    const [switchAll, setSwitchAll] = useState(`已关闭`)
+    const {Countdown} = Statistic;
+    const [open, setOpen] = useState(false);
+    const [editing, setEditing] = useState({})
+    const transformTag = (state)=>{
+        let newState;
+        if (state === '空闲'){
+            newState = <Tag color={"green"}>空闲</Tag>;
+        }else if (state === '使用中'){
+            newState = <Tag color={"blue"}>使用中</Tag>;
+        }else if (state === '已预订'){
+            newState = <Tag color={"purple"}>已预订</Tag>;
+        }else newState = <Tag color={"red"}>error</Tag>;
+        return newState
+    }
+    const onCreate = async (values) => {
+        let {hour,minute} = values;
+        if (hour<10){
+            hour = `0${hour}`
+        }else {
+            hour = hour.toString();
+        }
+        if (minute<10){
+            minute = `0${minute}`
+        }else {
+            minute = minute.toString();
+        }
+        const newCountdown = `${hour}:${minute}:00`
+        const newCourt = {
+            id:editing.id,
+            stadiumId:editing.stadiumId,
+            light:editing.light,
+            countdown:newCountdown,
+            state:values.state,
+        };
+        await setNewCourt(newCourt).then(response=>{
+            if (response.result){
+                newCourt.state = transformTag(newCourt.state)
+                let {countdown} = response
+                countdown = dateSubtract(countdown);
+                setCourts(courts.map(current => {
+                    if (current.id === editing.id) {
+                        return {...newCourt,countdown:countdown}
+                    } else return current;
+                }))
+                message.success(response.message);
+            }else {
+                message.error(response.message);
+            }
+        })
+        setOpen(false);
+    };
+    data = data.map(item=>{
+        const newState = transformTag(item.state);
+        return {...item,state:newState}
     })
     const [courts, setCourts] = useState(data);
-    const controlLight = (name)=>{
-        setCourts(courts.map(current => {
-            if (current.name === name){
-                return {...current, light: !current.light};
-            }else return current;
-        }))
+    const controlLight = async (stadiumId,id,light) => {
+        light = light === "开启中"? "已关闭":"开启中";
+        await switchLight(stadiumId,id,light).then(result=>{
+            if (result.result){
+                if (id === 0){
+                    setSwitchAll(switchAll === "开启中"? "已关闭":"开启中")
+                    setCourts(courts.map(current => {
+                        return {...current, light: light};
+                    }))
+                }else {
+                    setCourts(courts.map(current => {
+                        if (current.id === id) {
+                            return {...current, light: light};
+                        } else return current;
+                    }))
+                }
+                message.success(result.message);
+            }else {
+                message.error(result.message);
+            }
+        })
     }
-    return(
-        <List
-            itemLayout={`vertical`}
-            size="large"
-            grid={{
-                gutter: 20,
-                column: 2,
-            }}
-            pagination={{
-                onChange: (page) => {
-                    console.log(page);
-                },
-                pageSize: 6,
-            }}
-            dataSource={courts}
-            renderItem={(item) => (
-                <List.Item
-                    style={{marginBottom:`50px`}}
-                    key={item.name}
+    return (
+        <>
+            <Row justify={"end"}>
+                <Button
+                        type={switchAll === "已关闭"? 'default':'primary'}
+                        onClick={() => controlLight(stadiumId,0,switchAll)}>
+                    {switchAll === "已关闭"? '一键开启':'一键关闭'}
+                </Button>
+            </Row>
+            <List
+                itemLayout={`vertical`}
+                size="large"
+                grid={{
+                    gutter: 20,
+                    column: 2,
+                }}
+                pagination={{
+                    pageSize: 6,
+                }}
+                dataSource={courts}
+                renderItem={(item) => (
+                    <List.Item
+                        style={{marginBottom: `50px`}}
+                        key={item.id}
+                    >
+                        <Row justify="space-between">
+                            <Col>
+                                <Image
+                                    height={500}
+                                    src={courtImage}
+                                    preview={false}
+                                />
+                            </Col>
+                            <Col xxl={12}>
+                                <Row>
+                                    <Descriptions
+                                        title={`场地 ${item.id}`}
+                                        bordered
+                                        column={1}
+                                    >
+                                        <Descriptions.Item label="状态">
+                                            {item.state}
+                                        </Descriptions.Item>
+                                        <Descriptions.Item label="倒计时">
+                                            <Countdown value={item.countdown}/>
+                                        </Descriptions.Item>
+                                        <Descriptions.Item label="灯控">{
+                                            item.light==='开启中'?
+                                                <Tag color={"cyan"}>{item.light}</Tag>:
+                                                <Tag>{item.light}</Tag>
+                                        }
+                                        </Descriptions.Item>
+                                        <Descriptions.Item label="预订时间">{}</Descriptions.Item>
+                                    </Descriptions>
+                                </Row>
+                                <Row style={{marginTop:`50px`}}>
+                                    <Button style={{marginRight:`10px`}}
+                                            type={item.light === "已关闭"? 'default':'primary'}
+                                            onClick={() => controlLight(item.stadiumId,item.id,item.light)}>
+                                        {item.light === "开启中"? '关闭':'开启'}
+                                    </Button>
+                                    <Button onClick={() => {
+                                        setOpen(true);
+                                        setEditing(item)
+                                    }}>设置</Button>
+                                </Row>
+                            </Col>
+                        </Row>
+                    </List.Item>
+                )}
+            />
+            <Modal
+                centered={true}
+                open={open}
+                title="场地设置"
+                okText="确认"
+                cancelText="取消"
+                onCancel={() => setOpen(false)}
+                onOk={() => {
+                    form
+                        .validateFields()
+                        .then((values) => {
+                            form.resetFields();
+                            onCreate(values);
+                        })
+                        .catch((info) => {
+                            console.log('Validate Failed:', info);
+                        });
+                }}
+            >
+                <Form
+                    form={form}
+                    layout="vertical"
+                    name="form_in_modal"
+                    initialValues={{hour:0,minute:0,state:`空闲`}}
                 >
-                    <Row justify="space-between">
-                        <Col>
-                            <Image
-                                height={500}
-                                src={courtImage}
-                                preview={false}
-                            />
-                        </Col>
-                        <Col xxl={12}>
-                            <Descriptions
-                                title={item.name}
-                                bordered
-                                column={1}
-                            >
-                                <Descriptions.Item label="状态">{item.state}</Descriptions.Item>
-                                <Descriptions.Item label="倒计时">{item.countdown}</Descriptions.Item>
-                                <Descriptions.Item label="灯控">{item.light? `开`:`关`}</Descriptions.Item>
-                                <Descriptions.Item label="预订时间">{item.nextBooking}</Descriptions.Item>
-                            </Descriptions>
-                            <Button onClick={()=>controlLight(item.name)}>开启</Button>
-                        </Col>
-                    </Row>
-                </List.Item>
-            )}
-        />
+                    <Form.Item name="state" label="状态" rules={[
+                        {
+                            required: true,
+                            message: '请选择场地状态',
+                        },
+                    ]}>
+                        <Radio.Group
+                            buttonStyle="solid"
+                        >
+                            <Radio.Button value="空闲">空闲</Radio.Button>
+                            <Radio.Button value="使用中">使用中</Radio.Button>
+                            <Radio.Button value="已预订">已预订</Radio.Button>
+                        </Radio.Group>
+                    </Form.Item>
+                    <Form.Item label="倒计时">
+                        <Row>
+                            <Col span={5}>
+                                <Form.Item name="hour" rules={[
+                                    {
+                                        type:"number",
+                                        required: true,
+                                        message: '选择范围为0-23',
+                                        max:23,
+                                        min:0,
+                                    },
+                                ]}>
+                                    <InputNumber max={99} min={-1} addonAfter="时"/>
+                                </Form.Item>
+                            </Col>
+                            <Col push={1} span={5}>
+                                <Form.Item name="minute"  rules={[
+                                    {
+                                        type:"number",
+                                        required: true,
+                                        message: '选择范围为0-59',
+                                        max:59,
+                                        min:0,
+                                    },
+                                ]}>
+                                    <InputNumber max={99} min={-1} addonAfter="分"/>
+                                </Form.Item>
+                            </Col>
+                        </Row>
+                    </Form.Item>
+                </Form>
+            </Modal>
+        </>
     );
 }
 export default Courts;

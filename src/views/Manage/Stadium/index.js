@@ -6,6 +6,7 @@ import EditStadium from "./components/EditStadium";
 import {Link, useLoaderData} from "react-router-dom";
 import axios from "axios";
 import {ROOT_URL} from "../../../utils/constant";
+import deleteCourts from "../../../services/deleteCourts";
 
 const IconText = ({icon, text}) => (
     <Space>
@@ -53,6 +54,7 @@ const Stadium = () => {
                 content: error.message,
             })
         })
+        await deleteCourts(id);
     }
     return (
         <>
@@ -91,7 +93,7 @@ const Stadium = () => {
                                         <Space size={"middle"}>
                                             <EditStadium stadium={item} name={'编辑'} stadiumData={stadiumData} setData={setStadiumData}/>
                                             <Button onClick={()=>showConfirm(item.id)}>删除</Button>
-                                            <Link to={`../stadium/${item.id}/${item.courtNumber}`}><Button>管理</Button></Link>
+                                            <Link to={`/manage/stadium/${item.id}`}><Button>管理</Button></Link>
                                         </Space>
                                     </Row>
                                     }
