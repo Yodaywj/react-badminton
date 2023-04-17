@@ -1,6 +1,6 @@
 import {ScheduleOutlined, SlidersFilled, SnippetsOutlined} from '@ant-design/icons';
-import {Layout, Menu, Switch, theme} from 'antd';
-import React, {useState} from 'react';
+import {Layout, Menu, Skeleton, Switch, theme} from 'antd';
+import React, {useEffect, useState} from 'react';
 import {Link, Outlet, useLoaderData} from "react-router-dom";
 import {MyHeader} from "../../layout/header";
 const {Content, Sider } = Layout;
@@ -9,6 +9,10 @@ const Manage = () => {
     const [collapsed, setCollapsed] = useState(false);
     const [siderTheme, setSiderTheme] = useState('light');
     const [mode, setMode] = useState(true);
+    const [loading,setLoading] = useState(true);
+    useEffect(() => {
+        setLoading(false)
+    }, []);
     const changeTheme = (value) => {
         setSiderTheme(value ? 'dark' : 'light');
     };
@@ -101,7 +105,9 @@ const Manage = () => {
                             background: colorBgContainer,
                         }}
                     >
-                        <Outlet />
+                        <Skeleton loading={loading} active={true} paragraph={{rows:10}}>
+                            <Outlet />
+                        </Skeleton>
                     </Content>
                 </Layout>
             </Layout>

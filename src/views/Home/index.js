@@ -1,5 +1,5 @@
-import React from 'react';
-import {Col, Image, Layout, Row, Typography} from 'antd';
+import React, {useEffect, useState} from 'react';
+import {Col, Image, Layout, Row, Skeleton, Spin, Typography} from 'antd';
 import '../../styles/layout.css'
 import {MyHeader} from "../../layout/header";
 import {MyFooter} from "../../layout/footer";
@@ -15,6 +15,10 @@ const {Content} = Layout;
 const Home = () => {
     const {user, bulletins} = useLoaderData();
     const {Title, Text} = Typography;
+    const [loading,setLoading] = useState(true);
+    useEffect(() => {
+        setLoading(false)
+    }, []);
 
     return (
         <Layout>
@@ -23,7 +27,9 @@ const Home = () => {
                 <Row className={`content-home-intro`}>
                     <Col span={24}>
                         <Row justify={"center"}>
-                            <Image src={shuttlecock} preview={false}/>
+                            <Spin size={"large"} spinning={loading}>
+                                <Image src={shuttlecock} preview={false}/>
+                            </Spin>
                         </Row>
                         <Row justify={"center"}>
                             <Title level={1}>
@@ -39,7 +45,9 @@ const Home = () => {
                 </Row>
                 <Row className={`content-home-second`}>
                     <Col span={24}>
-                        <BulletinList bulletins={bulletins}/>
+                        <Skeleton loading={loading} active={true}>
+                            <BulletinList bulletins={bulletins}/>
+                        </Skeleton>
                     </Col>
                 </Row>
                 <Row justify={"center"} className={`content-home-third`}>

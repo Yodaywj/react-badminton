@@ -165,7 +165,6 @@ const BulletinBoard = () => {
                     <List.Item>
                         <Badge.Ribbon text={item.time}>
                             <Card
-                                loading={loading}
                                 title={item.editing ?
                                     <Input
                                         key={`${item.id}input`}

@@ -4,7 +4,6 @@ import {List} from 'antd';
 import React, {useState} from 'react';
 import switchLight from "../../../../services/switchLight";
 import setNewCourt from "../../../../services/setNewCourt";
-import dateSubtract from "../../../../utils/dateSubtract";
 const Courts = ({data,stadiumId}) => {
     const [form] = Form.useForm();
     const [switchAll, setSwitchAll] = useState(`已关闭`)
@@ -46,7 +45,8 @@ const Courts = ({data,stadiumId}) => {
             if (response.result){
                 newCourt.state = transformTag(newCourt.state)
                 let {countdown} = response
-                countdown = dateSubtract(countdown);
+                console.log(countdown)
+                countdown = Date.now()+Number(countdown)*1000;
                 setCourts(courts.map(current => {
                     if (current.id === editing.id) {
                         return {...newCourt,countdown:countdown}

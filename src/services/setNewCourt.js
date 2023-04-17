@@ -8,7 +8,7 @@ const setNewCourt = async (court)=>{
     await axios.patch(`${ROOT_URL}/courts/setNewCourt`,court).then(response=>{
         message = response.data.message;
         result = response.data.result;
-        countdown = response.data.countdown
+        countdown = response.data.countdown;
     }).catch(error=>{
         result = false;
         message = error.message;

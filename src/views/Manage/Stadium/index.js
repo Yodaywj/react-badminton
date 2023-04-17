@@ -9,7 +9,7 @@ import {ROOT_URL} from "../../../utils/constant";
 import deleteCourts from "../../../services/deleteCourts";
 
 const IconText = ({icon, text}) => (
-    <Space>
+    <Space style={{marginTop:`70px`}}>
         {React.createElement(icon)}
         {text}
     </Space>

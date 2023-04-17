@@ -7,7 +7,7 @@ const StadiumDetail = () => {
     const {members,stadiumId,courts,stadiumName} = useLoaderData();
 
     let data = courts.map(item => {
-        const countdown = dateSubtract(item.countdown);
+        const countdown = Number(item.countdown)*1000+Date.now();
         return {...item, countdown: countdown};
     })
     const items = [

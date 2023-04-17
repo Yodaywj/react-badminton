@@ -48,6 +48,7 @@ const CollectionCreateForm =  ({open, onCreate, onCancel, name, form}) => {
                 >
                     <Input showCount={true}
                            maxLength={20}
+                           allowClear={true}
                     />
                 </Form.Item>
                 <Row>
@@ -139,7 +140,7 @@ const EditStadium = ({stadium,name,stadiumData,setData}) => {
             if (stadium.courtNumber !== values.courtNumber){
                 await deleteCourts(values.id);
             }
-            await axios.post(`${ROOT_URL}/courts/pushNewCourts`, {stadiumId:values.id,number:values.courtNumber}).catch(error => {
+            axios.post(`${ROOT_URL}/courts/pushNewCourts`, {stadiumId:values.id,number:values.courtNumber}).catch(error => {
                 messageApi.open({
                     type: 'error',
                     content: error.message,
@@ -193,7 +194,7 @@ const EditStadium = ({stadium,name,stadiumData,setData}) => {
                     content: error.message,
                 })
             })
-            await axios.post(`${ROOT_URL}/courts/pushNewCourts`, {stadiumId:id,number:values.courtNumber}).catch(error => {
+            axios.post(`${ROOT_URL}/courts/pushNewCourts`, {stadiumId:id,number:values.courtNumber}).catch(error => {
                 messageApi.open({
                     type: 'error',
                     content: error.message,

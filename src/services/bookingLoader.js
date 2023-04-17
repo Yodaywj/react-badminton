@@ -4,13 +4,27 @@ import axios from "axios";
 const loader = async ()=>{
     let user = {};
     let data;
+    let sum;
     await session(`${ROOT_URL}/user/session`).then(response=>{
         user = response.user
     })
-    await axios.get(`${ROOT_URL}/stadium/show`,{withCredentials:true}).then(response => {
-        data = response.data.stadiums
+    await axios.get(`${ROOT_URL}/booking/enquiry?page=1&size=5`).then(response => {
+        data = response.data.stadiums;
+        sum = response.data.sum;
     })
-    return {user,data}
+    return {user,data,sum}
 }
-
-export {loader};
+const bookCourt = async (values)=>{
+    let message;
+    let result;
+    await axios.post(`${ROOT_URL}/booking/bookCourt`,values).then(response=>{
+        message = response.data.message;
+        result = response.data.result;
+        }
+    ).catch(error=>{
+        result = false;
+        message = error.message;
+    })
+    return {message, result}
+}
+export {loader, bookCourt};

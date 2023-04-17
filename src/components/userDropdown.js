@@ -82,6 +82,10 @@ export const UserDropdown = ({user})=> {
                 },
                 {
                     key: '3',
+                    label: <Link to={`/manage`}>场馆管理</Link>
+                },
+                {
+                    key: '4',
                     label: <Link to={`/`}>退出登录</Link>,
                     onClick: handleLogin,
                 },

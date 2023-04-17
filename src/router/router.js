@@ -1,4 +1,4 @@
-import {createBrowserRouter} from "react-router-dom";
+import {createBrowserRouter, createHashRouter} from "react-router-dom";
 import ErrorPage from "../views/ErrorPage";
 import Home from "../views/Home";
 import Register from "../views/User/Register";
@@ -80,6 +80,6 @@ const router = createBrowserRouter([
         errorElement:<ErrorPage/>,
         element:<MyFooter/>
     },
-]);
+],{basename:"/"});
 
 export default router;
