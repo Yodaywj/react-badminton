@@ -162,8 +162,8 @@ const Register = () => {
                     rules={[
                         {
                             required: true,
-                            message: '请输入8-15位的密码,仅且必须包含数字、字母',
-                            pattern: /^(?=.*[a-zA-Z])(?=.*\d)[a-zA-Z\d]{8,15}$/,
+                            message: '请输入8位以上的密码,至少包括一个字母和数字',
+                            pattern: /^(?=.*[A-Za-z])(?=.*\d)[^\s]{8,15}$/,
                         },
                     ]}
                     hasFeedback

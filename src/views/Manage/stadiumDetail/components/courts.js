@@ -112,14 +112,14 @@ const Courts = ({data,stadiumId}) => {
                         key={item.id}
                     >
                         <Row justify="space-between">
-                            <Col>
+                            <Col xs={{ span: 0}} lg={{ span: 12}}>
                                 <Image
                                     height={500}
                                     src={courtImage}
                                     preview={false}
                                 />
                             </Col>
-                            <Col xxl={12}>
+                            <Col xs={{ span: 24}} lg={{ span: 12}}>
                                 <Row>
                                     <Descriptions
                                         title={`场地 ${item.id}`}

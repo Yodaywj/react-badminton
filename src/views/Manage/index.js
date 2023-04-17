@@ -67,7 +67,7 @@ const Manage = () => {
                     style={{
                         background: colorBgContainer,
                         position: 'fixed',
-                        top: mode ? '8vh' : `0vh`,
+                        top: mode ? '72px' : `0`,
                         left: '0',
                     }}
                 >
