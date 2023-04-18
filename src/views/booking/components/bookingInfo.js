@@ -92,9 +92,14 @@ const BookingInfo = ({setStadiums,sum,stadiums,isFilter,user})=>{
     const [form] = Form.useForm();
     const [current, setCurrent] = useState(1);
     const [pageSize, setPageSize] = useState(5);
-    const [currentBooking, setCurrentBooking] = useState();
+    const [currentBooking, setCurrentBooking] = useState([]);
     const onCreate = (values)=> {
-        values = {...values,time:values.time.format("YYYY-MM-DD HH:mm:ss"),username:user.username,stadiumId:currentBooking,courtId:0,state:'预订中',}
+        values = {...values,time:values.time.format("YYYY-MM-DD HH:mm:ss"),
+            username:user.username,
+            stadiumId:currentBooking[0],
+            stadiumName:currentBooking[1],
+            courtId:0,
+            state:'预订中',}
         setOpen(false);
         bookCourt(values).then(response=>{
             if (response.result){
@@ -179,7 +184,7 @@ const BookingInfo = ({setStadiums,sum,stadiums,isFilter,user})=>{
                                 <Row>
                                     <Col push={20}>
                                         <Button onClick={()=> {
-                                            setCurrentBooking(item.id)
+                                            setCurrentBooking([item.id,item.stadiumName])
                                             setOpen(true)
                                         }} type={"primary"} style={{marginTop:`50px`}}>预订</Button>
                                     </Col>

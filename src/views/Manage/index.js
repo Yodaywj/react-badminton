@@ -1,8 +1,9 @@
 import {ScheduleOutlined, SlidersFilled, SnippetsOutlined} from '@ant-design/icons';
-import {Layout, Menu, Skeleton, Switch, theme} from 'antd';
+import {Image, Layout, Menu, Skeleton, Switch, theme} from 'antd';
 import React, {useEffect, useState} from 'react';
 import {Link, Outlet, useLoaderData} from "react-router-dom";
 import {MyHeader} from "../../layout/header";
+import stadiumGrey from "../../assets/stadiumGrey.svg"
 const {Content, Sider } = Layout;
 const Manage = () => {
     const {user} = useLoaderData();
@@ -46,13 +47,13 @@ const Manage = () => {
         {
             key : 3,
             icon: <SnippetsOutlined />,
-            label: <Link to={`stadium`}>我的场馆</Link>,
+            label: <Link to={`myBooking`}>我的预订</Link>,
         },
         {
             key : 4,
-            icon: <SnippetsOutlined />,
+            icon: <img  src={stadiumGrey} width={16} alt={'我的场馆'}/>,
             label: <Link to={`stadium`}>我的场馆</Link>,
-        }
+        },
     ]
     const {
         token: { colorBgContainer },

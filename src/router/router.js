@@ -1,4 +1,4 @@
-import {createBrowserRouter, createHashRouter} from "react-router-dom";
+import {createBrowserRouter} from "react-router-dom";
 import ErrorPage from "../views/ErrorPage";
 import Home from "../views/Home";
 import Register from "../views/User/Register";
@@ -17,6 +17,8 @@ import Stadium from "../views/Manage/Stadium";
 import {MyFooter} from "../layout/footer";
 import StadiumDetail from "../views/Manage/stadiumDetail";
 import Booking from "../views/booking";
+import MyBooking from "../views/Manage/MyBooking";
+import {myBookingLoader} from "../services/bookingLoader"
 
 
 const router = createBrowserRouter([
@@ -56,6 +58,11 @@ const router = createBrowserRouter([
                 path:"bulletin-board",
                 element: <BulletinBoard/>,
                 loader: bulletinDataLoader,
+            },
+            {
+                path:"myBooking",
+                element: <MyBooking/>,
+                loader: myBookingLoader,
             },
             {
                 path:"stadium",

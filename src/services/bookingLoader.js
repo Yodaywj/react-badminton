@@ -27,4 +27,17 @@ const bookCourt = async (values)=>{
     })
     return {message, result}
 }
-export {loader, bookCourt};
+const myBookingLoader = async ()=>{
+    let message = '';
+    let result;
+    let myBooking = [];
+    await axios.get(`${ROOT_URL}/booking/myBooking`,{withCredentials:true}).then(response=>{
+        result = true;
+        myBooking = response.data.myBooking;
+    }).catch(error=>{
+        message = error.message;
+        result = false;
+    })
+    return {message,result,myBooking}
+}
+export {loader, bookCourt, myBookingLoader};
