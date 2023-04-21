@@ -2,7 +2,7 @@ import {Button, Col, Row, Tabs, Tag, Typography} from 'antd';
 import {Link, useLoaderData} from "react-router-dom";
 import Member from "./components/member";
 import Courts from "./components/courts";
-import dateSubtract from "../../../utils/dateSubtract";
+import BookingManage from "./components/bookingManage";
 const StadiumDetail = () => {
     const {members,stadiumId,courts,stadiumName} = useLoaderData();
 
@@ -20,6 +20,11 @@ const StadiumDetail = () => {
             label: '会员管理',
             key: '2',
             children: <Member members={members} stadiumId={stadiumId}/>,
+        },
+        {
+            label: '预订管理',
+            key: '3',
+            children: <BookingManage stadiumId={stadiumId} courtsNum={courts.length}/>,
         },
     ]
     return (

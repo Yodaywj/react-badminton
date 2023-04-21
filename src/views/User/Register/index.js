@@ -98,20 +98,8 @@ const Register = () => {
             handleClick();
         }
     };
-    const prefixSelector = (
-        <Form.Item name="prefix" noStyle>
-            <Select
-                style={{
-                    width: 70,
-                }}
-            >
-                <Option value="86">+86</Option>
-                <Option value="87">+87</Option>
-            </Select>
-        </Form.Item>
-    );
     return (
-    <Col span={24}>
+        <Col span={20}>
             <Form
                 {...formItemLayout}
                 form={form}

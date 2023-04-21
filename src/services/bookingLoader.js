@@ -28,16 +28,60 @@ const bookCourt = async (values)=>{
     return {message, result}
 }
 const myBookingLoader = async ()=>{
-    let message = '';
+    let bookingMessage = '';
     let result;
     let myBooking = [];
     await axios.get(`${ROOT_URL}/booking/myBooking`,{withCredentials:true}).then(response=>{
         result = true;
         myBooking = response.data.myBooking;
     }).catch(error=>{
-        message = error.message;
+        bookingMessage = error.message;
         result = false;
     })
-    return {message,result,myBooking}
+    return {bookingMessage,result,myBooking}
 }
-export {loader, bookCourt, myBookingLoader};
+const deleteBooking = async (id)=>{
+    let result = false;
+    let info;
+    await axios.delete(`${ROOT_URL}/booking/deleteBooking/${id}`).then(response=>{
+        if (response.data.result){
+            result = true;
+            info = response.data.message;
+        }else info = '响应出错';
+    }).catch(error=>{
+        info = error.message
+    })
+    return{result,info}
+}
+const bookingManage = async (stadiumId)=>{
+    let bookings = [];
+    await axios.get(`${ROOT_URL}/booking/bookingManage/${stadiumId}`).then(response=>{
+        bookings = response.data.bookings;
+    })
+    return {bookings}
+}
+const setBooking = async (id,courtId,state)=>{
+    let result = false;
+    let resultMessage;
+    await axios.patch(`${ROOT_URL}/booking/setBooking/?id=${id}&courtId=${courtId}&state=${state}`).then(response=>{
+        result = response.data.result;
+        resultMessage = response.data.message;
+    }).catch(error=>{
+        resultMessage = error.message;
+    })
+    return {result,resultMessage}
+}
+const hideBooking = async (id)=>{
+    let result = false;
+    let info;
+    await axios.patch(`${ROOT_URL}/booking/hideBooking/${id}`).then(response=>{
+        if (response.data.result){
+            result = true;
+            info = response.data.message;
+        }else info = '响应出错';
+    }).catch(error=>{
+        info = error.message
+    })
+    return{result,info}
+}
+export {loader, bookCourt, myBookingLoader,deleteBooking,bookingManage,setBooking,hideBooking};

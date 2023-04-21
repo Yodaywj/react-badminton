@@ -61,14 +61,14 @@ const CollectionCreateForm =  ({open, onCreate,form,onCancel}) => {
                     label="时长"
                     rules={[
                         {
-                            message:`时长范围为1-24`,
+                            message:`时长范围为0.5-24`,
                             type:"number",
                             max:24,
-                            min:1,
+                            min:0.5,
                         },
                     ]}
                 >
-                    <InputNumber style={{width:`120px`}} min={1} max={24} addonAfter={'小时'}/>
+                    <InputNumber style={{width:`120px`}} min={0} max={99} addonAfter={'小时'}/>
                 </Form.Item>
                 <Form.Item
                     name="remarks"
@@ -95,11 +95,13 @@ const BookingInfo = ({setStadiums,sum,stadiums,isFilter,user})=>{
     const [currentBooking, setCurrentBooking] = useState([]);
     const onCreate = (values)=> {
         values = {...values,time:values.time.format("YYYY-MM-DD HH:mm:ss"),
+            id: null,
             username:user.username,
             stadiumId:currentBooking[0],
             stadiumName:currentBooking[1],
             courtId:0,
             state:'预订中',}
+        form.resetFields();
         setOpen(false);
         bookCourt(values).then(response=>{
             if (response.result){

@@ -20,3 +20,11 @@ export async function loader({params}) {
     })
     return {members,stadiumId,courts,stadiumName};
 }
+const getStadium = async (stadiumId)=>{
+    let stadium = {};
+    await axios.get(`${ROOT_URL}/stadium/getStadium/${stadiumId}`).then(response=>{
+        stadium = response.data.stadium;
+    })
+    return {stadium}
+}
+export {getStadium}

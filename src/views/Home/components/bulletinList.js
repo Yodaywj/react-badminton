@@ -1,7 +1,23 @@
 import {Badge, Card, List} from "antd";
-import React from "react";
+import React, {useEffect, useState} from "react";
 
 export default function BulletinList ({bulletins}){
+    const [screenWidth, setScreenWidth] = useState(window.innerWidth);
+    const [pageSize , setPageSize] = useState(6)
+    useEffect(() => {
+        function handleResize() {
+            setScreenWidth(window.innerWidth);
+        }
+        window.addEventListener('resize', handleResize);
+        return () => {
+            window.removeEventListener('resize', handleResize);
+        };
+    }, []);
+    useEffect(()=>{
+        if (screenWidth < 1200){
+            setPageSize(4);
+        } else setPageSize(6)
+    },[screenWidth])
     return(
         <List
             grid={{
@@ -15,7 +31,7 @@ export default function BulletinList ({bulletins}){
             }}
             pagination={{
                 simple : true,
-                pageSize : 6,
+                pageSize : pageSize,
             }}
             dataSource={bulletins}
             renderItem={(item) => (
