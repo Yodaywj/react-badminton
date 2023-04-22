@@ -191,7 +191,7 @@ const BulletinBoard = () => {
                                         }}
                                     />
                                     :
-                                    <div style={{minHeight: `200px`}} dangerouslySetInnerHTML={{__html: item.content}}/>
+                                    <div style={{overflow:`auto`,height: `260px`}} dangerouslySetInnerHTML={{__html: item.content}}/>
                                 }
                             </Card>
                         </Badge.Ribbon>

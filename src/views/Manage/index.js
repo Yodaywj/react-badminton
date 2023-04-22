@@ -1,16 +1,19 @@
-import {ScheduleOutlined, SlidersFilled, SnippetsOutlined} from '@ant-design/icons';
+import {ContactsOutlined, ScheduleOutlined, SlidersFilled, SnippetsOutlined} from '@ant-design/icons';
 import {Image, Layout, Menu, Skeleton, Switch, theme} from 'antd';
-import React, {useEffect, useState} from 'react';
+import React, {createContext, useEffect, useState} from 'react';
 import {Link, Outlet, useLoaderData} from "react-router-dom";
 import {MyHeader} from "../../layout/header";
 import stadiumGrey from "../../assets/stadiumGrey.svg"
 const {Content, Sider } = Layout;
 const Manage = () => {
     const {user} = useLoaderData();
+    const [userInfo,setUserInfo] = useState(user);
+    const deepData = [userInfo,setUserInfo];
     const [collapsed, setCollapsed] = useState(false);
     const [siderTheme, setSiderTheme] = useState('light');
     const [mode, setMode] = useState(true);
     const [loading,setLoading] = useState(true);
+
     useEffect(() => {
         setLoading(false)
     }, []);
@@ -45,6 +48,11 @@ const Manage = () => {
             label : <Link to={`bulletin-board`}>公告牌</Link>
         }:null,
         {
+            key : 2,
+            icon: <ContactsOutlined />,
+            label: <Link to={`userInfo`}>个人信息</Link>,
+        },
+        {
             key : 3,
             icon: <SnippetsOutlined />,
             label: <Link to={`myBooking`}>我的预订</Link>,
@@ -60,7 +68,7 @@ const Manage = () => {
     } = theme.useToken();
     return (
         <Layout style={{ minHeight: '100vh' }}>
-            {mode && <MyHeader user={user}/>}
+            {mode && <MyHeader user={userInfo}/>}
             <Layout>
                 <Sider
                     collapsible collapsed={collapsed} onCollapse={(value) => setCollapsed(value)}
@@ -90,6 +98,7 @@ const Manage = () => {
                             minHeight: '92vh'
                         }}
                         items={mainItems}
+
                     />
                 </Sider>
                 <Layout
@@ -106,9 +115,11 @@ const Manage = () => {
                             background: colorBgContainer,
                         }}
                     >
-                        <Skeleton loading={loading} active={true} paragraph={{rows:10}}>
-                            <Outlet />
-                        </Skeleton>
+                        <UserContext.Provider value={deepData}>
+                            <Skeleton loading={loading} active={true} paragraph={{rows:20}}>
+                                <Outlet />
+                            </Skeleton>
+                        </UserContext.Provider>
                     </Content>
                 </Layout>
             </Layout>
@@ -116,3 +127,4 @@ const Manage = () => {
     );
 };
 export default Manage;
+export const UserContext = createContext();

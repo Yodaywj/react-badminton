@@ -84,4 +84,11 @@ const hideBooking = async (id)=>{
     })
     return{result,info}
 }
-export {loader, bookCourt, myBookingLoader,deleteBooking,bookingManage,setBooking,hideBooking};
+const bookingsForCourt = async (stadiumId,id)=>{
+    let bookings = [];
+    await axios.get(`${ROOT_URL}/booking/bookingsForCourt/?stadiumId=${stadiumId}&courtId=${id}`).then(response=>{
+        bookings = response.data.bookings;
+    })
+    return {bookings};
+}
+export {loader, bookCourt, myBookingLoader,deleteBooking,bookingManage,setBooking,hideBooking,bookingsForCourt};

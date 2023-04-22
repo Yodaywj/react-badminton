@@ -1,11 +1,11 @@
 .content-home-intro{
     padding-top: 50px;
-    padding-bottom: 30px;
+    padding-bottom: 70px;
     background-color: white;
 }
 .content-home-second{
     background: linear-gradient(180deg, #f8f8f8,#ffffff);
-    padding: 50px;
+    padding: 20px 50px 50px 50px;
 }
 .content-home-third{
     background: linear-gradient(180deg, #f8f8f8,#ffffff);

@@ -1,15 +1,60 @@
 import courtImage from "../../../../assets/badminton-court-2d.png";
-import {Button, Col, Descriptions, Form, Image, Statistic, Modal, Row, Radio, InputNumber, message, Tag} from "antd";
+import {
+    Button,
+    Col,
+    Descriptions,
+    Form,
+    Image,
+    Statistic,
+    Modal,
+    Row,
+    Radio,
+    InputNumber,
+    message,
+    Drawer,
+    Tag,
+} from "antd";
 import {List} from 'antd';
 import React, {useState} from 'react';
 import switchLight from "../../../../services/switchLight";
 import setNewCourt from "../../../../services/setNewCourt";
+import {bookingsForCourt} from "../../../../services/bookingLoader";
 const Courts = ({data,stadiumId}) => {
     const [form] = Form.useForm();
     const [switchAll, setSwitchAll] = useState(`已关闭`)
     const {Countdown} = Statistic;
     const [open, setOpen] = useState(false);
     const [editing, setEditing] = useState({})
+    const [openSetting,setOpenSetting] = useState(false);
+    const [bookingDetail,setBookingDetail] = useState(<></>);
+    const bookingDetails = async (stadiumId,id)=>{
+        await bookingsForCourt(stadiumId,id).then(response=>{
+            setBookingDetail(
+                <List
+                    itemLayout="vertical"
+                    size="large"
+                    pagination={{
+                        pageSize: 3,
+                    }}
+                    dataSource={response.bookings}
+                    renderItem={(item) => (
+                        <List.Item
+                            key={item.id}
+                        >
+                            <Descriptions column={1}>
+                                <Descriptions.Item label="用户">{item.username}</Descriptions.Item>
+                                <Descriptions.Item label="时间">{item.time}</Descriptions.Item>
+                                <Descriptions.Item label="时长">{item.duration}</Descriptions.Item>
+                                <Descriptions.Item label="状态">{item.state}</Descriptions.Item>
+                                <Descriptions.Item label="备注">{item.remarks}</Descriptions.Item>
+                            </Descriptions>
+                        </List.Item>
+                    )}
+                />
+            )
+        })
+        setOpen(true)
+    }
     const transformTag = (state)=>{
         let newState;
         if (state === '空闲'){
@@ -88,6 +133,9 @@ const Courts = ({data,stadiumId}) => {
     }
     return (
         <>
+            <Drawer closable={false} title={`预订`} open={open} onClose = {()=>{setOpen(false)}}>
+                {bookingDetail}
+            </Drawer>
             <Row justify={"end"}>
                 <Button
                         type={switchAll === "已关闭"? 'default':'primary'}
@@ -138,7 +186,9 @@ const Courts = ({data,stadiumId}) => {
                                                 <Tag>{item.light}</Tag>
                                         }
                                         </Descriptions.Item>
-                                        <Descriptions.Item label="预订时间">{}</Descriptions.Item>
+                                        <Descriptions.Item label="预订时间">
+                                            <Button type={"dashed"} onClick={()=>{bookingDetails(item.stadiumId,item.id)}}>详情</Button>
+                                        </Descriptions.Item>
                                     </Descriptions>
                                 </Row>
                                 <Row style={{marginTop:`50px`}}>
@@ -148,7 +198,7 @@ const Courts = ({data,stadiumId}) => {
                                         {item.light === "开启中"? '关闭':'开启'}
                                     </Button>
                                     <Button onClick={() => {
-                                        setOpen(true);
+                                        setOpenSetting(true);
                                         setEditing(item)
                                     }}>设置</Button>
                                 </Row>
@@ -159,20 +209,17 @@ const Courts = ({data,stadiumId}) => {
             />
             <Modal
                 centered={true}
-                open={open}
+                open={openSetting}
                 title="场地设置"
                 okText="确认"
                 cancelText="取消"
-                onCancel={() => setOpen(false)}
+                onCancel={() => setOpenSetting(false)}
                 onOk={() => {
                     form
                         .validateFields()
                         .then((values) => {
                             form.resetFields();
                             onCreate(values);
-                        })
-                        .catch((info) => {
-                            console.log('Validate Failed:', info);
                         });
                 }}
             >

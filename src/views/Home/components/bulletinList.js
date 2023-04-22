@@ -1,6 +1,5 @@
 import {Badge, Card, List} from "antd";
 import React, {useEffect, useState} from "react";
-
 export default function BulletinList ({bulletins}){
     const [screenWidth, setScreenWidth] = useState(window.innerWidth);
     const [pageSize , setPageSize] = useState(6)
@@ -41,7 +40,7 @@ export default function BulletinList ({bulletins}){
                             title={item.title}
                         >
                             {
-                                <div style={{minHeight:`200px`}} dangerouslySetInnerHTML={{__html:item.content}} />
+                                <div style={{overflow:"auto",height:`260px`}} dangerouslySetInnerHTML={{__html:item.content}} />
                             }
                         </Card>
                     </Badge.Ribbon>

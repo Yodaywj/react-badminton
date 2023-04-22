@@ -19,6 +19,7 @@ import StadiumDetail from "../views/Manage/stadiumDetail";
 import Booking from "../views/booking";
 import MyBooking from "../views/Manage/MyBooking";
 import {myBookingLoader} from "../services/bookingLoader"
+import UserInfo from "../views/Manage/UserInfo";
 
 
 const router = createBrowserRouter([
@@ -73,6 +74,10 @@ const router = createBrowserRouter([
                 path:"stadium/:stadiumId",
                 element: <StadiumDetail/>,
                 loader: stadiumDetailLoader,
+            },
+            {
+                path:"userInfo",
+                element: <UserInfo/>,
             },
         ],
     },

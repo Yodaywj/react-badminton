@@ -1,4 +1,4 @@
-import {Button, Descriptions, List, message, Modal, Row, Space} from 'antd';
+import {Button, Descriptions, List, message, Modal, Row, Space, Tooltip} from 'antd';
 import React, {useState} from 'react';
 import stadium from '../../../assets/badminton-stadium.png'
 import {ExclamationCircleFilled, LikeOutlined, MessageOutlined, StarOutlined} from "@ant-design/icons";
@@ -69,7 +69,7 @@ const Stadium = () => {
                 renderItem={(item) => (
 
                     <List.Item
-                        key={item.title}
+                        key={item.id}
                         actions={[
                             <IconText icon={StarOutlined} text="156" key="list-vertical-star-o"/>,
                             <IconText icon={LikeOutlined} text="156" key="list-vertical-like-o"/>,
@@ -86,7 +86,7 @@ const Stadium = () => {
                         <List.Item.Meta
                             description={
                                 <Descriptions
-                                    title={`我的场馆 ${stadiumData.indexOf(item) + 1}`}
+                                    title={<Tooltip title={item.id}>我的场馆 {stadiumData.indexOf(item) + 1}</Tooltip>}
                                     bordered
                                     extra={
                                     <Row>

@@ -62,7 +62,7 @@ export const UserDropdown = ({user})=> {
                 },
                 {
                     key: '3',
-                    label: <Link to={`/manage/bulletin-board`}>公告板</Link>
+                    label: <Link to={`/manage/userInfo`}>个人中心</Link>
                 },
                 {
                     key: '4',

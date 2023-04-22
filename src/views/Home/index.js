@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {Col, Image, Layout, Row, Skeleton, Spin, Typography} from 'antd';
+import {Button, Col, Drawer, Image, Layout, Row, Skeleton, Spin, Typography} from 'antd';
 import '../../styles/layout.css'
 import {MyHeader} from "../../layout/header";
 import {MyFooter} from "../../layout/footer";
@@ -45,6 +45,11 @@ const Home = () => {
                 </Row>
                 <Row className={`content-home-second`}>
                     <Col span={24}>
+                        <Row justify={"center"}>
+                            <Title level={2} style={{marginBottom:`25px`}}>
+                                公告板
+                            </Title>
+                        </Row>
                         <Skeleton loading={loading} active={true}>
                             <BulletinList bulletins={bulletins}/>
                         </Skeleton>

@@ -1,7 +1,20 @@
-import {Button, Col, Descriptions, Form, InputNumber, List, Modal, Row, Space, DatePicker, message} from "antd";
+import {
+    Button,
+    Col,
+    Descriptions,
+    Form,
+    InputNumber,
+    List,
+    Modal,
+    Row,
+    Space,
+    DatePicker,
+    message,
+    Skeleton, Tooltip
+} from "antd";
 import {LikeOutlined, MessageOutlined, StarOutlined} from "@ant-design/icons";
 import stadium from "../../../assets/badminton-stadium.png";
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import axios from "axios";
 import {ROOT_URL} from "../../../utils/constant";
 import dayjs from 'dayjs';
@@ -93,6 +106,10 @@ const BookingInfo = ({setStadiums,sum,stadiums,isFilter,user})=>{
     const [current, setCurrent] = useState(1);
     const [pageSize, setPageSize] = useState(5);
     const [currentBooking, setCurrentBooking] = useState([]);
+    const [loading, setLoading] = useState(true);
+    useEffect(() => {
+        setLoading(false)
+    }, []);
     const onCreate = (values)=> {
         values = {...values,time:values.time.format("YYYY-MM-DD HH:mm:ss"),
             id: null,
@@ -137,63 +154,64 @@ const BookingInfo = ({setStadiums,sum,stadiums,isFilter,user})=>{
                 }}
                 dataSource={stadiums}
                 renderItem={(item) => (
+                    <Skeleton loading={loading} active={true} avatar={true} paragraph={{rows:5}}>
+                        <List.Item
+                            key={item.id}
+                            actions={[
+                                <IconText icon={StarOutlined} text="156" key="list-vertical-star-o"/>,
+                                <IconText icon={LikeOutlined} text="156" key="list-vertical-like-o"/>,
+                                <IconText icon={MessageOutlined} text="2" key="list-vertical-message"/>,
+                            ]}
+                            extra={
+                                <img
+                                    width={272}
+                                    alt="logo"
+                                    src={stadium}
+                                />
+                            }
+                        >
+                            <List.Item.Meta
+                                description={
+                                <>
+                                    <Descriptions
+                                        title={<Tooltip title={item.id}>查看编号</Tooltip>}
+                                        bordered
+                                        extra={
+                                            <Row>
+                                                <Space size={"middle"}>
 
-                    <List.Item
-                        key={item.title}
-                        actions={[
-                            <IconText icon={StarOutlined} text="156" key="list-vertical-star-o"/>,
-                            <IconText icon={LikeOutlined} text="156" key="list-vertical-like-o"/>,
-                            <IconText icon={MessageOutlined} text="2" key="list-vertical-message"/>,
-                        ]}
-                        extra={
-                            <img
-                                width={272}
-                                alt="logo"
-                                src={stadium}
+                                                </Space>
+                                            </Row>
+                                        }
+                                        column={{
+                                            xxl: 4,
+                                            xl: 3,
+                                            lg: 3,
+                                            md: 3,
+                                            sm: 2,
+                                            xs: 1,
+                                        }}
+                                    >
+                                        <Descriptions.Item label="场馆名">{item.stadiumName}</Descriptions.Item>
+                                        <Descriptions.Item label="省份">{item.province}</Descriptions.Item>
+                                        <Descriptions.Item label="城市">{item.city}</Descriptions.Item>
+                                        <Descriptions.Item label="详细地址">{item.address}</Descriptions.Item>
+                                        <Descriptions.Item label="场地数量">{item.courtNumber}</Descriptions.Item>
+                                        <Descriptions.Item label="电话">{item.phone}</Descriptions.Item>
+                                        <Descriptions.Item label="备注">{item.remarks}</Descriptions.Item>
+                                    </Descriptions>
+                                    <Row>
+                                        <Col push={20}>
+                                            <Button onClick={()=> {
+                                                setCurrentBooking([item.id,item.stadiumName])
+                                                setOpen(true)
+                                            }} type={"primary"} style={{marginTop:`50px`}}>预订</Button>
+                                        </Col>
+                                    </Row>
+                                </>}
                             />
-                        }
-                    >
-                        <List.Item.Meta
-                            description={
-                            <>
-                                <Descriptions
-                                    title={`我的场馆`}
-                                    bordered
-                                    extra={
-                                        <Row>
-                                            <Space size={"middle"}>
-
-                                            </Space>
-                                        </Row>
-                                    }
-                                    column={{
-                                        xxl: 4,
-                                        xl: 3,
-                                        lg: 3,
-                                        md: 3,
-                                        sm: 2,
-                                        xs: 1,
-                                    }}
-                                >
-                                    <Descriptions.Item label="场馆名">{item.stadiumName}</Descriptions.Item>
-                                    <Descriptions.Item label="省份">{item.province}</Descriptions.Item>
-                                    <Descriptions.Item label="城市">{item.city}</Descriptions.Item>
-                                    <Descriptions.Item label="详细地址">{item.address}</Descriptions.Item>
-                                    <Descriptions.Item label="场地数量">{item.courtNumber}</Descriptions.Item>
-                                    <Descriptions.Item label="电话">{item.phone}</Descriptions.Item>
-                                    <Descriptions.Item label="备注">{item.remarks}</Descriptions.Item>
-                                </Descriptions>
-                                <Row>
-                                    <Col push={20}>
-                                        <Button onClick={()=> {
-                                            setCurrentBooking([item.id,item.stadiumName])
-                                            setOpen(true)
-                                        }} type={"primary"} style={{marginTop:`50px`}}>预订</Button>
-                                    </Col>
-                                </Row>
-                            </>}
-                        />
-                    </List.Item>
+                        </List.Item>
+                    </Skeleton>
                 )}
             />
             <CollectionCreateForm
