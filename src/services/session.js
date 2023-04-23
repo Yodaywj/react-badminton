@@ -9,10 +9,10 @@ export async function loader() {
         if (response.data.result){
             user = response.data.user;
         }else {
-            user = {username: '未登录'}
+            user = {username: false}
         }
     }).catch(() => {
-        user = {username: '未登录'}
+        user = {username: false}
     })
     return {user};
 }

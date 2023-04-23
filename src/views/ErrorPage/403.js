@@ -5,7 +5,7 @@ const FourZeroThree = () => (
         status="403"
         title="403"
         subTitle="Sorry, you are not authorized to access this page."
-        extra={<Button type="primary"><Link to={'/'}>Back Home</Link></Button>}
+        extra={<Link to={'/'}><Button type="primary">回到首页</Button></Link>}
     />
 );
 export default FourZeroThree;

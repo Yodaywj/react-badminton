@@ -5,7 +5,7 @@ const FourZeroFour = () => (
         status="404"
         title="404"
         subTitle="Sorry, the page you visited does not exist."
-        extra={<Button type="primary"><Link to={'/'}>Back Home</Link></Button>}
+        extra={<Link to={'/'}><Button type="primary">回到首页</Button></Link>}
     />
 );
 export default FourZeroFour;

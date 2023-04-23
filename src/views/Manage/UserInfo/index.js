@@ -25,6 +25,9 @@ const UserInfo = ()=>{
             }
         })
     }
+    const resetPassword = ()=>{
+
+    }
     return (
         <>
             {!isEditing?
@@ -92,7 +95,7 @@ const UserInfo = ()=>{
                 </Form>
             }
             <Row style={{marginTop:`50px`}}>
-                <Button>重置密码</Button>
+                <Button disabled={true} onClick={resetPassword}>重置密码</Button>
                 <Button style={{marginLeft:`20px`}} type={"primary"} onClick={()=>editInfo()}>{isEditing?`取消`:`编辑信息`}</Button>
             </Row>
         </>

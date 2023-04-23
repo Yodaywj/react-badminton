@@ -99,7 +99,7 @@ const MyBooking = () => {
             },
         },
         {
-            title: '时长',
+            title: '时长(小时)',
             key: 'duration',
             dataIndex: 'duration',
         },

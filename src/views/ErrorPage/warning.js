@@ -4,7 +4,7 @@ const Warning = () => (
     <Result
         status="warning"
         title="There are some problems with your operation."
-        extra={<Button type="primary"><Link to={'/'}>Back Home</Link></Button>}
+        extra={<Link to={'/'}><Button type="primary">home</Button></Link>}
     />
 );
 export default Warning;

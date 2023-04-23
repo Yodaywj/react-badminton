@@ -154,7 +154,7 @@ const BookingManage = ({stadiumId,courtsNum}) => {
             },
         },
         {
-            title: '时长',
+            title: '时长(小时)',
             key: 'duration',
             dataIndex: 'duration',
         },

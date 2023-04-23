@@ -1,13 +1,18 @@
-import {Button, Card, Input, List, Badge, message, Modal} from 'antd';
+import {Button, Card, Input, List, Badge, message, Modal, Row} from 'antd';
 import {DeleteOutlined, EditOutlined, ExclamationCircleFilled, SaveOutlined} from "@ant-design/icons";
-import React, {useEffect, useState} from "react";
+import React, {useContext, useEffect, useState} from "react";
 import ReactQuill from "react-quill";
 import {useLoaderData} from "react-router-dom";
 import {ROOT_URL} from "../../../utils/constant";
 import axios from "axios";
 import 'react-quill/dist/quill.snow.css';
+import {UserContext} from "../index";
+import Warning from "../../ErrorPage/warning";
+import FourZeroThree from "../../ErrorPage/403";
 
 const BulletinBoard = () => {
+    const deepData = useContext(UserContext);
+    const user = deepData[0];
     let {data} = useLoaderData();
     const newData = data.map(item => ({...item, editing: false}));
     const [loading, setLoading] = useState(true);
@@ -144,6 +149,11 @@ const BulletinBoard = () => {
     useEffect(() => {
         setLoading(false);
     }, []);
+    if (user.privilege !== 'root')return (
+        <Row justify={"center"} align={"middle"}>
+            <FourZeroThree/>
+        </Row>
+    )
     return (
         <>
             <List

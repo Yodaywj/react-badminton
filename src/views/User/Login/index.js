@@ -135,13 +135,13 @@ const Login = () => {
                     </Row>
                 </Form.Item>
                 <Form.Item>
-                    <Form.Item name="remember" valuePropName="checked" noStyle>
-                        <Checkbox>7天免密登录</Checkbox>
-                    </Form.Item>
+                    {/*<Form.Item name="remember" valuePropName="checked" noStyle>*/}
+                    {/*    <Checkbox>7天免密登录</Checkbox>*/}
+                    {/*</Form.Item>*/}
 
-                    <Link className="login-form-forgot" to={'/'}>
-                        忘记密码
-                    </Link>
+                    {/*<Link className="login-form-forgot" to={'/'}>*/}
+                    {/*    忘记密码*/}
+                    {/*</Link>*/}
                 </Form.Item>
 
                 <Form.Item>

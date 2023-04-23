@@ -1,9 +1,11 @@
 import {ContactsOutlined, ScheduleOutlined, SlidersFilled, SnippetsOutlined} from '@ant-design/icons';
-import {Image, Layout, Menu, Skeleton, Switch, theme} from 'antd';
+import {Image, Layout, Menu, Row, Skeleton, Switch, theme} from 'antd';
 import React, {createContext, useEffect, useState} from 'react';
 import {Link, Outlet, useLoaderData} from "react-router-dom";
 import {MyHeader} from "../../layout/header";
 import stadiumGrey from "../../assets/stadiumGrey.svg"
+import Warning from "../ErrorPage/warning";
+import Failure from "../ErrorPage/failure";
 const {Content, Sider } = Layout;
 const Manage = () => {
     const {user} = useLoaderData();
@@ -66,7 +68,14 @@ const Manage = () => {
     const {
         token: { colorBgContainer },
     } = theme.useToken();
-    return (
+    if (user.username === false){
+        return (
+            <Row justify={"center"} align={"middle"} style={{height:`100vh`,width:`100vw`}}>
+                <Failure/>
+            </Row>
+        )
+    }
+    else return (
         <Layout style={{ minHeight: '100vh' }}>
             {mode && <MyHeader user={userInfo}/>}
             <Layout>

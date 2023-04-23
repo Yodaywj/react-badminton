@@ -9,7 +9,7 @@ import axios from "axios";
 export const UserDropdown = ({user})=> {
     let items = [{}];
     const [messageApi, contextHolder] = message.useMessage();
-    const [login, setLogin] = useState(user.username === '未登录');
+    const [login, setLogin] = useState(!user.username);
 
     const handleLogin = async () => {
         const url = `${ROOT_URL}/user/logout`
@@ -50,47 +50,25 @@ export const UserDropdown = ({user})=> {
             },
         ];
     }else {
-        if (user.privilege === 'root'){
-            items = [
-                {
-                    key: '1',
-                    label: `用户: ${user.username}`,
-                },
-                {
-                    key: '2',
-                    label: `昵称: ${user.nickname}`,
-                },
-                {
-                    key: '3',
-                    label: <Link to={`/manage/userInfo`}>个人中心</Link>
-                },
-                {
-                    key: '4',
-                    label: <Link to={`/`}>退出登录</Link>,
-                    onClick: handleLogin,
-                },
-            ];
-        }else {
-            items = [
-                {
-                    key: '1',
-                    label: `用户: ${user.username}`,
-                },
-                {
-                    key: '2',
-                    label: `昵称: ${user.nickname}`,
-                },
-                {
-                    key: '3',
-                    label: <Link to={`/manage`}>场馆管理</Link>
-                },
-                {
-                    key: '4',
-                    label: <Link to={`/`}>退出登录</Link>,
-                    onClick: handleLogin,
-                },
-            ];
-        }
+        items = [
+            {
+                key: '1',
+                label: `用户: ${user.username}`,
+            },
+            {
+                key: '2',
+                label: `昵称: ${user.nickname}`,
+            },
+            {
+                key: '3',
+                label: <Link to={`/manage/userInfo`}>个人中心</Link>
+            },
+            {
+                key: '4',
+                label: <Link to={`/`}>退出登录</Link>,
+                onClick: handleLogin,
+            },
+        ];
     }
     return (
         <Dropdown

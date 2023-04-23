@@ -5,7 +5,7 @@ const FiveZeroZero = () => (
         status="500"
         title="500"
         subTitle="Sorry, something went wrong."
-        extra={<Button type="primary"><Link to={'/'}>Back Home</Link></Button>}
+        extra={<Link to={'/'}><Button type="primary">回到首页</Button></Link>}
     />
 );
 export default FiveZeroZero;

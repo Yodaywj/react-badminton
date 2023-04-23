@@ -14,12 +14,13 @@ import {loader as bookingLoader} from "../services/bookingLoader"
 import BulletinBoard from "../views/Manage/BulletinBoard";
 import Manage from "../views/Manage";
 import Stadium from "../views/Manage/Stadium";
-import {MyFooter} from "../layout/footer";
 import StadiumDetail from "../views/Manage/stadiumDetail";
 import Booking from "../views/booking";
 import MyBooking from "../views/Manage/MyBooking";
 import {myBookingLoader} from "../services/bookingLoader"
 import UserInfo from "../views/Manage/UserInfo";
+import Comment from "../views/Comment";
+import {loader as commentLoader} from "../services/commentServices"
 
 
 const router = createBrowserRouter([
@@ -88,9 +89,10 @@ const router = createBrowserRouter([
         loader: bookingLoader,
     },
     {
-        path:"/test",
+        path:"/comment",
         errorElement:<ErrorPage/>,
-        element:<MyFooter/>
+        element:<Comment/>,
+        loader:commentLoader,
     },
 ],{basename:"/"});
 

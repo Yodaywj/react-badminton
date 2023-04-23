@@ -74,6 +74,9 @@ const CollectionCreateForm =  ({open, onCreate,form,onCancel}) => {
                     label="时长"
                     rules={[
                         {
+                            required:true,
+                        },
+                        {
                             message:`时长范围为0.5-24`,
                             type:"number",
                             max:24,
@@ -111,22 +114,26 @@ const BookingInfo = ({setStadiums,sum,stadiums,isFilter,user})=>{
         setLoading(false)
     }, []);
     const onCreate = (values)=> {
-        values = {...values,time:values.time.format("YYYY-MM-DD HH:mm:ss"),
-            id: null,
-            username:user.username,
-            stadiumId:currentBooking[0],
-            stadiumName:currentBooking[1],
-            courtId:0,
-            state:'预订中',}
-        form.resetFields();
-        setOpen(false);
-        bookCourt(values).then(response=>{
-            if (response.result){
-                message.success(response.message);
-            }else {
-                message.error(response.message);
-            }
-        })
+        if (!user.username){
+            message.error("请登录后预订")
+        }else {
+            values = {...values,time:values.time.format("YYYY-MM-DD HH:mm:ss"),
+                id: null,
+                username:user.username,
+                stadiumId:currentBooking[0],
+                stadiumName:currentBooking[1],
+                courtId:0,
+                state:'预订中',}
+            form.resetFields();
+            setOpen(false);
+            bookCourt(values).then(response=>{
+                if (response.result){
+                    message.success(response.message);
+                }else {
+                    message.error(response.message);
+                }
+            })
+        }
     }
     const onChange = (page,pageSize) => {
         if (!isFilter){
