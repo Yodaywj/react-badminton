@@ -15,15 +15,20 @@ const Comment = () => {
     const {user,comments} = useLoaderData();
     const [data,setData] = useState(comments);
     const [comment,setComment] = useState('');
+    console.log(user)
     const handleSend = async ()=>{
         if (!comment || comment.trim().length === 0){
             message.error(`评论不能为空`)
         }else {
-            const now = dayjs().format('YYYY-MM-DD HH:mm:ss')
+            const now = dayjs().format('YYYY-MM-DD HH:mm:ss');
+            let nickname = user.nickname;
+            if (!user.username){
+                nickname = '游客';
+            }
             let myComment = {
                 content:comment,
                 username:user.username,
-                nickname:user.nickname,
+                nickname:nickname,
                 time:now,
                 id:0}
             await send(myComment).then(response=>{
@@ -76,7 +81,7 @@ const Comment = () => {
                                         <List.Item
                                             key={item.id}
                                             extra={
-                                            item.username === user.username?
+                                            item.username === user.username || user.privilege === 'root'?
                                                 <Tooltip title={`删除`} placement={"left"}>
                                                     <Button style={{marginTop:`25px`}} type={"text"} onClick={()=>handleDelete(item)}>
                                                         <DeleteOutlined/>
