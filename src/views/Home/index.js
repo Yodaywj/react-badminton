@@ -57,16 +57,14 @@ const Home = () => {
                         </Skeleton>
                     </Col>
                 </Row>
-                <Row justify={"center"} className={`content-home-third`} >
+                <Row justify={"center"} className={`content-home-demo`} >
                     <Col>
-                        <Image width={600} src={courtShow} preview={false}/>
-                    </Col>
-                    <Col style={{marginLeft:`300px`}}>
-                        <Row justify={"center"} style={{marginTop:`40px`}}>
+                        <Row justify={"center"} style={{marginBottom:`20px`}}>
                             <Title level={2}>
                                 场地管理
                             </Title>
                         </Row>
+                        <Image width={600} src={courtShow}/>
                         <Row justify={"center"} style={{marginTop:`25px`}}>
                             <Text strong={false} className={`text-secondary text-size-4`}>
                                 通过数字化系统
@@ -79,16 +77,14 @@ const Home = () => {
                         </Row>
                     </Col>
                 </Row>
-                <Row justify={"center"} className={`content-home-third`}>
+                <Row justify={"center"} className={`content-home-demo`}>
                     <Col>
-                        <Image width={600} src={bookingShow} preview={false}/>
-                    </Col>
-                    <Col style={{marginLeft:`300px`}}>
-                        <Row justify={"center"} style={{marginTop:`40px`}}>
-                            <Title level={2}>
+                        <Row justify={"center"}>
+                            <Title level={2} style={{marginBottom:`20px`}}>
                                 预订系统
                             </Title>
                         </Row>
+                        <Image width={600} src={bookingShow}/>
                         <Row justify={"center"} style={{marginTop:`25px`}}>
                             <Text strong={false} className={`text-secondary text-size-4`}>
                                 在线预订场馆

@@ -4,11 +4,16 @@
     background-color: white;
 }
 .content-home-second{
-    background: linear-gradient(180deg, #fafafa,#ffffff);
+    background: linear-gradient(180deg, #f8f8f8,#ffffff);
     padding: 20px 50px 50px 50px;
 }
 .content-home-third{
-    background: linear-gradient(180deg, #fafafa,#ffffff);
+    background: linear-gradient(180deg, #f8f8f8,#ffffff);
     padding-bottom: 50px;
     padding-top: 50px;
+}
+.content-home-demo{
+    background: linear-gradient(180deg, #f8f8f8,#ffffff);
+    padding-bottom: 50px;
+    padding-top: 20px;
 }
