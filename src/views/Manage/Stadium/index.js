@@ -7,7 +7,6 @@ import {Link, useLoaderData} from "react-router-dom";
 import axios from "axios";
 import {ROOT_URL} from "../../../utils/constant";
 import deleteCourts from "../../../services/deleteCourts";
-
 const IconText = ({icon, text}) => (
     <Space style={{marginTop:`70px`}}>
         {React.createElement(icon)}
