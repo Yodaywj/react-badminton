@@ -21,6 +21,7 @@ import setNewCourt from "../../../../services/setNewCourt";
 import {bookingsForCourt} from "../../../../services/bookingLoader";
 const Courts = ({data,stadiumId}) => {
     const [form] = Form.useForm();
+    const [confirmLoading, setConfirmLoading] = useState(false);
     const [switchAll, setSwitchAll] = useState(`已关闭`)
     const {Countdown} = Statistic;
     const [open, setOpen] = useState(false);
@@ -67,6 +68,7 @@ const Courts = ({data,stadiumId}) => {
         return newState
     }
     const onCreate = async (values) => {
+        setConfirmLoading(true);
         let {hour,minute} = values;
         if (hour<10){
             hour = `0${hour}`
@@ -90,7 +92,6 @@ const Courts = ({data,stadiumId}) => {
             if (response.result){
                 newCourt.state = transformTag(newCourt.state)
                 let {countdown} = response
-                console.log(countdown)
                 countdown = Date.now()+Number(countdown)*1000;
                 setCourts(courts.map(current => {
                     if (current.id === editing.id) {
@@ -102,6 +103,7 @@ const Courts = ({data,stadiumId}) => {
                 message.error(response.message);
             }
         })
+        setConfirmLoading(false)
         setOpenSetting(false);
     };
     data = data.map(item=>{
@@ -208,6 +210,7 @@ const Courts = ({data,stadiumId}) => {
                 )}
             />
             <Modal
+                confirmLoading={confirmLoading}
                 centered={true}
                 open={openSetting}
                 title="场地设置"
@@ -217,9 +220,9 @@ const Courts = ({data,stadiumId}) => {
                 onOk={() => {
                     form
                         .validateFields()
-                        .then((values) => {
+                        .then(async (values) => {
+                            await onCreate(values);
                             form.resetFields();
-                            onCreate(values);
                         });
                 }}
             >
