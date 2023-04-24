@@ -102,7 +102,7 @@ const Courts = ({data,stadiumId}) => {
                 message.error(response.message);
             }
         })
-        setOpen(false);
+        setOpenSetting(false);
     };
     data = data.map(item=>{
         const newState = transformTag(item.state);
