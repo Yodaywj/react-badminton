@@ -10,7 +10,7 @@ import {
     Space,
     DatePicker,
     message,
-    Skeleton, Tooltip
+    Skeleton, Tooltip, Image
 } from "antd";
 import {LikeOutlined, MessageOutlined, StarOutlined} from "@ant-design/icons";
 import stadium from "../../../assets/badminton-stadium.png";
@@ -170,10 +170,11 @@ const BookingInfo = ({setStadiums,sum,stadiums,isFilter,user})=>{
                                 <IconText icon={MessageOutlined} text="2" key="list-vertical-message"/>,
                             ]}
                             extra={
-                                <img
+                                <Image
                                     width={272}
                                     alt="logo"
                                     src={stadium}
+                                    placeholder={<Skeleton/>}
                                 />
                             }
                         >

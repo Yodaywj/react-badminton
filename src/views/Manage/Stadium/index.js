@@ -1,4 +1,4 @@
-import {Button, Descriptions, List, message, Modal, Row, Space, Tooltip} from 'antd';
+import {Button, Descriptions, Image, List, message, Modal, Row, Skeleton, Space, Tooltip} from 'antd';
 import React, {useState} from 'react';
 import stadium from '../../../assets/badminton-stadium.png'
 import {ExclamationCircleFilled, LikeOutlined, MessageOutlined, StarOutlined} from "@ant-design/icons";
@@ -75,10 +75,11 @@ const Stadium = () => {
                             <IconText icon={MessageOutlined} text="2" key="list-vertical-message"/>,
                         ]}
                         extra={
-                            <img
+                            <Image
                                 width={272}
                                 alt="logo"
                                 src={stadium}
+                                placeholder={<Skeleton/>}
                             />
                         }
                     >

@@ -64,7 +64,7 @@ const Home = () => {
                                 场地管理
                             </Title>
                         </Row>
-                        <Image width={600} src={courtShow}/>
+                        <Image width={600} src={courtShow} placeholder={<Skeleton/>}/>
                         <Row justify={"center"} style={{marginTop:`25px`}}>
                             <Text strong={false} className={`text-secondary text-size-4`}>
                                 通过数字化系统
@@ -84,7 +84,7 @@ const Home = () => {
                                 预订系统
                             </Title>
                         </Row>
-                        <Image width={600} src={bookingShow}/>
+                        <Image width={600} src={bookingShow} placeholder={<Skeleton/>}/>
                         <Row justify={"center"} style={{marginTop:`25px`}}>
                             <Text strong={false} className={`text-secondary text-size-4`}>
                                 在线预订场馆
