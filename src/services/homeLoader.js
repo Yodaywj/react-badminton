@@ -1,6 +1,5 @@
 import axios from "axios";
 import {ROOT_URL} from "../utils/constant";
-import instance from "./index";
 
 export async function loader() {
     const urlSession = `${ROOT_URL}/user/session`;
@@ -14,8 +13,7 @@ export async function loader() {
 
     })
 
-    await instance.get("/user/session",{withCredentials:true}).then(response => {
-        console.log(response)
+    await axios.get(urlSession,{withCredentials:true}).then(response => {
         if (response.data.result){
             user = response.data.user;
         }else {
