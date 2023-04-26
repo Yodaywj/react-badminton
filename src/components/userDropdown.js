@@ -1,7 +1,7 @@
 import {Avatar, Dropdown, message} from "antd";
 import {UserOutlined} from "@ant-design/icons";
 import React, {useState} from "react";
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import {ROOT_URL} from "../utils/constant";
 import axios from "axios";
 
@@ -9,6 +9,7 @@ import axios from "axios";
 export const UserDropdown = ({user})=> {
     let items = [{}];
     const [messageApi, contextHolder] = message.useMessage();
+    const Navigate = useNavigate();
     const [login, setLogin] = useState(!user.username);
 
     const handleLogin = async () => {
@@ -29,6 +30,7 @@ export const UserDropdown = ({user})=> {
             content: message,
         })
         setLogin(true);
+       setTimeout(()=>{ Navigate('/')},1000)
     }
     if (login){
         items = [
@@ -65,7 +67,7 @@ export const UserDropdown = ({user})=> {
             },
             {
                 key: '4',
-                label: <Link to={`/`}>退出登录</Link>,
+                label: '退出登录',
                 onClick: handleLogin,
             },
         ];

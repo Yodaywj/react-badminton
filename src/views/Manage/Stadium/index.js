@@ -93,7 +93,7 @@ const Stadium = () => {
                                         <Space size={"middle"}>
                                             <EditStadium stadium={item} name={'编辑'} stadiumData={stadiumData} setData={setStadiumData}/>
                                             <Button onClick={()=>showConfirm(item.id)}>删除</Button>
-                                            <Link to={`/manage/stadium/${item.id}`}><Button>管理</Button></Link>
+                                            <Link to={`/manage/stadium/${item.id}/${item.courtNumber}`}><Button>管理</Button></Link>
                                         </Space>
                                     </Row>
                                     }

@@ -1,10 +1,10 @@
 import axios from "axios";
 import {ROOT_URL} from "../utils/constant";
 
-const switchLight = async (stadiumId,id,light)=> {
+const switchLight = async (stadiumId,id,light,courtNumber)=> {
     let message;
     let result;
-    await axios.patch(`${ROOT_URL}/courts/switchLight`,{stadiumId,id,light}).then(response=>{
+    await axios.patch(`${ROOT_URL}/courts/switchLight`,{stadiumId,id,light,courtNumber}).then(response=>{
         result = response.data.result;
         message = response.data.message;
     }).catch(error => {

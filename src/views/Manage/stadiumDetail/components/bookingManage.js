@@ -144,6 +144,11 @@ const BookingManage = ({stadiumId,courtsNum}) => {
             onFilter: (value, record) => record.courtId === value,
         },
         {
+            title: '订场用户',
+            dataIndex: 'username',
+            key: 'username',
+        },
+        {
             title: '时间',
             dataIndex: 'time',
             key: 'time',

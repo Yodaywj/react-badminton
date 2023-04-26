@@ -20,7 +20,7 @@ const Booking = () => {
                 <MyHeader user={user}/>
                 <Content style={{minHeight: `100vh-${heightOfHF}px`, backgroundColor: "white"}}>
                     <Row justify={"center"} style={{marginTop: `10px`}}>
-                        <Filter num={num} setStadiums={setStadiums} setNum={setNum} setIsFilter={setIsFilter}/>
+                        <Filter sum={sum} num={num} setStadiums={setStadiums} setNum={setNum} setIsFilter={setIsFilter}/>
                     </Row>
                     <Row justify={"center"}>
                         <Col span={21}>

@@ -20,6 +20,8 @@ import switchLight from "../../../../services/switchLight";
 import setNewCourt from "../../../../services/setNewCourt";
 import {bookingsForCourt} from "../../../../services/bookingLoader";
 const Courts = ({data,stadiumId}) => {
+    const courtNumber = data.length;
+    const [courts, setCourts] = useState(data);
     const [form] = Form.useForm();
     const [confirmLoading, setConfirmLoading] = useState(false);
     const [switchAll, setSwitchAll] = useState(`已关闭`)
@@ -110,10 +112,9 @@ const Courts = ({data,stadiumId}) => {
         const newState = transformTag(item.state);
         return {...item,state:newState}
     })
-    const [courts, setCourts] = useState(data);
     const controlLight = async (stadiumId,id,light) => {
         light = light === "开启中"? "已关闭":"开启中";
-        await switchLight(stadiumId,id,light).then(result=>{
+        await switchLight(stadiumId,id,light,courtNumber).then(result=>{
             if (result.result){
                 if (id === 0){
                     setSwitchAll(switchAll === "开启中"? "已关闭":"开启中")

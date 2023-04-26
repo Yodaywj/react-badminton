@@ -72,7 +72,7 @@ const router = createBrowserRouter([
                 loader: stadiumLoader,
             },
             {
-                path:"stadium/:stadiumId",
+                path:"stadium/:stadiumId/:courtNumber",
                 element: <StadiumDetail/>,
                 loader: stadiumDetailLoader,
             },

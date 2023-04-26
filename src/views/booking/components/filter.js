@@ -70,8 +70,7 @@ const CollectionCreateForm =  ({open, onCreate,form,onCancel}) => {
         </Modal>
     )
 }
-const Filter = ({num,setNum,setIsFilter,setStadiums}) => {
-    const sum = num;
+const Filter = ({sum,setNum,setIsFilter,setStadiums}) => {
     const [open, setOpen] = useState(false);
     const [form] = Form.useForm();
     const onCreate = async (values) => {
@@ -84,7 +83,7 @@ const Filter = ({num,setNum,setIsFilter,setStadiums}) => {
         setOpen(false)
         bookingFilter(values).then(response=>{
             if (response.result){
-                if (num === sum){
+                if (response.newStadiums.length === sum){
                     setIsFilter(false);
                 }else {
                     setIsFilter(true);

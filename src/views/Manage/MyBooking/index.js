@@ -43,7 +43,7 @@ const MyBooking = () => {
     const showStadium = (stadiumId) => {
         getStadium(stadiumId).then(response => {
             const {stadium} = response
-            setDrawerContent(
+            if (response.result){setDrawerContent(
                 <Descriptions
                     // layout={`vertical`}
                     bordered
@@ -63,7 +63,9 @@ const MyBooking = () => {
                     <Descriptions.Item label="场地数量">{stadium.courtNumber}</Descriptions.Item>
                     <Descriptions.Item label="电话">{stadium.phone}</Descriptions.Item>
                     <Descriptions.Item label="备注">{stadium.remarks}</Descriptions.Item>
-                </Descriptions>)
+                </Descriptions>)}else {
+                setDrawerContent(<h3>{response.message}</h3>)
+            }
             setOpen(true);
         })
     }

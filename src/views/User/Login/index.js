@@ -72,7 +72,8 @@ const Login = () => {
                 name="normal_login"
                 className="login-form"
                 initialValues={{
-                    remember: false,
+                    // remember: false,
+
                 }}
                 onFinish={onFinish}
                 size={'large'}

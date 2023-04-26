@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {Col, Image, Layout, Row, Skeleton, Spin, Typography} from 'antd';
+import {Button, Col, Image, Layout, Row, Skeleton, Spin, Typography} from 'antd';
 import '../../styles/layout.css'
 import {MyHeader} from "../../layout/header";
 import {MyFooter} from "../../layout/footer";
@@ -11,17 +11,15 @@ import bookingShow from "../../assets/bookingShow.jpg"
 import './index.css'
 
 import BulletinList from "./components/bulletinList";
-
 const {Content} = Layout;
 
 const Home = () => {
     const {user, bulletins} = useLoaderData();
-    const {Title, Text,Paragraph} = Typography;
+    const {Title, Text} = Typography;
     const [loading,setLoading] = useState(true);
     useEffect(() => {
         setLoading(false)
     }, []);
-
     return (
         <Layout>
             <MyHeader user = {user}/>
