@@ -6,6 +6,7 @@ import {MyHeader} from "../../layout/header";
 import stadiumGrey from "../../assets/stadiumGrey.svg"
 import Warning from "../ErrorPage/warning";
 import Failure from "../ErrorPage/failure";
+import Chat from "../../components/Chat/Chat";
 const {Content, Sider } = Layout;
 const Manage = () => {
     const {user} = useLoaderData();
@@ -129,6 +130,7 @@ const Manage = () => {
                                 <Outlet />
                             </Skeleton>
                         </UserContext.Provider>
+                        <Chat user={user}/>
                     </Content>
                 </Layout>
             </Layout>

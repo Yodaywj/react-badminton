@@ -1,5 +1,6 @@
 import {ROOT_URL} from "../utils/constant";
 import axios from "axios";
+import request from "./index";
 
 const editUser = async (user)=>{
     let result = false;
@@ -14,4 +15,8 @@ const editUser = async (user)=>{
     })
     return {result,message,newUser};
 }
-export {editUser};
+const register = (newUser)=>{
+    return request.post(`${ROOT_URL}/user/register`,newUser)
+}
+
+export {editUser,register};

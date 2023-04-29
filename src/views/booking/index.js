@@ -6,6 +6,7 @@ import {useLoaderData} from "react-router-dom";
 import {MyFooter} from "../../layout/footer";
 import {heightOfHF} from "../../utils/constant";
 import Filter from "./components/filter";
+import Chat from "../../components/Chat/Chat";
 
 const {Content} = Layout;
 const Booking = () => {
@@ -28,6 +29,7 @@ const Booking = () => {
                                          isFilter={isFilter}/>
                         </Col>
                     </Row>
+                    <Chat user={user}/>
                 </Content>
                 <MyFooter/>
             </Layout>

@@ -1,4 +1,4 @@
-import {Avatar, Button, Col, Layout, List, message, Row, Tooltip, Typography, Badge, Popconfirm, Modal} from 'antd';
+import {Avatar, Button, Col, Layout, List, message, Row, Tooltip, Badge, Modal} from 'antd';
 import React, { useState } from 'react';
 import {MyHeader} from "../../layout/header";
 import {heightOfHF} from "../../utils/constant";
@@ -9,13 +9,13 @@ import {useLoaderData} from "react-router-dom";
 import {deleteComment, send} from "../../services/commentServices";
 import dayjs from "dayjs";
 import {DeleteOutlined} from "@ant-design/icons";
+import Chat from "../../components/Chat/Chat";
 
 const Comment = () => {
     const [modal, contextHolder] = Modal.useModal();
     const {user,comments} = useLoaderData();
     const [data,setData] = useState(comments);
     const [comment,setComment] = useState('');
-    console.log(user)
     const handleSend = async ()=>{
         if (!comment || comment.trim().length === 0){
             message.error(`评论不能为空`)
@@ -69,6 +69,7 @@ const Comment = () => {
             <Layout style={{minHeight: `100vh`}}>
                 <MyHeader user={user}/>
                 <Content style={{minHeight: `100vh-${heightOfHF}px`, backgroundColor: "white"}}>
+                    <Chat user={user}/>
                     <Row justify={"center"} style={{marginTop:`60px`}}>
                         <Col span={20}>
                             <List

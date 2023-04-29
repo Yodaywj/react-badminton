@@ -3,9 +3,10 @@ import {Col, Image, Layout, Row, Skeleton, Space, Spin} from "antd";
 import {MyFooter} from "../../layout/footer";
 import bg from '../../assets/badminton-court-2d.png'
 import {heightOfHF, imageFallback} from "../../utils/constant";
-import React, {useEffect, useState} from "react";
+import React, {Suspense, useEffect, useState} from "react";
 import {Outlet, useLoaderData} from "react-router-dom";
 import NavUser from "./components/navigation";
+import Chat from "../../components/Chat/Chat";
 
 const User = () => {
     const {user} = useLoaderData()
@@ -38,6 +39,7 @@ const User = () => {
                             </Space>
                         </Col>
                     </Row>
+                    <Chat user={user}></Chat>
                 </Content>
             </Skeleton>
             <Row>

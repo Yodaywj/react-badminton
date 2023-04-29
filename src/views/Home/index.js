@@ -11,6 +11,7 @@ import bookingShow from "../../assets/bookingShow.jpg"
 import './index.css'
 
 import BulletinList from "./components/bulletinList";
+import Chat from "../../components/Chat/Chat";
 const {Content} = Layout;
 
 const Home = () => {
@@ -98,6 +99,7 @@ const Home = () => {
                 <Row justify={"center"} className={`content-home-third`}>
                     <Image width={700} src={manage} preview={false}/>
                 </Row>
+                <Chat user={user}/>
             </Content>
             <MyFooter/>
         </Layout>

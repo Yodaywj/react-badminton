@@ -16,6 +16,7 @@ import drawCaptcha from "../../../utils/generateCaptchaImage";
 import {ROOT_URL} from "../../../utils/constant";
 import axios from "axios";
 import {Navigate} from "react-router-dom";
+import {register} from "../../../services/userInfoLoader";
 
 const {Option} = Select;
 const formItemLayout = {
@@ -52,7 +53,7 @@ const Register = () => {
     //Validation
     const [code, setCode] = useState(generateCode)
     const [isShown, setIsShown] = useState(false)
-    const [success,setSuccess] = useState(false);
+    const [success, setSuccess] = useState(false);
     const canvasRef = useRef(null);
     const [errorText, setErrorText] = useState('')
     const [username, setUsername] = useState('')
@@ -75,23 +76,18 @@ const Register = () => {
                 password: values.password,
                 phone: values.phone,
             }
-            const url = `${ROOT_URL}/user/register`;
-            axios.post(url, newUser)
-                .then(response => {
-                    console.log(response)
-                    if (response.data.result) {
-                        setUsername(newUser.username);
-                        setSuccess(true);
-                    }
-                    else {
-                        handleClick();
-                        setIsShown(true);
-                        setErrorText('用户名已存在');
-                    }
-                })
-                .catch(error => {
-                    console.log(error);
-                });
+            register(newUser).then(response => {
+                if (response.data.result) {
+                    setUsername(newUser.username);
+                    setSuccess(true);
+                } else {
+                    handleClick();
+                    setIsShown(true);
+                    setErrorText('用户名已存在');
+                }
+            }).catch(error => {
+                console.log(error);
+            });
         } else {
             setErrorText("验证码错误")
             setIsShown(true);
@@ -256,11 +252,11 @@ const Register = () => {
                     </Row>
                 </Form.Item>
                 {success && <Navigate to="/user/success" state={{
-                    message:`您的用户名为${username}`,
-                    title:'注册成功',
-                    homePath:'/',
-                    loginPath:'/user/login',
-                }} />}
+                    message: `您的用户名为${username}`,
+                    title: '注册成功',
+                    homePath: '/',
+                    loginPath: '/user/login',
+                }}/>}
             </Form>
         </Col>
     );

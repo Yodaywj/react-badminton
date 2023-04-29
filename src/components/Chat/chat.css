@@ -1,0 +1,14 @@
+.my-message{
+    max-width:230px;
+    word-wrap: break-word;
+    background-color: #00f500;
+    padding: 8px;
+    border-radius: 8px;
+}
+.your-message{
+    max-width:230px;
+    word-wrap: break-word;
+    background-color: #f0f0f0;
+    padding: 8px;
+    border-radius: 8px;
+}
