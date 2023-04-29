@@ -1,25 +1,27 @@
 import React, {useState, useEffect, useRef, useId, memo} from "react";
-import {Avatar, Col, FloatButton, List, Modal, Row, Tag, message as systemMessage, Button} from "antd";
+import {Col, FloatButton, Modal, Row, Tag, message as systemMessage, Input, Drawer, List, Avatar} from "antd";
 import useWebSocket from 'react-use-websocket';
-import {CustomerServiceOutlined, UserAddOutlined} from "@ant-design/icons";
-import TextArea from "antd/es/input/TextArea";
+import {CustomerServiceOutlined} from "@ant-design/icons";
 import "./chat.css"
 import MyMessage from "./MyMessage";
 import YourMessage from "./YourMessage";
 import { v4 as uuidv4 } from 'uuid';
-
+const { TextArea } = Input;
 const Chat = ({user}) => {
     const uuid = uuidv4();
     const scrollableRef = useRef(null);
     const [name,setName] = useState(user.username?user.username:`游客${uuid}`)
+    const [onlineUsers,setOnlineUsers] = useState([]);
+    const [count,setCount] = useState(0);
     const [content,setContent] = useState([]);
     const [message,setMessage] = useState('');
     const [open, setOpen] = useState(false);
+    const [drawer,setDrawer] = useState(false);
     const [numOfMessage,setNumOfMessage] = useState(0);
     const [connection,setConnection] = useState(false);
     useEffect(() => {
         scrollToBottom();
-    });
+    }, );
     const scrollToBottom = () => {
         if (scrollableRef.current) {
             scrollableRef.current.scrollIntoView({ behavior: 'smooth', block: 'end' });
@@ -32,7 +34,7 @@ const Chat = ({user}) => {
         // lastJsonMessage,
         // readyState,
         // getWebSocket,
-    } = useWebSocket( `ws://localhost:8080/chat/${name}`, {
+    } = useWebSocket( `wss://yangwenjun.cn:8080/chat/${name}`, {
         onOpen: () => setConnection(true),
         onMessage:(event)=>{
             const uuid = uuidv4();
@@ -55,13 +57,23 @@ const Chat = ({user}) => {
                     setNumOfMessage(numOfMessage+1)
                 }
             }
+            if (receivedMSG.users !== undefined){
+                setCount(receivedMSG.users.length);
+                setOnlineUsers(receivedMSG.users);
+            }
         },
         shouldReconnect: (closeEvent) => true,
     });
     const sendMyMessage = ()=>{
-        const chatting = {...user,text:message,to:'all',userId:name,nickname:user.nickname}
-        sendMessage(JSON.stringify(chatting))
-        scrollToBottom();
+        if (message.trim().length !== 0){
+            const chatting = {...user,text:message,to:'all',userId:name,nickname:user.nickname}
+            sendMessage(JSON.stringify(chatting))
+            setMessage('');
+        }
+    }
+    const enterSend = (event)=>{
+        event.preventDefault();
+        sendMyMessage();
     }
     return (
         <>
@@ -80,6 +92,27 @@ const Chat = ({user}) => {
                     setNumOfMessage(0)
                 }}
             />
+            <Drawer
+                zIndex={9999}
+                title="在线用户"
+                placement="right"
+                onClose={()=>setDrawer(false)}
+                open={drawer}
+                getContainer={false}
+            >
+                <List
+                    itemLayout="horizontal"
+                    dataSource={onlineUsers}
+                    renderItem={(item, index) => (
+                        <List.Item>
+                            <List.Item.Meta
+                                avatar={<Avatar src={`https://xsgames.co/randomusers/avatar.php?g=pixel&key=${index}`} />}
+                                title={item.username}
+                            />
+                        </List.Item>
+                    )}
+                />
+            </Drawer>
             <Modal
                 width={800}
                 centered={true}
@@ -104,15 +137,17 @@ const Chat = ({user}) => {
                 <Row style={{height:`500px`,marginBottom:`8px`}}>
                     <Col>
                         <Row style={{marginBottom:`10px`}}>
-                            <div ref={scrollableRef} style={{height:`400px`,width:`750px`,overflow:`auto`}}>
+                            <div style={{height:`400px`,width:`750px`,overflow:`auto`}}>
                                 {content}
+                                <div ref={scrollableRef}></div>
                             </div>
                         </Row>
                         <Row justify={"center"} style={{marginBottom:`10px`}}>
-                            <Tag color={"geekblue"}>谢谢,我会尽快回复你</Tag>
+                            <Tag onClick={()=>setDrawer(true)} style={{cursor:"pointer"}} color={"geekblue"}>{`当前在线人数:${count}`}</Tag>
                         </Row>
                         <Row style={{height:`70px`,width:`100%`}}>
                             <TextArea
+                                onPressEnter={enterSend}
                                 allowClear={true}
                                 maxLength={100}
                                 value={message}

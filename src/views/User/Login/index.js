@@ -73,6 +73,8 @@ const Login = () => {
                 className="login-form"
                 initialValues={{
                     // remember: false,
+                    username:'Neo_Young',
+                    password:'Ywj20001231!'
                 }}
                 onFinish={onFinish}
                 size={'large'}

@@ -1,4 +1,4 @@
-import {Button, Card, Input, List, Badge, message, Modal, Row} from 'antd';
+import {Button, Card, Input, List, Badge, message, Modal, Row, Tag} from 'antd';
 import {DeleteOutlined, EditOutlined, ExclamationCircleFilled, SaveOutlined} from "@ant-design/icons";
 import React, {useContext, useEffect, useState} from "react";
 import ReactQuill from "react-quill";
@@ -13,9 +13,8 @@ import FourZeroThree from "../../ErrorPage/403";
 const BulletinBoard = () => {
     const deepData = useContext(UserContext);
     const user = deepData[0];
-    let {data} = useLoaderData();
+    let {data,count,view} = useLoaderData();
     const newData = data.map(item => ({...item, editing: false}));
-    const [loading, setLoading] = useState(true);
     const [bulletins, setBulletins] = useState(newData);
     const [messageApi, contextHolder] = message.useMessage();
     const { confirm } = Modal;
@@ -146,9 +145,6 @@ const BulletinBoard = () => {
         })
 
     }
-    useEffect(() => {
-        setLoading(false);
-    }, []);
     if (user.privilege !== 'root')return (
         <Row justify={"center"} align={"middle"}>
             <FourZeroThree/>
@@ -208,6 +204,10 @@ const BulletinBoard = () => {
                     </List.Item>
                 )}
             />
+            <Row justify={"end"} style={{marginTop:`10px`}}>
+                <Tag color={"green"} >首页访问数:{count}</Tag>
+                <Tag color={"gold"} style={{marginLeft:`10px`}}>API调用数:{view}</Tag>
+            </Row>
             <Button type={'primary'} onClick={handleAdd}>新增公告</Button>
             {contextHolder}
         </>
