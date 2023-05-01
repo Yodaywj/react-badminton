@@ -12,18 +12,16 @@ const User = () => {
     const {user} = useLoaderData()
     const {Content} = Layout;
     const [loading, setLoading] = useState(true);
-    useEffect(() => {
-        setLoading(false);
-    }, []);
 
     return (
         <div style={{height: `100vh`}}>
             <MyHeader user={user}/>
-            <Skeleton loading={loading}>
+            <Skeleton loading={false}>
                 <Content>
                     <Row align={`middle`} justify={`center`} style={{height: `calc(100vh - ${heightOfHF}px)`}}>
                         <Col xs={{span: 0}} lg={{span: 7}}>
-                            <Image src={bg} placeholder={<Skeleton/>} fallback={imageFallback}
+                            {loading && <Skeleton/>}
+                            <Image style={{ display: !loading ? 'block' : 'none' }} onLoad={()=>{setLoading(false)}} src={bg} fallback={imageFallback}
                                    height={`calc(100vh - 152px)`} preview={false}/>
                         </Col>
                         <Col xs={{span: 24}} lg={{span: 12}}>

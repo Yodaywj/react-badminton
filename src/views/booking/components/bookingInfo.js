@@ -14,13 +14,14 @@ import {
 } from "antd";
 import {LikeOutlined, MessageOutlined, StarOutlined} from "@ant-design/icons";
 import stadium from "../../../assets/badminton-stadium.png";
-import React, {useEffect, useState} from "react";
+import React, {useContext, useEffect, useState} from "react";
 import axios from "axios";
 import {ROOT_URL} from "../../../utils/constant";
 import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 import TextArea from "antd/es/input/TextArea";
 import {bookCourt} from "../../../services/bookingLoader";
+import {AppContext} from "../../../index";
 dayjs.extend(customParseFormat);
 const disabledDate = (current) => {
     const today = dayjs().startOf('day');
@@ -104,6 +105,8 @@ const CollectionCreateForm =  ({open, onCreate,form,onCancel}) => {
     )
 }
 const BookingInfo = ({setStadiums,sum,stadiums,isFilter,user})=>{
+    const [loadIMG,setLoadIMG] = useState(true)
+    const screenWidth = useContext(AppContext);
     const [open, setOpen] = useState(false);
     const [form] = Form.useForm();
     const [current, setCurrent] = useState(1);
@@ -164,18 +167,23 @@ const BookingInfo = ({setStadiums,sum,stadiums,isFilter,user})=>{
                     <Skeleton loading={loading} active={true} avatar={true} paragraph={{rows:5}}>
                         <List.Item
                             key={item.id}
-                            actions={[
-                                <IconText icon={StarOutlined} text="156" key="list-vertical-star-o"/>,
-                                <IconText icon={LikeOutlined} text="156" key="list-vertical-like-o"/>,
-                                <IconText icon={MessageOutlined} text="2" key="list-vertical-message"/>,
-                            ]}
+                            // actions={[
+                            //     <IconText icon={StarOutlined} text="156" key="list-vertical-star-o"/>,
+                            //     <IconText icon={LikeOutlined} text="156" key="list-vertical-like-o"/>,
+                            //     <IconText icon={MessageOutlined} text="2" key="list-vertical-message"/>,
+                            // ]}
                             extra={
-                                <Image
-                                    width={272}
-                                    alt="logo"
-                                    src={stadium}
-                                    placeholder={<Skeleton/>}
-                                />
+                                <>
+                                    {loadIMG && <Skeleton/>}
+                                    <Image
+                                        style={{ display: !loadIMG ? 'block' : 'none' }}
+                                        onLoad={()=>{setLoadIMG(false)}}
+                                        width={screenWidth>700?272:0}
+                                        alt="logo"
+                                        src={stadium}
+                                        placeholder={<Skeleton/>}
+                                    />
+                                </>
                             }
                         >
                             <List.Item.Meta

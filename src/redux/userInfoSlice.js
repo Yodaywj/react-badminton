@@ -4,7 +4,7 @@ export const userInfoSlice = createSlice({
     name: 'userInfo',
     initialState: {
         userInfo: {
-            username:'',
+            username:'未登录',
             nickname:'',
             mail:'',
             phone:'',
@@ -18,13 +18,7 @@ export const userInfoSlice = createSlice({
             state.userInfo = action.payload;
         },
         logout: (state) => {
-            state.userInfo = {username:'',
-                nickname:'',
-                mail:'',
-                phone:'',
-                privilege:'',
-                gender:'',
-                password:'',}
+            state.userInfo = {username:false}
         },
     },
 })

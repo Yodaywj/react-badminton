@@ -1,5 +1,5 @@
 import {Button, Descriptions, Image, List, message, Modal, Row, Skeleton, Space, Tooltip} from 'antd';
-import React, {useState} from 'react';
+import React, {useContext, useState} from 'react';
 import stadium from '../../../assets/badminton-stadium.png'
 import {ExclamationCircleFilled, LikeOutlined, MessageOutlined, StarOutlined} from "@ant-design/icons";
 import EditStadium from "./components/EditStadium";
@@ -7,6 +7,7 @@ import {Link, useLoaderData} from "react-router-dom";
 import axios from "axios";
 import {ROOT_URL} from "../../../utils/constant";
 import deleteCourts from "../../../services/deleteCourts";
+import {AppContext} from "../../../index";
 const IconText = ({icon, text}) => (
     <Space style={{marginTop:`70px`}}>
         {React.createElement(icon)}
@@ -14,6 +15,8 @@ const IconText = ({icon, text}) => (
     </Space>
 );
 const Stadium = () => {
+    const [loadIMG,setLoadIMG] = useState(true)
+    const screenWidth = useContext(AppContext);
     const {data} = useLoaderData();
     const [stadiumData, setStadiumData] = useState(data);
     const [messageApi, contextHolder] = message.useMessage();
@@ -69,14 +72,16 @@ const Stadium = () => {
 
                     <List.Item
                         key={item.id}
-                        actions={[
-                            <IconText icon={StarOutlined} text="156" key="list-vertical-star-o"/>,
-                            <IconText icon={LikeOutlined} text="156" key="list-vertical-like-o"/>,
-                            <IconText icon={MessageOutlined} text="2" key="list-vertical-message"/>,
-                        ]}
+                        // actions={[
+                        //     <IconText icon={StarOutlined} text="156" key="list-vertical-star-o"/>,
+                        //     <IconText icon={LikeOutlined} text="156" key="list-vertical-like-o"/>,
+                        //     <IconText icon={MessageOutlined} text="2" key="list-vertical-message"/>,
+                        // ]}
                         extra={
                             <Image
-                                width={272}
+                                style={{ display: !loadIMG ? 'block' : 'none' }}
+                                onLoad={()=>{setLoadIMG(false)}}
+                                width={screenWidth>700?272:0}
                                 alt="logo"
                                 src={stadium}
                                 placeholder={<Skeleton/>}

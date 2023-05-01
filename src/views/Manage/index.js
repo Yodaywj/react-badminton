@@ -1,24 +1,28 @@
 import {ContactsOutlined, ScheduleOutlined, SlidersFilled, SnippetsOutlined} from '@ant-design/icons';
-import {Image, Layout, Menu, Row, Skeleton, Switch, theme} from 'antd';
-import React, {createContext, useEffect, useState} from 'react';
+import {Layout, Menu, message, Row, Skeleton, Switch, theme} from 'antd';
+import React, {createContext, useContext, useEffect, useState} from 'react';
 import {Link, Outlet, useLoaderData} from "react-router-dom";
 import {MyHeader} from "../../layout/header";
 import stadiumGrey from "../../assets/stadiumGrey.svg"
-import Warning from "../ErrorPage/warning";
 import Failure from "../ErrorPage/failure";
 import Chat from "../../components/Chat/Chat";
+import {AppContext} from "../../index";
 const {Content, Sider } = Layout;
 const Manage = () => {
+    const screenWidth = useContext(AppContext);
     const {user} = useLoaderData();
     const [userInfo,setUserInfo] = useState(user);
     const deepData = [userInfo,setUserInfo];
-    const [collapsed, setCollapsed] = useState(false);
+    const [collapsed, setCollapsed] = useState(screenWidth <= 700);
     const [siderTheme, setSiderTheme] = useState('light');
     const [mode, setMode] = useState(true);
     const [loading,setLoading] = useState(true);
 
     useEffect(() => {
         setLoading(false)
+        if (screenWidth<700){
+            message.info('建议使用电脑端访问个人中心')
+        }
     }, []);
     const changeTheme = (value) => {
         setSiderTheme(value ? 'dark' : 'light');
@@ -82,12 +86,13 @@ const Manage = () => {
             <Layout>
                 <Sider
                     collapsible collapsed={collapsed} onCollapse={(value) => setCollapsed(value)}
-                    width={200}
+                    width={screenWidth>700?200:screenWidth}
                     style={{
                         background: colorBgContainer,
                         position: 'fixed',
                         top: mode ? '72px' : `0`,
                         left: '0',
+                        zIndex:`9999`,
                     }}
                 >
                     <Menu
@@ -138,4 +143,4 @@ const Manage = () => {
     );
 };
 export default Manage;
-export const UserContext = createContext();
+export const UserContext = createContext(null);

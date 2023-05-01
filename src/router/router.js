@@ -21,6 +21,7 @@ import {myBookingLoader} from "../services/bookingLoader"
 import UserInfo from "../views/Manage/UserInfo";
 import Comment from "../views/Comment";
 import {loader as commentLoader} from "../services/commentServices"
+import Redirect from "../views/ErrorPage/Redirect";
 
 
 const router = createBrowserRouter([
@@ -94,6 +95,11 @@ const router = createBrowserRouter([
         element:<Comment/>,
         loader:commentLoader,
     },
-],{basename:"/"});
+    {
+        path:"/civil",
+        errorElement:<ErrorPage/>,
+        element:<Redirect/>,
+    },
+],);
 
 export default router;

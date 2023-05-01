@@ -1,5 +1,5 @@
-import React, {useEffect, useState} from 'react';
-import {Button, Col, Image, Layout, Row, Skeleton, Spin, Typography} from 'antd';
+import React, {useContext, useEffect, useState} from 'react';
+import {Col, Image, Layout, Row, Skeleton, Spin, Typography} from 'antd';
 import '../../styles/layout.css'
 import {MyHeader} from "../../layout/header";
 import {MyFooter} from "../../layout/footer";
@@ -12,10 +12,12 @@ import './index.css'
 
 import BulletinList from "./components/bulletinList";
 import Chat from "../../components/Chat/Chat";
+import {AppContext} from "../../index";
 const {Content} = Layout;
 
 const Home = () => {
     const {user, bulletins} = useLoaderData();
+    const screenWidth = useContext(AppContext)
     const {Title, Text} = Typography;
     const [loading,setLoading] = useState(true);
     useEffect(() => {
@@ -63,7 +65,7 @@ const Home = () => {
                                 场地管理
                             </Title>
                         </Row>
-                        <Image width={600} src={courtShow} placeholder={<Skeleton/>}/>
+                        <Image width={screenWidth*0.4} src={courtShow} placeholder={<Skeleton/>}/>
                         <Row justify={"center"} style={{marginTop:`25px`}}>
                             <Text strong={false} className={`text-secondary text-size-4`}>
                                 通过数字化系统
@@ -83,7 +85,7 @@ const Home = () => {
                                 预订系统
                             </Title>
                         </Row>
-                        <Image width={600} src={bookingShow} placeholder={<Skeleton/>}/>
+                        <Image width={screenWidth*0.4} src={bookingShow} placeholder={<Skeleton/>}/>
                         <Row justify={"center"} style={{marginTop:`25px`}}>
                             <Text strong={false} className={`text-secondary text-size-4`}>
                                 在线预订场馆

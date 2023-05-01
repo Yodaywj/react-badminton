@@ -7,5 +7,6 @@ const FourZeroFour = () => (
         subTitle="Sorry, the page you visited does not exist."
         extra={<Link to={'/'}><Button type="primary">回到首页</Button></Link>}
     />
+
 );
 export default FourZeroFour;

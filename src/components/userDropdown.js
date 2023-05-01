@@ -4,6 +4,8 @@ import React, {useState} from "react";
 import {Link, useNavigate} from "react-router-dom";
 import {ROOT_URL} from "../utils/constant";
 import axios from "axios";
+import {useDispatch} from "react-redux";
+import {logout} from "../redux/userInfoSlice";
 
 
 export const UserDropdown = ({user})=> {
@@ -11,6 +13,7 @@ export const UserDropdown = ({user})=> {
     const [messageApi, contextHolder] = message.useMessage();
     const Navigate = useNavigate();
     const [login, setLogin] = useState(!user.username);
+    const dispatch = useDispatch();
 
     const handleLogin = async () => {
         const url = `${ROOT_URL}/user/logout`
@@ -30,7 +33,9 @@ export const UserDropdown = ({user})=> {
             content: message,
         })
         setLogin(true);
+        dispatch(logout);
        setTimeout(()=>{ Navigate('/')},1000)
+
     }
     if (login){
         items = [

@@ -6,11 +6,17 @@ import "./chat.css"
 import MyMessage from "./MyMessage";
 import YourMessage from "./YourMessage";
 import { v4 as uuidv4 } from 'uuid';
+import {useSelector} from "react-redux";
+
 const { TextArea } = Input;
 const Chat = ({user}) => {
+    const userInfo = useSelector(state => state.userInfo.userInfo)
     const uuid = uuidv4();
+    const randomName = `游客${uuid}`;
+    const [address] = useState(uuid);
     const scrollableRef = useRef(null);
-    const [name,setName] = useState(user.username?user.username:`游客${uuid}`)
+    const [name,setName] = useState(user.username?user.username:randomName)
+    const [nickname] = useState(user.username? user.nickname:randomName);
     const [onlineUsers,setOnlineUsers] = useState([]);
     const [count,setCount] = useState(0);
     const [content,setContent] = useState([]);
@@ -34,7 +40,7 @@ const Chat = ({user}) => {
         // lastJsonMessage,
         // readyState,
         // getWebSocket,
-    } = useWebSocket( `wss://yangwenjun.cn:8080/chat/${name}`, {
+    } = useWebSocket( `wss://yangwenjun.cn:8080/chat/${name}/${nickname}/${address}`, {
         onOpen: () => setConnection(true),
         onMessage:(event)=>{
             const uuid = uuidv4();
@@ -58,10 +64,13 @@ const Chat = ({user}) => {
                 }
             }
             if (receivedMSG.users !== undefined){
-                setCount(receivedMSG.users.length);
-                setOnlineUsers(receivedMSG.users);
+                const newUsers = Array.from(new Set(receivedMSG.users.map(JSON.stringify))).map(JSON.parse);
+                setCount(newUsers.length);
+                setOnlineUsers(newUsers);
             }
         },
+        onError:()=>setConnection(false),
+        onClose:()=>{setConnection(false)},
         shouldReconnect: (closeEvent) => true,
     });
     const sendMyMessage = ()=>{
@@ -107,7 +116,8 @@ const Chat = ({user}) => {
                         <List.Item>
                             <List.Item.Meta
                                 avatar={<Avatar src={`https://xsgames.co/randomusers/avatar.php?g=pixel&key=${index}`} />}
-                                title={item.username}
+                                title={item.nickname}
+                                description={<Tag color={"blue"}>{`用户名: ${item.username===item.nickname?"无":item.username}`}</Tag>}
                             />
                         </List.Item>
                     )}
