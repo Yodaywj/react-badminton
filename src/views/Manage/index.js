@@ -1,4 +1,4 @@
-import {ContactsOutlined, ScheduleOutlined, SlidersFilled, SnippetsOutlined} from '@ant-design/icons';
+import {ContactsOutlined, ScheduleOutlined, SlidersFilled, SnippetsOutlined, StarOutlined} from '@ant-design/icons';
 import {Layout, Menu, message, Row, Skeleton, Switch, theme} from 'antd';
 import React, {createContext, useContext, useEffect, useState} from 'react';
 import {Link, Outlet, useLoaderData} from "react-router-dom";
@@ -69,6 +69,11 @@ const Manage = () => {
             icon: <img  src={stadiumGrey} width={16} alt={'我的场馆'}/>,
             label: <Link to={`stadium`}>我的场馆</Link>,
         },
+        {
+            key : 5,
+            icon: <StarOutlined />,
+            label: <Link to={`myBookmarks`}>收藏场馆</Link>,
+        },
     ]
     const {
         token: { colorBgContainer },
@@ -92,7 +97,6 @@ const Manage = () => {
                         position: 'fixed',
                         top: mode ? '72px' : `0`,
                         left: '0',
-                        zIndex:`9999`,
                     }}
                 >
                     <Menu

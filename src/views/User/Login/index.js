@@ -132,7 +132,7 @@ const Login = () => {
                             </Form.Item>
                         </Col>
                         <Col span={10} offset={1} onClick={handleCaptchaClick}>
-                            <canvas ref={canvasRef} width={200} height={50} style={{cursor: "pointer"}}/>
+                            <canvas ref={canvasRef} width={180} height={50} style={{cursor: "pointer"}}/>
                         </Col>
                     </Row>
                 </Form.Item>

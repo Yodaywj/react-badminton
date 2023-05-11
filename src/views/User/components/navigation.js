@@ -15,12 +15,6 @@ const items = [
         key: '/user/register',
         icon: <IdcardOutlined />,
     },
-    {
-        label: '返回',
-        key: '/',
-        icon: <CaretLeftOutlined />,
-
-    },
 ];
 const NavUser = () => {
     const [current, setCurrent] = useState()

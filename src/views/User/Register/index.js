@@ -10,13 +10,14 @@ import {
 } from 'antd';
 import MyNotification from "./notification";
 import {SmileOutlined} from "@ant-design/icons";
-import React, {useEffect, useRef, useState} from "react";
+import React, {useContext, useEffect, useRef, useState} from "react";
 import generateCode from "../../../utils/captcha";
 import drawCaptcha from "../../../utils/generateCaptchaImage";
 import {ROOT_URL} from "../../../utils/constant";
 import axios from "axios";
 import {Navigate} from "react-router-dom";
 import {register} from "../../../services/userInfoLoader";
+import {HeightContext} from "../index";
 
 const {Option} = Select;
 const formItemLayout = {
@@ -57,10 +58,18 @@ const Register = () => {
     const canvasRef = useRef(null);
     const [errorText, setErrorText] = useState('')
     const [username, setUsername] = useState('')
+    const height = useContext(HeightContext)
+    const setHeight = height[1];
     const handleClick = () => {
         setCode(generateCode());
         drawCaptcha(200, 50, code, canvasRef)
     }
+    useEffect(()=>{
+        setHeight('register')
+        return(()=>{
+            setHeight('login')
+        })
+    },[])
     useEffect(() => {
         drawCaptcha(200, 50, code, canvasRef)
     }, [code]);
@@ -95,7 +104,7 @@ const Register = () => {
         }
     };
     return (
-        <Col span={20}>
+        <Col span={24}>
             <Form
                 {...formItemLayout}
                 form={form}
@@ -207,13 +216,14 @@ const Register = () => {
                                 <Input maxLength={6}/>
                             </Form.Item>
                         </Col>
+                        <Col span={12}  onClick={handleClick}>
+                            <canvas ref={canvasRef} width={180} height={50} style={{cursor: "pointer"}}/>
+                        </Col>
                     </Row>
                 </Form.Item>
                 <Form.Item>
                     <Row>
-                        <Col span={12} offset={12} onClick={handleClick}>
-                            <canvas ref={canvasRef} width={200} height={50} style={{cursor: "pointer"}}/>
-                        </Col>
+
                     </Row>
                 </Form.Item>
                 <Form.Item

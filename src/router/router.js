@@ -22,6 +22,8 @@ import UserInfo from "../views/Manage/UserInfo";
 import Comment from "../views/Comment";
 import {loader as commentLoader} from "../services/commentServices"
 import Redirect from "../views/ErrorPage/Redirect";
+import {MyBookmarks} from "../views/Manage/MyBookmarks";
+import {loader as bookmarkLoader} from "../services/bookmark"
 
 
 const router = createBrowserRouter([
@@ -81,10 +83,15 @@ const router = createBrowserRouter([
                 path:"userInfo",
                 element: <UserInfo/>,
             },
+            {
+                path:"myBookmarks",
+                element: <MyBookmarks/>,
+                loader: bookmarkLoader,
+            },
         ],
     },
     {
-        path:"booking",
+        path:"/booking",
         element:<Booking/>,
         errorElement:<ErrorPage/>,
         loader: bookingLoader,

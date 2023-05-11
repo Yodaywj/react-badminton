@@ -33,6 +33,15 @@ const CollectionCreateForm =  ({open, onCreate,form,onCancel}) => {
                 name="form_in_modal"
             >
                 <Form.Item
+                    name="stadiumId"
+                    label="场馆编号"
+                >
+                    <Input
+                           maxLength={36}
+                           allowClear={true}
+                    />
+                </Form.Item>
+                <Form.Item
                     name="stadiumName"
                     label="场馆名"
                     rules={[
@@ -74,10 +83,15 @@ const Filter = ({sum,setNum,setIsFilter,setStadiums}) => {
     const [open, setOpen] = useState(false);
     const [form] = Form.useForm();
     const onCreate = async (values) => {
-        const {area: [province, city], ...rest} = values;
+        const {area: [province, city],stadiumId, ...rest} = values;
+        let newStadiumId = stadiumId.trim();
+        if (newStadiumId === ''){
+            newStadiumId = null;
+        }
         values = {
             province: province,
             city: city,
+            stadiumId: newStadiumId,
             ...rest
         };
         setOpen(false)

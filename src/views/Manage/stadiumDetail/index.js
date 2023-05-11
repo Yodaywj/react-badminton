@@ -3,11 +3,14 @@ import {Link, useLoaderData} from "react-router-dom";
 import Member from "./components/member";
 import Courts from "./components/courts";
 import BookingManage from "./components/bookingManage";
+import {useState} from "react";
+
 const StadiumDetail = () => {
-    const {members,stadiumId,courts,stadiumName} = useLoaderData();
+    const {members, stadiumId, courts, stadiumName} = useLoaderData();
+    const [btnState,setBtnState] = useState(false)
 
     let data = courts.map(item => {
-        const countdown = Number(item.countdown)*1000+Date.now();
+        const countdown = Number(item.countdown) * 1000 + Date.now();
         return {...item, countdown: countdown};
     })
     const items = [
@@ -39,11 +42,16 @@ const StadiumDetail = () => {
                     >{stadiumName}</Typography.Title>
                 </Col>
             </Row>
-                <Tabs
-                    tabBarExtraContent={{left:<Link to={'/manage/stadium'}><Button style={{marginRight:`20px`}}>返回</Button></Link>}}
-                    defaultActiveKey="1"
-                    items={items}
-                />
+            <Tabs
+                tabBarExtraContent={{
+                    left:
+                        <Link to={'/manage/stadium'} onClick={()=>setBtnState(true)}>
+                            <Button loading={btnState} style={{marginRight: `20px`}}>返回</Button>
+                        </Link>
+                }}
+                defaultActiveKey="1"
+                items={items}
+            />
         </>
     );
 }

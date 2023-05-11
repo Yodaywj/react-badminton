@@ -5,6 +5,7 @@ const loader = async ()=>{
     let user = {};
     let data;
     let sum;
+    let bookmarks;
     await session(`${ROOT_URL}/user/session`).then(response=>{
         user = response.user
     })
@@ -12,7 +13,11 @@ const loader = async ()=>{
         data = response.data.stadiums;
         sum = response.data.sum;
     })
-    return {user,data,sum}
+    const {username} = user;
+    await axios.get(`${ROOT_URL}/bookmark/getBookmarks/${username}`).then(response => {
+        bookmarks = response.data.bookmarks;
+    })
+    return {user,data,sum,bookmarks}
 }
 const bookCourt = async (values)=>{
     let message;

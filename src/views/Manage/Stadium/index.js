@@ -1,4 +1,4 @@
-import {Button, Descriptions, Image, List, message, Modal, Row, Skeleton, Space, Tooltip} from 'antd';
+import {Button, Col, Descriptions, Image, List, message, Modal, Row, Skeleton, Space, Tooltip} from 'antd';
 import React, {useContext, useState} from 'react';
 import stadium from '../../../assets/badminton-stadium.png'
 import {ExclamationCircleFilled, LikeOutlined, MessageOutlined, StarOutlined} from "@ant-design/icons";
@@ -8,6 +8,7 @@ import axios from "axios";
 import {ROOT_URL} from "../../../utils/constant";
 import deleteCourts from "../../../services/deleteCourts";
 import {AppContext} from "../../../index";
+import Icon from "../../../components/icon";
 const IconText = ({icon, text}) => (
     <Space style={{marginTop:`70px`}}>
         {React.createElement(icon)}
@@ -18,7 +19,7 @@ const Stadium = () => {
     const [loadIMG,setLoadIMG] = useState(true)
     const screenWidth = useContext(AppContext);
     const {data} = useLoaderData();
-    const [stadiumData, setStadiumData] = useState(data);
+    const [stadiumData, setStadiumData] = useState(data.map(item=>{return {...item,btnState: false}}));
     const [messageApi, contextHolder] = message.useMessage();
     const { confirm } = Modal;
     const showConfirm = (id) => {
@@ -30,7 +31,7 @@ const Stadium = () => {
             cancelText:`取消`,
             centered:true,
             onOk() {
-                deleteStadium(id)
+                deleteStadium(id).then(r => {})
             },
             onCancel() {
             },
@@ -91,14 +92,37 @@ const Stadium = () => {
                         <List.Item.Meta
                             description={
                                 <Descriptions
-                                    title={<Tooltip title={item.id}>我的场馆 {stadiumData.indexOf(item) + 1}</Tooltip>}
+                                    title={<Tooltip title={
+                                        <>
+                                            <Row>
+                                                <Col span={22}>
+                                                    {item.id}
+                                                </Col>
+                                                <Col span={2}
+                                                     style={{cursor:"pointer",height:`50%`}}
+                                                     onClick={()=>{
+                                                         navigator.clipboard.writeText(item.id).then(r => {});
+                                                     }}>
+                                                    <Icon/>
+                                                </Col>
+                                            </Row>
+                                        </>
+                                    }>我的场馆 {stadiumData.indexOf(item) + 1}</Tooltip>}
                                     bordered
                                     extra={
                                     <Row>
                                         <Space size={"middle"}>
                                             <EditStadium stadium={item} name={'编辑'} stadiumData={stadiumData} setData={setStadiumData}/>
                                             <Button onClick={()=>showConfirm(item.id)}>删除</Button>
-                                            <Link to={`/manage/stadium/${item.id}/${item.courtNumber}`}><Button>管理</Button></Link>
+                                            <Link to={`/manage/stadium/${item.id}/${item.courtNumber}`}
+                                                  onClick={()=>{setStadiumData(stadiumData.map(current=>{
+                                                      if (current.id === item.id){
+                                                          return {...item,btnState:true}
+                                                      }else return current
+                                                  }))}}
+                                            >
+                                                <Button loading={item.btnState}>管理</Button>
+                                            </Link>
                                         </Space>
                                     </Row>
                                     }

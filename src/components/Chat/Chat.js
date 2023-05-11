@@ -102,12 +102,12 @@ const Chat = ({user}) => {
                 }}
             />
             <Drawer
+                style={{height:`100%`}}
                 zIndex={9999}
                 title="在线用户"
                 placement="right"
                 onClose={()=>setDrawer(false)}
                 open={drawer}
-                getContainer={false}
             >
                 <List
                     itemLayout="horizontal"

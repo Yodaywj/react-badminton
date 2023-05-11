@@ -6,8 +6,10 @@ const bookingFilter = async (values)=>{
     let message;
     let result;
 
-    const {stadiumName,courtNumber,province,city} = values;
-    await axios.get(`${ROOT_URL}/booking/filter?stadiumName=${stadiumName}&courtNumber=${courtNumber}&province=${province}&city=${city}`).then(
+    const {stadiumName,courtNumber,province,city,stadiumId} = values;
+    await axios.get(`${ROOT_URL}/booking/filter?
+    stadiumName=${stadiumName}&courtNumber=${courtNumber}&province=${province}&city=${city}&stadiumId=${stadiumId}`)
+        .then(
         response=>{
             newStadiums = response.data.stadiums;
             message = response.data.message;

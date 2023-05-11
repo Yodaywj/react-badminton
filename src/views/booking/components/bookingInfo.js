@@ -12,7 +12,7 @@ import {
     message,
     Skeleton, Tooltip, Image
 } from "antd";
-import {LikeOutlined, MessageOutlined, StarOutlined} from "@ant-design/icons";
+import {CopyOutlined, LikeOutlined, MessageOutlined, StarFilled, StarOutlined} from "@ant-design/icons";
 import stadium from "../../../assets/badminton-stadium.png";
 import React, {useContext, useEffect, useState} from "react";
 import axios from "axios";
@@ -22,6 +22,8 @@ import customParseFormat from 'dayjs/plugin/customParseFormat';
 import TextArea from "antd/es/input/TextArea";
 import {bookCourt} from "../../../services/bookingLoader";
 import {AppContext} from "../../../index";
+import Icon from "../../../components/icon";
+import {addBookmark, deleteBookmark} from "../../../services/bookmark";
 dayjs.extend(customParseFormat);
 const disabledDate = (current) => {
     const today = dayjs().startOf('day');
@@ -29,7 +31,7 @@ const disabledDate = (current) => {
 }
 const IconText = ({icon, text}) => (
     <Space>
-        {React.createElement(icon)}
+        {icon}
         {text}
     </Space>
 );
@@ -104,7 +106,8 @@ const CollectionCreateForm =  ({open, onCreate,form,onCancel}) => {
         </Modal>
     )
 }
-const BookingInfo = ({setStadiums,sum,stadiums,isFilter,user})=>{
+const BookingInfo = ({setStadiums,sum,stadiums,isFilter,user,bookmarks})=>{
+    const [myBookmarks,setMyBookmarks] = useState(bookmarks);
     const [loadIMG,setLoadIMG] = useState(true)
     const screenWidth = useContext(AppContext);
     const [open, setOpen] = useState(false);
@@ -113,6 +116,20 @@ const BookingInfo = ({setStadiums,sum,stadiums,isFilter,user})=>{
     const [pageSize, setPageSize] = useState(5);
     const [currentBooking, setCurrentBooking] = useState([]);
     const [loading, setLoading] = useState(true);
+    const markBooking = (id,star)=>{
+        if (star){
+            setMyBookmarks([...myBookmarks,id])
+            if (user.username){
+                addBookmark(user.username,id);
+            }else message.info('请登录后收藏场馆').then();
+
+        }else {
+            setMyBookmarks(myBookmarks.filter(item=>item!==id))
+            if (user.username){
+                deleteBookmark(user.username,id);
+            }else message.info('请登录后收藏场馆').then();
+        }
+    }
     useEffect(() => {
         setLoading(false)
     }, []);
@@ -168,10 +185,9 @@ const BookingInfo = ({setStadiums,sum,stadiums,isFilter,user})=>{
                         <List.Item
                             key={item.id}
                             // actions={[
-                            //     <IconText icon={StarOutlined} text="156" key="list-vertical-star-o"/>,
-                            //     <IconText icon={LikeOutlined} text="156" key="list-vertical-like-o"/>,
-                            //     <IconText icon={MessageOutlined} text="2" key="list-vertical-message"/>,
-                            // ]}
+                                // <IconText icon={<StarOutlined  style={{fontSize:`20px`}}/>} key="list-vertical-star-o"/>,
+                                // <IconText icon={LikeOutlined} text="156" key="list-vertical-like-o"/>,
+                                // <IconText icon={MessageOutlined} text="2" key="list-vertical-message"/>,
                             extra={
                                 <>
                                     {loadIMG && <Skeleton/>}
@@ -190,7 +206,22 @@ const BookingInfo = ({setStadiums,sum,stadiums,isFilter,user})=>{
                                 description={
                                 <>
                                     <Descriptions
-                                        title={<Tooltip title={item.id}>查看编号</Tooltip>}
+                                        title={<Tooltip title={
+                                            <>
+                                                <Row>
+                                                    <Col span={22}>
+                                                        {item.id}
+                                                    </Col>
+                                                    <Col span={2}
+                                                         style={{cursor:"pointer",height:`50%`}}
+                                                         onClick={()=>{
+                                                             navigator.clipboard.writeText(item.id).then(r => {});
+                                                         }}>
+                                                        <Icon/>
+                                                    </Col>
+                                                </Row>
+                                            </>
+                                        }>查看编号</Tooltip>}
                                         bordered
                                         extra={
                                             <Row>
@@ -216,12 +247,18 @@ const BookingInfo = ({setStadiums,sum,stadiums,isFilter,user})=>{
                                         <Descriptions.Item label="电话">{item.phone}</Descriptions.Item>
                                         <Descriptions.Item label="备注">{item.remarks}</Descriptions.Item>
                                     </Descriptions>
-                                    <Row>
+                                    <Row style={{marginTop:`75px`}}>
+                                        <Col push={1}>
+                                            {myBookmarks.includes(item.id)?
+                                                <StarFilled key={`${item.id}filled`} onClick={()=>markBooking(item.id,false)}  style={{fontSize:`20px`,color:`gold`}}/>:
+                                                <StarOutlined key={`${item.id}outlined`} onClick={()=>markBooking(item.id,true)}   style={{fontSize:`20px`}}/>
+                                            }
+                                        </Col>
                                         <Col push={20}>
                                             <Button onClick={()=> {
                                                 setCurrentBooking([item.id,item.stadiumName])
                                                 setOpen(true)
-                                            }} type={"primary"} style={{marginTop:`50px`}}>预订</Button>
+                                            }} type={"primary"}>预订</Button>
                                         </Col>
                                     </Row>
                                 </>}

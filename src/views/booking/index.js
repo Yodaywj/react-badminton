@@ -10,7 +10,7 @@ import Chat from "../../components/Chat/Chat";
 
 const {Content} = Layout;
 const Booking = () => {
-    const {data, user, sum} = useLoaderData();
+    const {data, user, sum, bookmarks} = useLoaderData();
     const [stadiums, setStadiums] = useState(data);
     const [num, setNum] = useState(sum);
     const [isFilter, setIsFilter] = useState(false);
@@ -26,7 +26,7 @@ const Booking = () => {
                     <Row justify={"center"}>
                         <Col span={21}>
                             <BookingInfo user={user} stadiums={stadiums} setStadiums={setStadiums} sum={num}
-                                         isFilter={isFilter}/>
+                                         isFilter={isFilter} bookmarks={bookmarks}/>
                         </Col>
                     </Row>
                     <Chat user={user}/>

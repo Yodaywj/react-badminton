@@ -1,9 +1,9 @@
 import React, {useContext, useEffect, useState} from 'react';
-import {Col, Image, Layout, Row, Skeleton, Spin, Typography} from 'antd';
+import {Button, Col, Image, Layout, Row, Skeleton, Spin, Typography} from 'antd';
 import '../../styles/layout.css'
 import {MyHeader} from "../../layout/header";
 import {MyFooter} from "../../layout/footer";
-import {useLoaderData} from "react-router-dom";
+import {Link, useLoaderData} from "react-router-dom";
 import shuttlecock from "../../assets/shuttlecock-blue.svg"
 import manage from "../../assets/badminton-management.svg"
 import courtShow from "../../assets/courtShow.jpg"
@@ -20,6 +20,7 @@ const Home = () => {
     const screenWidth = useContext(AppContext)
     const {Title, Text} = Typography;
     const [loading,setLoading] = useState(true);
+    const [btnState,setBtnState] = useState({booking:false})
     useEffect(() => {
         setLoading(false)
     }, []);
@@ -40,9 +41,34 @@ const Home = () => {
                             </Title>
                         </Row>
                         <Row justify={"center"}>
-                            <Text strong={false} className={`text-secondary text-size-4`}>
+                            {screenWidth>720?
+                                <Text strong={false} className={`text-secondary text-size-4`}>
                                 用于羽毛球馆数字化管理的智慧门店
-                            </Text>
+                                </Text>:
+                                <>
+                                    <Text strong={false} className={`text-secondary text-size-4`}>
+                                        用于羽毛球馆数字化
+                                    </Text>
+                                    <Text strong={false} className={`text-secondary text-size-4`}>
+                                    管理的智慧门店
+                                    </Text>
+                                </>
+                            }
+                        </Row>
+                        <Row justify={"center"} style={{marginTop:`30px`}}>
+                            <Link to={user.username?`/manage/userInfo`:`/user/login`}>
+                                <Button type="primary" shape="round"  size={`large`} style={{marginRight:`10px`}}>
+                                    开始使用
+                                </Button>
+                            </Link>
+                            <Link to={`/booking`}
+                                  onClick={()=>{setBtnState({...btnState,booking: true})}}
+                            >
+                                <Button shape="round"  size={`large`}
+                                        loading={btnState.booking}>
+                                    场馆预订
+                                </Button>
+                            </Link>
                         </Row>
                     </Col>
                 </Row>
@@ -65,7 +91,9 @@ const Home = () => {
                                 场地管理
                             </Title>
                         </Row>
-                        <Image width={screenWidth*0.4} src={courtShow} placeholder={<Skeleton/>}/>
+                        <Row justify={"center"}>
+                            <Image width={screenWidth*0.4} src={courtShow} placeholder={<Skeleton/>}/>
+                        </Row>
                         <Row justify={"center"} style={{marginTop:`25px`}}>
                             <Text strong={false} className={`text-secondary text-size-4`}>
                                 通过数字化系统
@@ -85,7 +113,9 @@ const Home = () => {
                                 预订系统
                             </Title>
                         </Row>
-                        <Image width={screenWidth*0.4} src={bookingShow} placeholder={<Skeleton/>}/>
+                        <Row justify={"center"}>
+                            <Image width={screenWidth*0.4} src={bookingShow} placeholder={<Skeleton/>}/>
+                        </Row>
                         <Row justify={"center"} style={{marginTop:`25px`}}>
                             <Text strong={false} className={`text-secondary text-size-4`}>
                                 在线预订场馆
