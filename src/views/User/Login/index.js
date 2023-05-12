@@ -8,6 +8,7 @@ import React, {useEffect, useRef, useState} from "react";
 import Cookies from 'js-cookie';
 import generateCode from "../../../utils/captcha";
 import drawCaptcha from "../../../utils/generateCaptchaImage";
+import ResetButton from "../../../components/resetButton";
 const Login = () => {
     const [success,setSuccess] = useState(false)
     const [messageApi, contextHolder] = message.useMessage();
@@ -140,10 +141,7 @@ const Login = () => {
                     {/*<Form.Item name="remember" valuePropName="checked" noStyle>*/}
                     {/*    <Checkbox>7天免密登录</Checkbox>*/}
                     {/*</Form.Item>*/}
-
-                    {/*<Link className="login-form-forgot" to={'/'}>*/}
-                    {/*    忘记密码*/}
-                    {/*</Link>*/}
+                    <ResetButton text={"忘记密码"}/>
                 </Form.Item>
 
                 <Form.Item>

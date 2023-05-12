@@ -2,6 +2,7 @@ import {UserContext} from "../index";
 import {useContext, useState} from "react";
 import {Button, Descriptions, Form, Input, message, Radio, Row} from "antd";
 import {editUser} from "../../../services/userInfoLoader";
+import ResetButton from "../../../components/resetButton";
 
 const UserInfo = ()=>{
     const deepData = useContext(UserContext);
@@ -25,9 +26,6 @@ const UserInfo = ()=>{
             }
         })
     }
-    const resetPassword = ()=>{
-
-    }
     return (
         <>
             {!isEditing?
@@ -40,12 +38,26 @@ const UserInfo = ()=>{
                 </Descriptions>:
                 <Form form={form} onFinish={onFinish} style={{maxWidth:`500px`}}
                       initialValues={{
+                          username:username,
                           nickname:nickname,
                           mail:mail,
                           phone:phone,
                           gender:gender,
                       }}
                 >
+                    <Form.Item
+                        name="username"
+                        label="用户名"
+                        rules={[
+                            {
+                                required: true,
+                                message: '请输入8-15位字母开头的的用户名,仅包括数字、字母和下划线',
+                                pattern: /^[a-zA-Z]\w{7,14}$/,
+                            },
+                        ]}
+                    >
+                        <Input disabled={true}/>
+                    </Form.Item>
                     <Form.Item name={`nickname`} label="昵称"
                                rules={[
                                    {
@@ -56,7 +68,7 @@ const UserInfo = ()=>{
                                    },
                                ]}
                     >
-                        <Input />
+                        <Input allowClear={true}/>
                     </Form.Item>
                     <Form.Item name={`mail`} label="邮箱"
                                rules={[
@@ -70,7 +82,7 @@ const UserInfo = ()=>{
                                    },
                                ]}
                     >
-                        <Input />
+                        <Input disabled={true}/>
                     </Form.Item>
                     <Form.Item name={`phone`} label="手机号"
                                rules={[
@@ -81,7 +93,7 @@ const UserInfo = ()=>{
                                    },
                                ]}
                     >
-                        <Input />
+                        <Input allowClear={true}/>
                     </Form.Item>
                     <Form.Item name={`gender`} label="性别">
                         <Radio.Group>
@@ -95,7 +107,7 @@ const UserInfo = ()=>{
                 </Form>
             }
             <Row style={{marginTop:`50px`}}>
-                <Button disabled={true} onClick={resetPassword}>重置密码</Button>
+                <ResetButton text = {'重置密码'} user={user}/>
                 <Button style={{marginLeft:`20px`}} type={"primary"} onClick={()=>editInfo()}>{isEditing?`取消`:`编辑信息`}</Button>
             </Row>
         </>

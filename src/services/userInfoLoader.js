@@ -24,4 +24,7 @@ const getCaptcha = (mail,type)=>{
 const validateCaptcha = async (mail,type,code)=>{
     return await request.get(`/user/validateCaptcha/?mail=${mail}&type=${type}&code=${code}`)
 }
-export {editUser,register,getCaptcha,validateCaptcha};
+const resetPassword = (mail,password)=>{
+    return request.patch(`/user/resetPassword/?mail=${mail}&password=${password}`)
+}
+export {editUser,register,getCaptcha,validateCaptcha,resetPassword};

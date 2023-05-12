@@ -51,9 +51,7 @@ const Register = () => {
     const [countdown, setCountdown] = useState(60);
     const [isCounting,setIsCounting] = useState(false);
     const [mail,setMail] = useState('');
-    const [isShown, setIsShown] = useState(false)
     const [success, setSuccess] = useState(false);
-    const [errorText, setErrorText] = useState('')
     const [username, setUsername] = useState('')
     const height = useContext(HeightContext)
     const setHeight = height[1];
@@ -96,27 +94,25 @@ const Register = () => {
         })
         if (state) {
             const newUser = {
-                username: values.username,
+                username: values.email,
                 mail: values.email,
                 gender: 'male',
-                nickname: values.nickname || values.username,
+                nickname: values.nickname || values.email,
                 password: values.password,
-                phone: values.phone,
+                phone: '',
             }
             register(newUser).then(response => {
                 if (response.data.result) {
                     setUsername(newUser.username);
                     setSuccess(true);
                 } else {
-                    setIsShown(true);
-                    setErrorText('用户名已存在');
+                    message.error("用户名已存在")
                 }
             }).catch(error => {
                 console.log(error);
             });
         } else {
-            setErrorText("验证码错误")
-            setIsShown(true);
+            message.error("验证码错误")
         }
     };
     return (
@@ -150,21 +146,6 @@ const Register = () => {
                 >
                     <Input allowClear={true} onChange={(event)=>{setMail(event.target.value)}}/>
                 </Form.Item>
-
-                <Form.Item
-                    name="username"
-                    label="Username"
-                    rules={[
-                        {
-                            required: true,
-                            message: '请输入8-15位字母开头的的用户名,仅包括数字、字母和下划线',
-                            pattern: /^[a-zA-Z]\w{7,14}$/,
-                        },
-                    ]}
-                >
-                    <Input allowClear={true}/>
-                </Form.Item>
-
                 <Form.Item
                     name="password"
                     label="Password"
@@ -271,14 +252,6 @@ const Register = () => {
                     <Button type="primary" htmlType="submit">
                         Register
                     </Button>
-                </Form.Item>
-                <Form.Item>
-                    <Row>
-                        <Col push={12}>
-                            {isShown && <Alert message={errorText} type="error" showIcon closable
-                                               afterClose={() => setIsShown(false)}/>}
-                        </Col>
-                    </Row>
                 </Form.Item>
                 {success && <Navigate to="/user/success" state={{
                     message: `您的用户名为${username}`,
