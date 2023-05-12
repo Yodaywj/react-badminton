@@ -18,5 +18,10 @@ const editUser = async (user)=>{
 const register = (newUser)=>{
     return request.post(`${ROOT_URL}/user/register`,newUser)
 }
-
-export {editUser,register};
+const getCaptcha = (mail,type)=>{
+    return request.get(`/user/getCaptcha/?mail=${mail}&type=${type}`)
+}
+const validateCaptcha = async (mail,type,code)=>{
+    return await request.get(`/user/validateCaptcha/?mail=${mail}&type=${type}&code=${code}`)
+}
+export {editUser,register,getCaptcha,validateCaptcha};

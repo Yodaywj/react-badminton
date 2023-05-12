@@ -4,19 +4,15 @@ import {
     Checkbox,
     Col,
     Form,
-    Input,
+    Input, message,
     Row,
     Select,
 } from 'antd';
 import MyNotification from "./notification";
 import {SmileOutlined} from "@ant-design/icons";
-import React, {useContext, useEffect, useRef, useState} from "react";
-import generateCode from "../../../utils/captcha";
-import drawCaptcha from "../../../utils/generateCaptchaImage";
-import {ROOT_URL} from "../../../utils/constant";
-import axios from "axios";
+import React, {useContext, useEffect, useState} from "react";
 import {Navigate} from "react-router-dom";
-import {register} from "../../../services/userInfoLoader";
+import {getCaptcha, register, validateCaptcha} from "../../../services/userInfoLoader";
 import {HeightContext} from "../index";
 
 const {Option} = Select;
@@ -52,17 +48,22 @@ const tailFormItemLayout = {
 };
 const Register = () => {
     //Validation
-    const [code, setCode] = useState(generateCode)
+    const [countdown, setCountdown] = useState(60);
+    const [isCounting,setIsCounting] = useState(false);
+    const [mail,setMail] = useState('');
     const [isShown, setIsShown] = useState(false)
     const [success, setSuccess] = useState(false);
-    const canvasRef = useRef(null);
     const [errorText, setErrorText] = useState('')
     const [username, setUsername] = useState('')
     const height = useContext(HeightContext)
     const setHeight = height[1];
-    const handleClick = () => {
-        setCode(generateCode());
-        drawCaptcha(200, 50, code, canvasRef)
+    const getRegisterCaptcha = (mail,validate,form)=>{
+        if (form.getFieldError("email").length === 0&& mail.trim() !== ''){
+            setIsCounting(true);
+            getCaptcha(mail, 'register').then();
+        }else {
+            message.error("请填写正确格式的邮箱").then()
+        }
     }
     useEffect(()=>{
         setHeight('register')
@@ -71,12 +72,29 @@ const Register = () => {
         })
     },[])
     useEffect(() => {
-        drawCaptcha(200, 50, code, canvasRef)
-    }, [code]);
+        let timer = null;
+        if (isCounting) {
+            timer = setInterval(() => {
+                setCountdown(prevCountdown => prevCountdown - 1);
+            }, 1000);
+        }
+
+        if (countdown === 0) {
+            clearInterval(timer);
+            setIsCounting(false);
+            setCountdown(60);
+        }
+
+        return () => clearInterval(timer);
+    }, [countdown, isCounting]);
     const [form] = Form.useForm();
 //Transfer the information of form
-    const onFinish = (values) => {
-        if (values.captcha.toUpperCase() === code.toUpperCase()) {
+    const onFinish = async (values) => {
+        let state = false;
+        await validateCaptcha(values.email,"register",values.captcha).then(response=>{
+            state = response.data.state;
+        })
+        if (state) {
             const newUser = {
                 username: values.username,
                 mail: values.email,
@@ -90,7 +108,6 @@ const Register = () => {
                     setUsername(newUser.username);
                     setSuccess(true);
                 } else {
-                    handleClick();
                     setIsShown(true);
                     setErrorText('用户名已存在');
                 }
@@ -100,7 +117,6 @@ const Register = () => {
         } else {
             setErrorText("验证码错误")
             setIsShown(true);
-            handleClick();
         }
     };
     return (
@@ -132,7 +148,7 @@ const Register = () => {
                         },
                     ]}
                 >
-                    <Input/>
+                    <Input allowClear={true} onChange={(event)=>{setMail(event.target.value)}}/>
                 </Form.Item>
 
                 <Form.Item
@@ -146,7 +162,7 @@ const Register = () => {
                         },
                     ]}
                 >
-                    <Input/>
+                    <Input allowClear={true}/>
                 </Form.Item>
 
                 <Form.Item
@@ -161,9 +177,8 @@ const Register = () => {
                     ]}
                     hasFeedback
                 >
-                    <Input.Password/>
+                    <Input.Password allowClear={true}/>
                 </Form.Item>
-
                 <Form.Item
                     name="confirm"
                     label="Confirm Password"
@@ -184,7 +199,7 @@ const Register = () => {
                         }),
                     ]}
                 >
-                    <Input.Password/>
+                    <Input.Password allowClear={true}/>
                 </Form.Item>
                 <Form.Item
                     name="nickname"
@@ -198,7 +213,7 @@ const Register = () => {
                         },
                     ]}
                 >
-                    <Input/>
+                    <Input allowClear={true}/>
                 </Form.Item>
                 <Form.Item label="Captcha" extra="Click to change, no case sensitive">
                     <Row gutter={8}>
@@ -216,8 +231,12 @@ const Register = () => {
                                 <Input maxLength={6}/>
                             </Form.Item>
                         </Col>
-                        <Col span={12}  onClick={handleClick}>
-                            <canvas ref={canvasRef} width={180} height={50} style={{cursor: "pointer"}}/>
+                        <Col>
+                            <Button disabled={isCounting} onClick={()=>{
+                                getRegisterCaptcha(mail,form.isFieldsValidating,form)
+                            }}>
+                                {isCounting?`${countdown}秒后重新获取`:'获取验证码'}
+                            </Button>
                         </Col>
                     </Row>
                 </Form.Item>
