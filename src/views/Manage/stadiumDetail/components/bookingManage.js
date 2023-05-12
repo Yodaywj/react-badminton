@@ -110,7 +110,9 @@ const BookingManage = ({stadiumId,courtsNum}) => {
     const courtIdFilter = createCourtNum(courtsNum,'filter')
     const finishSetting = async (values)=>{
         const {id,courtId,state} = values;
+        message.loading("设置中",0).then();
         await setBooking(id,courtId,state).then(response=>{
+            message.destroy();
             if (response.result){
                 message.success(response.resultMessage);
                 setBookings(bookings.map(item=>{

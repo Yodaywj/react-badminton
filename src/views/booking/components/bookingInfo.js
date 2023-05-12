@@ -146,7 +146,9 @@ const BookingInfo = ({setStadiums,sum,stadiums,isFilter,user,bookmarks})=>{
                 state:'预订中',}
             form.resetFields();
             setOpen(false);
+            message.loading("预订中",0).then();
             bookCourt(values).then(response=>{
+                message.destroy();
                 if (response.result){
                     message.success(response.message);
                 }else {

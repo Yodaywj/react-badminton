@@ -25,7 +25,7 @@ const ResetButton = ({text,user})=>{
                 setOpen(false);
             }}
         />
-        <Button size={"middle"} type={text === "重置密码"?"default":"link"} onClick={()=>setOpen(true)}>
+        <Button style={text === "重置密码"?{}:{padding:0}} size={"middle"} type={text === "重置密码"?"default":"link"} onClick={()=>setOpen(true)}>
             {text}
         </Button>
     </>)
