@@ -14,7 +14,7 @@ const MyNotification = ({message,description,icon}) => {
             {contextHolder}
             {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
             <a type="primary" onClick={()=>openNotification({message, description, icon})}>
-                agreement
+                用户须知
             </a>
         </>
     );

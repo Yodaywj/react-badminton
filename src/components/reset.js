@@ -1,7 +1,7 @@
 import {Button, Col, Form, Input, message, Modal, Radio, Row} from 'antd';
 import React, {useEffect, useState} from 'react';
 import {getCaptcha} from "../services/userInfoLoader";
-const Reset = ({ open, onCreate, onCancel,user}) => {
+const Reset = ({ open, onCreate, onCancel,user,text}) => {
     const [form] = Form.useForm();
     const [countdown, setCountdown] = useState(60);
     const [isCounting,setIsCounting] = useState(false);
@@ -25,7 +25,9 @@ const Reset = ({ open, onCreate, onCancel,user}) => {
     const getResetCaptcha = (mail,validate,form)=>{
         if (form.getFieldError("email").length === 0&& mail.trim() !== ''){
             setIsCounting(true);
-            getCaptcha(mail, 'reset').then();
+            if (text === '快速登录'){
+                getCaptcha(mail, 'login').then();
+            }else getCaptcha(mail, 'reset').then();
         }else {
             message.error("请填写正确格式的邮箱").then()
         }
@@ -33,15 +35,15 @@ const Reset = ({ open, onCreate, onCancel,user}) => {
     return (
         <Modal
             open={open}
-            title="重置密码"
-            okText="重置"
+            title={text}
+            okText={text==="快速登录"?'登录':'重置'}
             cancelText="取消"
             onCancel={onCancel}
             onOk={() => {
                 form
                     .validateFields()
                     .then((values) => {
-                        form.resetFields();
+                        form.resetFields(["captcha"]);
                         onCreate(values);
                     })
             }}
@@ -55,8 +57,9 @@ const Reset = ({ open, onCreate, onCancel,user}) => {
                 }}
             >
                 <Form.Item
+                    extra={text==="快速登录"?"登录后自动注册":''}
                     name="email"
-                    label="E-mail"
+                    label="邮箱"
                     rules={[
                         {
                             type: 'email',
@@ -70,21 +73,21 @@ const Reset = ({ open, onCreate, onCancel,user}) => {
                 >
                     <Input allowClear={true} onChange={(event)=>{setMail(event.target.value)}}/>
                 </Form.Item>
-                <Form.Item
+                {text === "快速登录"?<></>:<Form.Item
                     name="password"
-                    label="Password"
+                    label="密码"
                     rules={[
-                        {
-                            required: true,
-                            message: '请输入8位以上的密码,至少包括一个字母和数字',
-                            pattern: /^(?=.*[A-Za-z])(?=.*\d)[^\s]{8,15}$/,
-                        },
+                {
+                    required: true,
+                    message: '请输入8位以上的密码,至少包括一个字母和数字',
+                    pattern: /^(?=.*[A-Za-z])(?=.*\d)[^\s]{8,15}$/,
+                },
                     ]}
-                    hasFeedback
-                >
-                    <Input.Password allowClear={true}/>
-                </Form.Item>
-                <Form.Item label="Captcha" extra="Click to change, no case sensitive">
+                hasFeedback
+            >
+                <Input.Password allowClear={true}/>
+            </Form.Item>}
+                <Form.Item label="验证码">
                     <Row gutter={8}>
                         <Col span={12}>
                             <Form.Item

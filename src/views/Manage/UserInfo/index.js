@@ -48,13 +48,6 @@ const UserInfo = ()=>{
                     <Form.Item
                         name="username"
                         label="用户名"
-                        rules={[
-                            {
-                                required: true,
-                                message: '请输入8-15位字母开头的的用户名,仅包括数字、字母和下划线',
-                                pattern: /^[a-zA-Z]\w{7,14}$/,
-                            },
-                        ]}
                     >
                         <Input disabled={true}/>
                     </Form.Item>

@@ -58,10 +58,10 @@ export const UserDropdown = ({user})=> {
         ];
     }else {
         items = [
-            {
-                key: '1',
-                label: `用户: ${user.username}`,
-            },
+            // {
+            //     key: '1',
+            //     label: `用户: ${user.username}`,
+            // },
             {
                 key: '2',
                 label: `昵称: ${user.nickname}`,

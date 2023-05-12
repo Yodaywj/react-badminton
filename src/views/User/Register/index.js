@@ -132,7 +132,7 @@ const Register = () => {
             >
                 <Form.Item
                     name="email"
-                    label="E-mail"
+                    label="邮箱"
                     rules={[
                         {
                             type: 'email',
@@ -148,7 +148,7 @@ const Register = () => {
                 </Form.Item>
                 <Form.Item
                     name="password"
-                    label="Password"
+                    label="密码"
                     rules={[
                         {
                             required: true,
@@ -162,7 +162,7 @@ const Register = () => {
                 </Form.Item>
                 <Form.Item
                     name="confirm"
-                    label="Confirm Password"
+                    label="确认密码"
                     dependencies={['password']}
                     hasFeedback
                     rules={[
@@ -184,8 +184,8 @@ const Register = () => {
                 </Form.Item>
                 <Form.Item
                     name="nickname"
-                    label="Nickname"
-                    tooltip="What do you want others to call you?"
+                    label="昵称"
+                    tooltip="你希望别人如何称呼你？"
                     rules={[
                         {
                             message: '昵称仅允许由3-12位汉字、数字、字母和下划线组成',
@@ -196,7 +196,7 @@ const Register = () => {
                 >
                     <Input allowClear={true}/>
                 </Form.Item>
-                <Form.Item label="Captcha" extra="Click to change, no case sensitive">
+                <Form.Item label="验证码">
                     <Row gutter={8}>
                         <Col span={12}>
                             <Form.Item
@@ -238,7 +238,7 @@ const Register = () => {
                     {...tailFormItemLayout}
                 >
                     <Checkbox>
-                        I have read the <MyNotification
+                        我已阅读 <MyNotification
                         description={
                             `This is a website created by Yang Wenjun.
                             Click the agreement means you have known that`
@@ -250,7 +250,7 @@ const Register = () => {
                 </Form.Item>
                 <Form.Item {...tailFormItemLayout}>
                     <Button type="primary" htmlType="submit">
-                        Register
+                        注册
                     </Button>
                 </Form.Item>
                 {success && <Navigate to="/user/success" state={{

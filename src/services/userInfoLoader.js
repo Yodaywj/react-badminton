@@ -27,4 +27,7 @@ const validateCaptcha = async (mail,type,code)=>{
 const resetPassword = (mail,password)=>{
     return request.patch(`/user/resetPassword/?mail=${mail}&password=${password}`)
 }
-export {editUser,register,getCaptcha,validateCaptcha,resetPassword};
+const quickLogin = (mail)=>{
+    return request.post(`/user/quickLogin?mail=${mail}`,{},{withCredentials:true});
+}
+export {editUser,register,getCaptcha,validateCaptcha,resetPassword,quickLogin};

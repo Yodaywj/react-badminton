@@ -89,7 +89,7 @@ const Login = () => {
                         },
                         {
                             message: '用户名格式不正确',
-                            pattern: /^[a-zA-Z]\w{7,14}$/,
+                            pattern: /^[^\s]{6,60}$/,
                             validateTrigger:"onSubmit",
                         },
                     ]}
@@ -104,7 +104,7 @@ const Login = () => {
                             message: 'Please input your Password!',
                         },
                         {
-                          pattern: /^(?=.*[A-Za-z])(?=.*\d)[^\s]{8,15}$/,
+                          pattern: /^[^\s]{6,40}$/,
                           message:'密码格式不正确',
                           validateTrigger:"onSubmit",
                         },
@@ -141,7 +141,8 @@ const Login = () => {
                     {/*<Form.Item name="remember" valuePropName="checked" noStyle>*/}
                     {/*    <Checkbox>7天免密登录</Checkbox>*/}
                     {/*</Form.Item>*/}
-                    <ResetButton text={"忘记密码"}/>
+                    <ResetButton text={"忘记密码"} style={{padding:0}}/>
+                    <ResetButton setSuccess={setSuccess} style={{marginLeft:`20px`}} text={"快速登录"}/>
                 </Form.Item>
 
                 <Form.Item>

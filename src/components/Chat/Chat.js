@@ -71,7 +71,7 @@ const Chat = ({user}) => {
         },
         onError:()=>setConnection(false),
         onClose:()=>{setConnection(false)},
-        shouldReconnect: (closeEvent) => false,
+        shouldReconnect: (closeEvent) => true,
     });
     const sendMyMessage = ()=>{
         if (message.trim().length !== 0){
