@@ -92,7 +92,6 @@ const Courts = ({data,stadiumId}) => {
         };
         await setNewCourt(newCourt).then(response=>{
             if (response.result){
-                newCourt.state = transformTag(newCourt.state)
                 let {countdown} = response
                 countdown = Date.now()+Number(countdown)*1000;
                 setCourts(courts.map(current => {
@@ -178,7 +177,7 @@ const Courts = ({data,stadiumId}) => {
                                         column={1}
                                     >
                                         <Descriptions.Item label="状态">
-                                            {item.state}
+                                            {transformTag(item.state)}
                                         </Descriptions.Item>
                                         <Descriptions.Item label="倒计时">
                                             <Countdown value={item.countdown}/>

@@ -9,7 +9,7 @@ import manage from "../../assets/badminton-management.svg"
 import courtShow from "../../assets/courtShow.jpg"
 import bookingShow from "../../assets/bookingShow.jpg"
 import './index.css'
-
+import '../../styles/scrollbar.css'
 import BulletinList from "./components/bulletinList";
 import Chat from "../../components/Chat/Chat";
 import {AppContext} from "../../index";

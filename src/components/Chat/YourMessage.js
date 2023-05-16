@@ -4,7 +4,7 @@ import {UserOutlined} from "@ant-design/icons";
 
 const YourMessage = ({name,message,avatar})=> {
     return (
-        <Row style={{marginTop:`10px`,marginBottom:`10px`}}>
+        <Row align={"middle"} style={{marginTop:`10px`,marginBottom:`10px`}}>
             <Col>
                 <Tooltip title={name}>
                     <Avatar icon={<UserOutlined />} />
