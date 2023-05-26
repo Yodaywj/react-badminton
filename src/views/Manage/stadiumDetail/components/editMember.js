@@ -1,15 +1,17 @@
 import {Button, Col, DatePicker, Drawer, Form, Input, InputNumber, message, Row, Space} from 'antd';
 import ReactQuill from "react-quill";
-import React from "react";
+import React, {useContext} from "react";
 import dayjs from 'dayjs';
 import 'dayjs/locale/zh-cn';
 import customParseFormat from 'dayjs/plugin/customParseFormat'
 import axios from "axios";
 import {ROOT_URL} from "../../../../utils/constant";
 import locale from "antd/locale/zh_CN";
+import {AppContext} from "../../../../index";
 
 dayjs.extend(customParseFormat);
 const EditMember = ({editing,setEditing,newMembers,setNewMembers}) => {
+    const screenWidth = useContext(AppContext);
     const [messageApi, contextHolder] = message.useMessage();
     const [form] = Form.useForm();
     const onClose = () => {
@@ -88,7 +90,7 @@ const EditMember = ({editing,setEditing,newMembers,setNewMembers}) => {
             {contextHolder}
             <Drawer
                 title={editing[1]==='register'?`新增会员`:`编辑${editing[1].memberName}的会员信息`}
-                width={720}
+                width={screenWidth>720?720:screenWidth}
                 onClose={onClose}
                 open={editing[0]}
                 bodyStyle={{

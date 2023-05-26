@@ -151,7 +151,7 @@ const Login = () => {
                     </Button>
                 </Form.Item>
                 {contextHolder}
-                {success && <Navigate to="/" />}
+                {success && <Navigate to="/manage/userInfo" />}
             </Form>
         </Col>
     );

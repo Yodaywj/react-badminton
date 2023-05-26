@@ -1,4 +1,4 @@
-import {Button, Card, Input, List, Badge, message, Modal, Row, Tag} from 'antd';
+import {Button, Card, Input, List, Badge, message, Modal, Row, Tag, InputNumber} from 'antd';
 import {DeleteOutlined, EditOutlined, ExclamationCircleFilled, SaveOutlined} from "@ant-design/icons";
 import React, {useContext, useEffect, useState} from "react";
 import ReactQuill from "react-quill";
@@ -9,13 +9,35 @@ import 'react-quill/dist/quill.snow.css';
 import {UserContext} from "../index";
 import Warning from "../../ErrorPage/warning";
 import FourZeroThree from "../../ErrorPage/403";
+import {number} from "sockjs-client/lib/utils/random";
+import {AppContext} from "../../../index";
 
 const BulletinBoard = () => {
+    const screenWidth = useContext(AppContext);
+    let pageSize;
+    switch (true) {
+        case (screenWidth<992):
+            pageSize = 3;
+            break;
+        case (screenWidth<1200):
+            pageSize = 4;
+            break;
+        default:
+            pageSize = 6;
+    }
     const deepData = useContext(UserContext);
     const user = deepData[0];
     let {data,count,view} = useLoaderData();
     const newData = data.map(item => ({...item, editing: false}));
-    const [bulletins, setBulletins] = useState(newData);
+    const [bulletins, setBulletins] = useState(newData.sort((a, b) => {
+        if (a.weight === 0) {
+            return 1;
+        } else if (b.weight === 0) {
+            return -1;
+        } else {
+            return a.weight - b.weight;
+        }
+    }));
     const [messageApi, contextHolder] = message.useMessage();
     const { confirm } = Modal;
     const showConfirm = (id) => {
@@ -42,20 +64,20 @@ const BulletinBoard = () => {
             }
         }))
     }
-    const handleSave = (id, content, title) => {
+    const handleSave = (id, content, title,weight) => {
         const url = `${ROOT_URL}/bulletin-board/save`;
-        const data = {id: id, content: content, title: title}
+        const data = {id: id, content: content, title: title, weight:weight}
         axios.post(url, data).then(response => {
             if (response.data.result) {
                 messageApi.open({
                     type: 'success',
                     content: response.data.message,
-                })
+                }).then();
             } else {
                 messageApi.open({
                     type: 'error',
                     content: response.data.message,
-                })
+                }).then()
             }
         }).catch(error => {
             messageApi.open({
@@ -63,18 +85,37 @@ const BulletinBoard = () => {
                 content: error.message,
             })
         })
-        setBulletins(bulletins.map((item) => {
+        const newBulletins = [...bulletins].sort((a, b) => {
+            if (a.weight === 0) {
+                return 1;
+            } else if (b.weight === 0) {
+                return -1;
+            } else {
+                return a.weight - b.weight;
+            }
+        });
+        setBulletins(newBulletins.map((item) => {
             if (item.id === id) {
                 return {...item, editing: false};
             } else {
                 return item;
             }
-        }))
+        }));
+        console.log(newBulletins)
     }
     const handleInput = (event, id) => {
         setBulletins(bulletins.map((newItem) => {
             if (newItem.id === id) {
                 return {...newItem, title: event.target.value};
+            } else {
+                return newItem;
+            }
+        }))
+    }
+    const handleWeight = (event, id) => {
+        setBulletins(bulletins.map((newItem) => {
+            if (newItem.id === id) {
+                return {...newItem, weight: parseInt(event.target.value)};
             } else {
                 return newItem;
             }
@@ -156,15 +197,15 @@ const BulletinBoard = () => {
                 grid={{
                     gutter: 16,
                     xs: 1,
-                    sm: 2,
-                    md: 4,
-                    lg: 4,
-                    xl: 6,
+                    sm: 1,
+                    md: 1,
+                    lg: 2,
+                    xl: 3,
                     xxl: 3,
                 }}
                 pagination={{
                     simple: true,
-                    pageSize: 6,
+                    pageSize: pageSize,
                 }}
                 dataSource={bulletins}
                 renderItem={(item) => (
@@ -183,21 +224,34 @@ const BulletinBoard = () => {
                                     item.editing ?
                                         <SaveOutlined
                                             key={`${item.id}save`}
-                                            onClick={() => handleSave(item.id, item.content, item.title)}
+                                            onClick={() => handleSave(item.id, item.content, item.title,item.weight)}
                                         /> : <EditOutlined key={`${item.id}edit`} onClick={() => handleEdit(item.id)}/>,
                                     <DeleteOutlined key={`${item.id}delete`} onClick={() => showConfirm(item.id)}/>,
                                 ]}
                             >
                                 {item.editing ?
-                                    <ReactQuill
-                                        theme="snow"
-                                        value={item.content}
-                                        onChange={(value) => {
-                                            handleQuill(value, item.id)
+                                    <>
+                                        weight:<Input
+                                        style={{width:`100px`,marginBottom:`10px`,marginLeft:`5px`}}
+                                        key={`${item.id}weight`}
+                                        value={item.weight}
+                                        onChange={(event) => {
+                                            handleWeight(event, item.id)
                                         }}
                                     />
+                                        <ReactQuill
+                                            theme="snow"
+                                            value={item.content}
+                                            onChange={(value) => {
+                                                handleQuill(value, item.id)
+                                            }}
+                                        />
+                                    </>
                                     :
-                                    <div style={{overflow:`auto`,height: `260px`}} dangerouslySetInnerHTML={{__html: item.content}}/>
+                                    <>
+                                        <Tag color={"geekblue"} >{item.weight}</Tag>
+                                        <div style={{overflow:`auto`,height: `260px`}} dangerouslySetInnerHTML={{__html: item.content}}/>
+                                    </>
                                 }
                             </Card>
                         </Badge.Ribbon>

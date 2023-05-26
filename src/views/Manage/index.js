@@ -1,5 +1,5 @@
 import {ContactsOutlined, ScheduleOutlined, SlidersFilled, SnippetsOutlined, StarOutlined} from '@ant-design/icons';
-import {Layout, Menu, message, Row, Skeleton, Switch, theme} from 'antd';
+import {FloatButton, Layout, Menu, message, Row, Skeleton, Switch, theme, Tooltip} from 'antd';
 import React, {createContext, useContext, useEffect, useState} from 'react';
 import {Link, Outlet, useLoaderData} from "react-router-dom";
 import {MyHeader} from "../../layout/header";
@@ -17,7 +17,6 @@ const Manage = () => {
     const [siderTheme, setSiderTheme] = useState('light');
     const [mode, setMode] = useState(true);
     const [loading,setLoading] = useState(true);
-
     useEffect(() => {
         setLoading(false)
         if (screenWidth<700){
@@ -30,6 +29,13 @@ const Manage = () => {
     const changeMode = (value) => {
         setMode(!value);
     };
+    const closeSider =() =>{
+        if (screenWidth<700){
+            setTimeout(()=>{
+                setCollapsed(!collapsed);
+            },500)
+        }
+    }
     const items = [
         {
             key: 1,
@@ -52,27 +58,27 @@ const Manage = () => {
         user.privilege === 'root'?{
             key : 1,
             icon : <ScheduleOutlined />,
-            label : <Link to={`bulletin-board`}>公告牌</Link>
+            label : <Link onClick={closeSider} to={`bulletin-board`}>公告牌</Link>
         }:null,
         {
             key : 2,
             icon: <ContactsOutlined />,
-            label: <Link to={`userInfo`}>个人信息</Link>,
+            label: <Link onClick={closeSider} to={`userInfo`}>个人信息</Link>,
         },
         {
             key : 3,
             icon: <SnippetsOutlined />,
-            label: <Link to={`myBooking`}>我的预订</Link>,
+            label: <Link onClick={closeSider} to={`myBooking`}>我的预订</Link>,
         },
         {
             key : 4,
             icon: <img  src={stadiumGrey} width={16} alt={'我的场馆'}/>,
-            label: <Link to={`stadium`}>我的场馆</Link>,
+            label: <Link onClick={closeSider} to={`stadium`}>我的场馆</Link>,
         },
         {
             key : 5,
             icon: <StarOutlined />,
-            label: <Link to={`myBookmarks`}>收藏场馆</Link>,
+            label: <Link onClick={closeSider} to={`myBookmarks`}>收藏场馆</Link>,
         },
     ]
     const {
@@ -90,13 +96,16 @@ const Manage = () => {
             {mode && <MyHeader user={userInfo}/>}
             <Layout>
                 <Sider
-                    collapsible collapsed={collapsed} onCollapse={(value) => setCollapsed(value)}
+                    collapsible={screenWidth>700}
+                    collapsed={collapsed} onCollapse={(value) => setCollapsed(value)}
                     width={screenWidth>700?200:screenWidth}
                     style={{
+                        display: screenWidth<700&&collapsed?"none":"block",
                         background: colorBgContainer,
                         position: 'fixed',
                         top: mode ? '72px' : `0`,
                         left: '0',
+                        zIndex:99,
                     }}
                 >
                     <Menu
@@ -121,10 +130,14 @@ const Manage = () => {
                     />
                 </Sider>
                 <Layout
-                    style={{
+                    style={
+                    screenWidth>700?{
                         padding: '0 24px 24px',
                         marginLeft: collapsed? '80px':'200px',
-                    }}
+                    }:{
+                        padding: '0 24px 24px',
+                    }
+                    }
                 >
                     <Content
                         style={{
@@ -139,7 +152,27 @@ const Manage = () => {
                                 <Outlet />
                             </Skeleton>
                         </UserContext.Provider>
-                        <Chat user={user}/>
+                        <FloatButton.Group
+                            shape="circle"
+                            style={screenWidth < 700 ?{
+                                right: 20,
+                                top:'75%',
+                                height:`81px`
+                            }:{
+                                right: 20,
+                                top:'83%',
+                                height:`41px`
+                            }}
+                        >
+                            {screenWidth < 700 ? <Tooltip placement="top" title={`菜单`}>
+                                <FloatButton
+                                    onClick={() => {
+                                        setCollapsed(!collapsed);
+                                    }}
+                                />
+                            </Tooltip>:<></>}
+                            <Chat user={user}/>
+                        </FloatButton.Group>
                     </Content>
                 </Layout>
             </Layout>

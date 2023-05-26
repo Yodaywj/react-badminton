@@ -15,11 +15,13 @@ import {
     Tag,
 } from "antd";
 import {List} from 'antd';
-import React, {useState} from 'react';
+import React, {useContext, useState} from 'react';
 import switchLight from "../../../../services/switchLight";
 import setNewCourt from "../../../../services/setNewCourt";
 import {bookingsForCourt} from "../../../../services/bookingLoader";
+import {AppContext} from "../../../../index";
 const Courts = ({data,stadiumId}) => {
+    const screenWidth = useContext(AppContext);
     const courtNumber = data.length;
     const [courts, setCourts] = useState(data);
     const [form] = Form.useForm();
@@ -135,7 +137,7 @@ const Courts = ({data,stadiumId}) => {
     }
     return (
         <>
-            <Drawer closable={false} title={`预订`} open={open} onClose = {()=>{setOpen(false)}}>
+            <Drawer width={screenWidth>720?720:screenWidth} closable={screenWidth<720} title={`预订`} open={open} onClose = {()=>{setOpen(false)}}>
                 {bookingDetail}
             </Drawer>
             <Row justify={"end"}>
@@ -150,10 +152,10 @@ const Courts = ({data,stadiumId}) => {
                 size="large"
                 grid={{
                     gutter: 20,
-                    column: 2,
+                    column: screenWidth>700?2:1,
                 }}
                 pagination={{
-                    pageSize: 6,
+                    pageSize: screenWidth>700?6:3,
                 }}
                 dataSource={courts}
                 renderItem={(item) => (
@@ -162,14 +164,14 @@ const Courts = ({data,stadiumId}) => {
                         key={item.id}
                     >
                         <Row justify="space-between">
-                            <Col xs={{ span: 0}} lg={{ span: 12}}>
+                            <Col span={screenWidth>1365?12:0}>
                                 <Image
                                     height={500}
                                     src={courtImage}
                                     preview={false}
                                 />
                             </Col>
-                            <Col xs={{ span: 24}} lg={{ span: 12}}>
+                            <Col span={screenWidth>1365?12:24}>
                                 <Row>
                                     <Descriptions
                                         title={`场地 ${item.id}`}

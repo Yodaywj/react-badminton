@@ -40,7 +40,7 @@ const Chat = ({user}) => {
         // lastJsonMessage,
         // readyState,
         // getWebSocket,
-    } = useWebSocket( `wss://yangwenjun.cn:8080/chat/${name}/${nickname}/${address}`, {
+    } = useWebSocket( `wss://hiywj.com:8080/chat/${name}/${nickname}/${address}`, {
         onOpen: () => setConnection(true),
         onMessage:(event)=>{
             const uuid = uuidv4();

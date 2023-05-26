@@ -1,10 +1,13 @@
 import {Button, Descriptions, Drawer, message, Modal, Popconfirm, Row, Space, Table, Tag} from 'antd';
 import {useLoaderData} from "react-router-dom";
 import {getStadium} from "../../../services/stadiumDetailLoader";
-import React, {memo, useEffect, useState} from "react";
+import React, {memo, useContext, useEffect, useState} from "react";
 import {deleteBooking} from "../../../services/bookingLoader";
+import {tableScroll} from "../../../utils/constant";
+import {AppContext} from "../../../index";
 
 const MyBooking = () => {
+    const screenWidth = useContext(AppContext);
     let {bookingMessage, result, myBooking} = useLoaderData();
     const nameFilter = Array.from(new Set(myBooking.map((item) => item.stadiumName))).map((name) => {
             return { text: name, value: name };
@@ -177,10 +180,10 @@ const MyBooking = () => {
     return (
         <>
             {contextHolder}
-            <Drawer title="场馆信息" placement="right" onClose={onClose} open={open}>
+            <Drawer width={screenWidth>720?720:screenWidth} closable={screenWidth<720} title="场馆信息" placement="right" onClose={onClose} open={open}>
                 {drawerContent}
             </Drawer>
-            <Table columns={columns} dataSource={bookingData} rowKey={(record) => record.id}/>
+            <Table scroll={tableScroll} columns={columns} dataSource={bookingData} rowKey={(record) => record.id}/>
         </>
     )
 };

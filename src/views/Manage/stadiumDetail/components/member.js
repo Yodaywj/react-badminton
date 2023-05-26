@@ -1,8 +1,8 @@
 import {Avatar, Button, Descriptions, Drawer, message, Popconfirm, Table, Tag, Modal} from 'antd';
-import React, {useEffect, useState} from "react";
+import React, {useContext, useEffect, useState} from "react";
 import EditMember from "./editMember";
 import axios from "axios";
-import {ROOT_URL} from "../../../../utils/constant";
+import {ROOT_URL, tableScroll} from "../../../../utils/constant";
 import {ExclamationCircleFilled, UserOutlined} from "@ant-design/icons";
 import { MenuOutlined } from '@ant-design/icons';
 import { DndContext } from '@dnd-kit/core';
@@ -14,6 +14,7 @@ import {
 } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import './member.css'
+import {AppContext} from "../../../../index";
 
 const {confirm} = Modal
 const Row = ({ children, ...props }) => {
@@ -67,6 +68,7 @@ const Row = ({ children, ...props }) => {
     );
 };
 const Member = ({members,stadiumId}) => {
+    const screenWidth = useContext(AppContext);
     const [selectedRowKeys, setSelectedRowKeys] = useState([]);
     const [open, setOpen] = useState(false);
     const [showInfo, setShowInfo] = useState(false)
@@ -261,14 +263,14 @@ const Member = ({members,stadiumId}) => {
     }
     return (
         <>
-            <Drawer title={`${drawerMemberName}`} placement="right" onClose={onClose} open={open} closable={false}>
+            <Drawer title={`${drawerMemberName}`} placement="right" onClose={onClose} open={open} width={screenWidth>720?720:screenWidth} closable={screenWidth<720}>
                 <div dangerouslySetInnerHTML={{__html: drawerContent}}/>
             </Drawer>
             <Drawer title={<><Avatar style={{marginRight:'15px'}} icon={<UserOutlined/>}/>用户ID: {userInfo.username}</>}
                     placement="right"
                     onClose={closeInfo}
                     open={showInfo}
-                    closable={false}>
+                    width={screenWidth>720?720:screenWidth} closable={screenWidth<720}>
                 {userExist? <Descriptions
                     bordered
                     column={1}
@@ -286,6 +288,7 @@ const Member = ({members,stadiumId}) => {
                     strategy={verticalListSortingStrategy}
                 >
                     <Table
+                        scroll={tableScroll}
                         rowSelection={rowSelection}
                         components={tableMembers.length !== 0?{
                         body: {

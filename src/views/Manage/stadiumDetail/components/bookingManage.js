@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from "react";
 import {Button, Form, message, Modal, Popconfirm, Radio, Select, Space, Table, Tag} from "antd";
 import {bookingManage, hideBooking, setBooking} from "../../../../services/bookingLoader";
+import {tableScroll} from "../../../../utils/constant";
 
 const CreateForm =  ({open, onCreate,form,onCancel,options,bookingId}) => {
     return(
@@ -238,7 +239,7 @@ const BookingManage = ({stadiumId,courtsNum}) => {
     return (
         <>
             {contextHolder}
-            <Table columns={columns} dataSource={bookings} rowKey={(record) => record.id}/>
+            <Table scroll={tableScroll} columns={columns} dataSource={bookings} rowKey={(record) => record.id}/>
             <CreateForm
                 bookingId = {bookingId}
                 options = {options}

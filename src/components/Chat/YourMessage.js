@@ -4,10 +4,10 @@ import {UserOutlined} from "@ant-design/icons";
 
 const YourMessage = ({name,message,avatar})=> {
     return (
-        <Row align={"middle"} style={{marginTop:`10px`,marginBottom:`10px`}}>
+        <Row style={{marginTop:`10px`,marginBottom:`10px`}}>
             <Col>
                 <Tooltip title={name}>
-                    <Avatar icon={<UserOutlined />} />
+                    <Avatar shape="square" size={38} icon={<UserOutlined />} />
                 </Tooltip>
             </Col>
             <Col style={{marginLeft:`5px`}}>

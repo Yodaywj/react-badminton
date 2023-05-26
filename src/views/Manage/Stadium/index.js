@@ -82,7 +82,7 @@ const Stadium = () => {
                             <Image
                                 style={{ display: !loadIMG ? 'block' : 'none' }}
                                 onLoad={()=>{setLoadIMG(false)}}
-                                width={screenWidth>700?272:0}
+                                width={screenWidth>1000?272:0}
                                 alt="logo"
                                 src={stadium}
                                 placeholder={<Skeleton/>}
