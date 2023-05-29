@@ -1,6 +1,6 @@
-// export const ROOT_URL = 'https://yangwenjun.cn:8080';
-// export const ROOT_URL = 'http://localhost:8080';
-export const ROOT_URL = 'https://hiywj.com:8080';
+export const ROOT_URL = process.env.NODE_ENV === 'production' ?
+    `https://${window.location.hostname}:8080` // 生产环境的请求地址
+    : 'http://localhost:8080';
 
 export const heightOfHF = 152;
 

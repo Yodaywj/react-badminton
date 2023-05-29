@@ -250,7 +250,7 @@ const Courts = ({data,stadiumId}) => {
                     </Form.Item>
                     <Form.Item label="倒计时">
                         <Row>
-                            <Col span={5}>
+                            <Col style={{width:`92px`}}>
                                 <Form.Item name="hour" rules={[
                                     {
                                         type:"number",
@@ -263,7 +263,7 @@ const Courts = ({data,stadiumId}) => {
                                     <InputNumber max={99} min={-1} addonAfter="时"/>
                                 </Form.Item>
                             </Col>
-                            <Col push={1} span={5}>
+                            <Col push={1} style={{width:`92px`}}>
                                 <Form.Item name="minute"  rules={[
                                     {
                                         type:"number",

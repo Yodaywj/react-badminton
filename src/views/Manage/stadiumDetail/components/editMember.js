@@ -1,6 +1,6 @@
 import {Button, Col, DatePicker, Drawer, Form, Input, InputNumber, message, Row, Space} from 'antd';
 import ReactQuill from "react-quill";
-import React, {useContext} from "react";
+import React, {useContext, useEffect} from "react";
 import dayjs from 'dayjs';
 import 'dayjs/locale/zh-cn';
 import customParseFormat from 'dayjs/plugin/customParseFormat'
@@ -13,7 +13,8 @@ dayjs.extend(customParseFormat);
 const EditMember = ({editing,setEditing,newMembers,setNewMembers}) => {
     const screenWidth = useContext(AppContext);
     const [messageApi, contextHolder] = message.useMessage();
-    const [form] = Form.useForm();
+    const formInstance = Form.useFormInstance();
+    const [form] = Form.useForm(formInstance);
     const onClose = () => {
         setEditing([false,{}]);
     };
@@ -76,15 +77,16 @@ const EditMember = ({editing,setEditing,newMembers,setNewMembers}) => {
         }
         setEditing([false,{}]);
     }
-
-    const fillForm = ()=>{
-        form.setFieldsValue({
-            balance:editing[1].balance,
-            level:editing[1].level,
-            dateTime:[dayjs(editing[1].startTime),dayjs(editing[1].expiredTime)],
-            remarks:editing[1].preRemarks,
-        })
-    }
+    useEffect(()=>{
+        if (editing[1]!=='register'){
+            form.setFieldsValue({
+                balance:editing[1].balance,
+                level:editing[1].level,
+                dateTime:[dayjs(editing[1].startTime),dayjs(editing[1].expiredTime)],
+                remarks:editing[1].preRemarks,
+            })
+        }
+    },[editing])
     return (
         <>
             {contextHolder}
@@ -98,9 +100,6 @@ const EditMember = ({editing,setEditing,newMembers,setNewMembers}) => {
                 }}
                 extra={
                     <Space>
-                        {editing[1]!=='register'&&<Button type="link" onClick={fillForm}>
-                            填写原信息
-                        </Button>}
                         <Button onClick={()=>form.resetFields()}>重置</Button>
                         <Button onClick={handleSubmit} type="primary">
                             提交
@@ -168,11 +167,27 @@ const EditMember = ({editing,setEditing,newMembers,setNewMembers}) => {
                                     },
                                 ]}
                             >
+                                {/*{screenWidth>700?<DatePicker.RangePicker*/}
+                                {/*    locale={locale}*/}
+                                {/*    style={{*/}
+                                {/*        width: '100%',*/}
+                                {/*    }}*/}
+                                {/*    getPopupContainer={(trigger) => trigger.parentElement}*/}
+                                {/*/>:*/}
+                                {/*    <>*/}
+                                {/*        <DatePicker/>*/}
+                                {/*        <DatePicker/>*/}
+                                {/*    </>}*/}
                                 <DatePicker.RangePicker
                                     locale={locale}
                                     style={{
                                         width: '100%',
                                     }}
+                                    showTime={{
+                                        hideDisabledOptions: true,
+                                        defaultValue: [dayjs('00:00:00', 'HH:mm:ss'), dayjs('23:59:59', 'HH:mm:ss')],
+                                    }}
+                                    format="YYYY-MM-DD"
                                     getPopupContainer={(trigger) => trigger.parentElement}
                                 />
                             </Form.Item>

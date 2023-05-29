@@ -10,7 +10,7 @@ import {
     Space,
     DatePicker,
     message,
-    Skeleton, Tooltip, Image
+    Skeleton, Tooltip, Image, Cascader, TimePicker
 } from "antd";
 import {CopyOutlined, LikeOutlined, MessageOutlined, StarFilled, StarOutlined} from "@ant-design/icons";
 import stadium from "../../../assets/badminton-stadium.png";
@@ -24,6 +24,7 @@ import {bookCourt} from "../../../services/bookingLoader";
 import {AppContext} from "../../../index";
 import Icon from "../../../components/icon";
 import {addBookmark, deleteBookmark} from "../../../services/bookmark";
+import options from "./options";
 dayjs.extend(customParseFormat);
 const disabledDate = (current) => {
     const today = dayjs().startOf('day');
@@ -56,8 +57,9 @@ const CollectionCreateForm =  ({open, onCreate,form,onCancel}) => {
                 name="form_in_modal"
             >
                 <Form.Item
-                    name="time"
-                    label="时间"
+                    name="date"
+                    label="日期"
+                    inputreadonly={true}
                     rules={[
                         {
                             required:true,
@@ -65,12 +67,21 @@ const CollectionCreateForm =  ({open, onCreate,form,onCancel}) => {
                     ]}
                 >
                     <DatePicker
-                        format="YYYY-MM-DD HH:mm:ss"
+                        format="YYYY-MM-DD"
                         disabledDate={disabledDate}
-                        showTime={{
-                            defaultValue: dayjs('00:00:00', 'HH:mm:ss'),
-                        }}
                     />
+                </Form.Item>
+                <Form.Item
+                    name="time"
+                    label="时间"
+                    inputreadonly={true}
+                    rules={[
+                        {
+                            required:true,
+                        }
+                    ]}
+                >
+                    <TimePicker format='HH:mm'/>
                 </Form.Item>
                 <Form.Item
                     name="duration"
@@ -137,7 +148,7 @@ const BookingInfo = ({setStadiums,sum,stadiums,isFilter,user,bookmarks})=>{
         if (!user.username){
             message.error("请登录后预订")
         }else {
-            values = {...values,time:values.time.format("YYYY-MM-DD HH:mm:ss"),
+            values = {...values,time:values.date.format("YYYY-MM-DD ")+values.time.format("HH:mm:ss"),
                 id: null,
                 username:user.username,
                 stadiumId:currentBooking[0],
