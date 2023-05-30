@@ -150,7 +150,7 @@ const Chat = ({user}) => {
                 <Row style={{height:`500px`,marginBottom:`8px`}}>
                     <Col>
                         <Row style={{marginBottom:`10px`}}>
-                            <div style={{height:`400px`,width:`750px`,overflow:`auto`}}>
+                            <div style={{height:`430px`,width:`750px`,overflow:`auto`}}>
                                 {content}
                                 <div ref={scrollableRef}></div>
                             </div>
@@ -158,7 +158,7 @@ const Chat = ({user}) => {
                         <Row justify={"center"} style={{marginBottom:`10px`}}>
                             <Tag onClick={()=>setDrawer(true)} style={{cursor:"pointer"}} color={"geekblue"}>{`当前在线人数:${count}`}</Tag>
                         </Row>
-                        <Row style={{height:`70px`,width:`100%`}}>
+                        <Row style={{height:`40px`,width:`100%`}}>
                             <TextArea
                                 onPressEnter={enterSend}
                                 allowClear={true}
