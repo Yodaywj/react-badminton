@@ -2,9 +2,13 @@ import {Button, Col, Form, Input, message, Modal, Radio, Row} from 'antd';
 import React, {useEffect, useState} from 'react';
 import {getCaptcha} from "../services/userInfoLoader";
 const Reset = ({ open, onCreate, onCancel,user,text}) => {
+    // const expirationTime = Date.now() + 60000;
+    // localStorage.setItem('expirationTime', expirationTime);
+    const expirationTime = localStorage.getItem('expirationTime');
+    const remainingTime = expirationTime - Date.now();
     const [form] = Form.useForm();
-    const [countdown, setCountdown] = useState(60);
-    const [isCounting,setIsCounting] = useState(false);
+    const [isCounting,setIsCounting] = useState(!!remainingTime);
+    const [countdown, setCountdown] = useState(isCounting?Math.floor(remainingTime/1000):60);
     const [mail,setMail] = useState(user?user.mail:'');
     useEffect(() => {
         let timer = null;
@@ -14,15 +18,18 @@ const Reset = ({ open, onCreate, onCancel,user,text}) => {
             }, 1000);
         }
 
-        if (countdown === 0) {
+        if (countdown <= 0) {
             clearInterval(timer);
             setIsCounting(false);
             setCountdown(60);
+            localStorage.removeItem('expiration');
         }
 
         return () => clearInterval(timer);
     }, [countdown, isCounting]);
     const getResetCaptcha = (mail,validate,form)=>{
+        const expirationTime = Date.now() + 60000;
+        localStorage.setItem('expirationTime', expirationTime);
         if (form.getFieldError("email").length === 0&& mail.trim() !== ''){
             setIsCounting(true);
             if (text === '快速登录'){
