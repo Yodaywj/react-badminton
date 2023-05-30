@@ -24,7 +24,6 @@ import {bookCourt} from "../../../services/bookingLoader";
 import {AppContext} from "../../../index";
 import Icon from "../../../components/icon";
 import {addBookmark, deleteBookmark} from "../../../services/bookmark";
-import options from "./options";
 dayjs.extend(customParseFormat);
 const disabledDate = (current) => {
     const today = dayjs().startOf('day');
@@ -59,7 +58,6 @@ const CollectionCreateForm =  ({open, onCreate,form,onCancel}) => {
                 <Form.Item
                     name="date"
                     label="日期"
-                    inputreadonly={true}
                     rules={[
                         {
                             required:true,
@@ -67,6 +65,7 @@ const CollectionCreateForm =  ({open, onCreate,form,onCancel}) => {
                     ]}
                 >
                     <DatePicker
+                        inputReadOnly={true}
                         format="YYYY-MM-DD"
                         disabledDate={disabledDate}
                     />
@@ -74,14 +73,13 @@ const CollectionCreateForm =  ({open, onCreate,form,onCancel}) => {
                 <Form.Item
                     name="time"
                     label="时间"
-                    inputreadonly={true}
                     rules={[
                         {
                             required:true,
                         }
                     ]}
                 >
-                    <TimePicker format='HH:mm'/>
+                    <TimePicker inputReadOnly={true} format='HH:mm'/>
                 </Form.Item>
                 <Form.Item
                     name="duration"

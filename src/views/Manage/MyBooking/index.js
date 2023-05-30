@@ -180,7 +180,7 @@ const MyBooking = () => {
     return (
         <>
             {contextHolder}
-            <Drawer width={screenWidth>720?720:screenWidth} closable={screenWidth<720} title="场馆信息" placement="right" onClose={onClose} open={open}>
+            <Drawer width={screenWidth>720?378:screenWidth} closable={screenWidth<720} title="场馆信息" placement="right" onClose={onClose} open={open}>
                 {drawerContent}
             </Drawer>
             <Table scroll={tableScroll} columns={columns} dataSource={bookingData} rowKey={(record) => record.id}/>

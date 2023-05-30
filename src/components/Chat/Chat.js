@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useRef, useId, memo} from "react";
+import React, {useState, useEffect, useRef, useId, memo, useContext} from "react";
 import {Col, FloatButton, Modal, Row, Tag, message as systemMessage, Input, Drawer, List, Avatar} from "antd";
 import useWebSocket from 'react-use-websocket';
 import {CustomerServiceOutlined} from "@ant-design/icons";
@@ -7,9 +7,11 @@ import MyMessage from "./MyMessage";
 import YourMessage from "./YourMessage";
 import { v4 as uuidv4 } from 'uuid';
 import {useSelector} from "react-redux";
+import {AppContext} from "../../index";
 
 const { TextArea } = Input;
 const Chat = ({user}) => {
+    const screenWidth = useContext(AppContext);
     const userInfo = useSelector(state => state.userInfo.userInfo)
     const uuid = uuidv4();
     const randomName = `游客${uuid}`;
@@ -102,6 +104,7 @@ const Chat = ({user}) => {
                 }}
             />
             <Drawer
+                width={screenWidth>720?378:screenWidth}
                 style={{height:`100%`}}
                 zIndex={9999}
                 title="在线用户"

@@ -263,14 +263,14 @@ const Member = ({members,stadiumId}) => {
     }
     return (
         <>
-            <Drawer title={`${drawerMemberName}`} placement="right" onClose={onClose} open={open} width={screenWidth>720?720:screenWidth} closable={screenWidth<720}>
+            <Drawer title={`${drawerMemberName}`} placement="right" onClose={onClose} open={open} width={screenWidth>720?378:screenWidth} closable={screenWidth<720}>
                 <div dangerouslySetInnerHTML={{__html: drawerContent}}/>
             </Drawer>
             <Drawer title={<><Avatar style={{marginRight:'15px'}} icon={<UserOutlined/>}/>用户ID: {userInfo.username}</>}
                     placement="right"
                     onClose={closeInfo}
                     open={showInfo}
-                    width={screenWidth>720?720:screenWidth} closable={screenWidth<720}>
+                    width={screenWidth>720?378:screenWidth} closable={screenWidth<720}>
                 {userExist? <Descriptions
                     bordered
                     column={1}

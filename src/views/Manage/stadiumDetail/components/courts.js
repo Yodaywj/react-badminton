@@ -137,7 +137,7 @@ const Courts = ({data,stadiumId}) => {
     }
     return (
         <>
-            <Drawer width={screenWidth>720?720:screenWidth} closable={screenWidth<720} title={`预订`} open={open} onClose = {()=>{setOpen(false)}}>
+            <Drawer width={screenWidth>720?378:screenWidth} closable={screenWidth<720} title={`预订`} open={open} onClose = {()=>{setOpen(false)}}>
                 {bookingDetail}
             </Drawer>
             <Row justify={"end"}>

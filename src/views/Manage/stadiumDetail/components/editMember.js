@@ -92,7 +92,7 @@ const EditMember = ({editing,setEditing,newMembers,setNewMembers}) => {
             {contextHolder}
             <Drawer
                 title={editing[1]==='register'?`新增会员`:`编辑${editing[1].memberName}的会员信息`}
-                width={screenWidth>720?720:screenWidth}
+                width={screenWidth>720?378:screenWidth}
                 onClose={onClose}
                 open={editing[0]}
                 bodyStyle={{
