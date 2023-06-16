@@ -49,7 +49,7 @@ const BulletinBoard = () => {
             cancelText:`取消`,
             centered:true,
             onOk() {
-                handleDelete(id)
+                handleDelete(id).then();
             },
             onCancel() {
             },
@@ -114,8 +114,13 @@ const BulletinBoard = () => {
     }
     const handleWeight = (event, id) => {
         setBulletins(bulletins.map((newItem) => {
+            let {value} = event.target;
+            value = value.trim();
+            if (isNaN(value)||value===''){
+                value = 0;
+            }else value = parseInt(value);
             if (newItem.id === id) {
-                return {...newItem, weight: parseInt(event.target.value)};
+                return {...newItem, weight: value};
             } else {
                 return newItem;
             }
@@ -234,7 +239,7 @@ const BulletinBoard = () => {
                                         weight:<Input
                                         style={{width:`100px`,marginBottom:`10px`,marginLeft:`5px`}}
                                         key={`${item.id}weight`}
-                                        value={item.weight}
+                                        value={isNaN(item.weight)?'':item.weight}
                                         onChange={(event) => {
                                             handleWeight(event, item.id)
                                         }}

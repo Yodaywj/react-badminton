@@ -5,7 +5,7 @@ const Reset = ({ open, onCreate, onCancel,user,text}) => {
     // const expirationTime = Date.now() + 60000;
     // localStorage.setItem('expirationTime', expirationTime);
     const expirationTime = localStorage.getItem('expirationTime');
-    const remainingTime = expirationTime - Date.now();
+    const remainingTime = parseInt(expirationTime) - Date.now();
     const [form] = Form.useForm();
     const [isCounting,setIsCounting] = useState(!!remainingTime);
     const [countdown, setCountdown] = useState(isCounting?Math.floor(remainingTime/1000):60);
@@ -29,7 +29,7 @@ const Reset = ({ open, onCreate, onCancel,user,text}) => {
     }, [countdown, isCounting]);
     const getResetCaptcha = (mail,validate,form)=>{
         const expirationTime = Date.now() + 60000;
-        localStorage.setItem('expirationTime', expirationTime);
+        localStorage.setItem('expirationTime', expirationTime.toString());
         if (form.getFieldError("email").length === 0&& mail.trim() !== ''){
             setIsCounting(true);
             if (text === '快速登录'){

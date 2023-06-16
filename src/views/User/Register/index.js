@@ -48,14 +48,18 @@ const tailFormItemLayout = {
 };
 const Register = () => {
     //Validation
-    const [countdown, setCountdown] = useState(60);
-    const [isCounting,setIsCounting] = useState(false);
+    const expirationTime = localStorage.getItem('expirationTime');
+    const remainingTime = parseInt(expirationTime) - Date.now();
+    const [isCounting,setIsCounting] = useState(!!remainingTime);
+    const [countdown, setCountdown] = useState(isCounting?Math.floor(remainingTime/1000):60);
     const [mail,setMail] = useState('');
     const [success, setSuccess] = useState(false);
     const [username, setUsername] = useState('')
     const height = useContext(HeightContext)
     const setHeight = height[1];
     const getRegisterCaptcha = (mail,validate,form)=>{
+        const expirationTime = Date.now() + 60000;
+        localStorage.setItem('expirationTime', expirationTime.toString());
         if (form.getFieldError("email").length === 0&& mail.trim() !== ''){
             setIsCounting(true);
             getCaptcha(mail, 'register').then();
@@ -77,7 +81,8 @@ const Register = () => {
             }, 1000);
         }
 
-        if (countdown === 0) {
+        if (countdown <= 0) {
+            localStorage.removeItem('expiration');
             clearInterval(timer);
             setIsCounting(false);
             setCountdown(60);
