@@ -10,9 +10,10 @@ import {AppContext} from "../../index";
 const {Content, Sider } = Layout;
 const Manage = () => {
     const screenWidth = useContext(AppContext);
-    const {user} = useLoaderData();
+    const {user,avatar} = useLoaderData();
     const [userInfo,setUserInfo] = useState(user);
-    const deepData = [userInfo,setUserInfo];
+    const [userAvatar,setUserAvatar] = useState(avatar);
+    const deepData = [userInfo,setUserInfo,userAvatar,setUserAvatar];
     const [collapsed, setCollapsed] = useState(screenWidth <= 700);
     const [siderTheme, setSiderTheme] = useState('light');
     const [mode, setMode] = useState(true);

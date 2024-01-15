@@ -6,6 +6,7 @@ export async function loader() {
     const urlBulletin = `${ROOT_URL}/bulletin-board/show`;
     let user = null;
     let bulletins = [];
+    const jwt = localStorage.getItem("user");
 
     await axios.get(urlBulletin,{withCredentials:true}).then(response => {
         bulletins = response.data.bulletin;
@@ -13,7 +14,7 @@ export async function loader() {
 
     })
 
-    await axios.get(urlSession,{withCredentials:true}).then(response => {
+    await axios.get(urlSession,{withCredentials:true,params:{jwt:jwt?jwt:"null"}}).then(response => {
         if (response.data.result){
             user = response.data.user;
         }else {

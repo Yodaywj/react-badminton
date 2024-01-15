@@ -1,5 +1,13 @@
 const cities = [
     {
+        "label": "Other",
+        "value": "Other",
+        "children": [{
+            "label": "Other",
+            "value": "Other",
+        }]
+    },
+    {
         "label": "安徽",
         "value": "安徽",
         "children": [

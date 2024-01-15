@@ -1,0 +1,8 @@
+#main-box{
+    margin-left: 30vw;
+}
+@media (max-width: 400px){
+    #main-box{
+        margin-left: 15vw;
+    }
+}

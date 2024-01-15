@@ -1,62 +1,73 @@
-import {Avatar, Dropdown, message} from "antd";
+import {Avatar, Button, Dropdown, message} from "antd";
 import {UserOutlined} from "@ant-design/icons";
-import React, {useState} from "react";
-import {Link, useNavigate} from "react-router-dom";
+import React, {useEffect, useState} from "react";
+import {Link, Navigate, useNavigate} from "react-router-dom";
 import {ROOT_URL} from "../utils/constant";
 import axios from "axios";
 import {useDispatch} from "react-redux";
 import {logout} from "../redux/userInfoSlice";
+import ResetButton from "./resetButton";
 
 
-export const UserDropdown = ({user})=> {
+export const UserDropdown = ({user}) => {
     let items = [{}];
     const [messageApi, contextHolder] = message.useMessage();
     const Navigate = useNavigate();
     const [login, setLogin] = useState(!user.username);
     const dispatch = useDispatch();
+    const [success, setSuccess] = useState(false)
+    useEffect(() => {
+        if (success){
+            setSuccess(false)
+            Navigate('/manage/userInfo');
+        }
+    }, [success]);
 
     const handleLogin = async () => {
         const url = `${ROOT_URL}/user/logout`
         let message;
         let result;
-        await axios.delete(url,{withCredentials:true})
+        await axios.delete(url, {withCredentials: true})
             .then(response => {
                 message = response.data.message;
                 result = response.data.result;
+                localStorage.removeItem("user");
             })
             .catch(error => {
                 result = false;
                 message = error.message;
             });
         messageApi.open({
-            type:result? 'success':'error',
+            type: result ? 'success' : 'error',
             content: message,
         })
         setLogin(true);
         dispatch(logout);
-       setTimeout(()=>{ Navigate('/')},1000)
+        setTimeout(() => {
+            Navigate('/')
+        }, 1000)
 
     }
-    if (login){
+    if (login) {
         items = [
             {
                 key: '1',
                 label: (
-                    <Link to={`/user/login`}>
-                        登录
-                    </Link>
+                    <>
+                        <ResetButton setSuccess={setSuccess} isButton={true} button={<Button style={{color:'black'}} type={"link"}>登录</Button>} text={"快速登录"}/>
+                    </>
                 ),
             },
             {
                 key: '2',
                 label: (
                     <Link to={`/user/register`}>
-                        注册
+                        <Button style={{color:'black'}} type={"link"}>注册</Button>
                     </Link>
                 ),
             },
         ];
-    }else {
+    } else {
         items = [
             // {
             //     key: '1',

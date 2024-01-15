@@ -3,7 +3,7 @@ import {Button, message} from "antd";
 import React, {useState} from "react";
 import Reset from "./reset";
 
-const ResetButton = ({text,user,style,setSuccess})=>{
+const ResetButton = ({text,user,style,setSuccess,button,isButton})=>{
     const [open, setOpen] = useState(false);
     const onCreate = async (values) => {
         let state = false;
@@ -15,6 +15,7 @@ const ResetButton = ({text,user,style,setSuccess})=>{
             if (text==='快速登录'){
                 await quickLogin(values.email).then(response=>{
                     if (response.data.result){
+                        localStorage.setItem("user",response.data.message);
                         message.success("登录成功")
                         setTimeout(()=>{setSuccess(true)},1000);
                     }else message.error("登录失败")
@@ -40,9 +41,11 @@ const ResetButton = ({text,user,style,setSuccess})=>{
                 setOpen(false);
             }}
         />
-        <Button style={style} size={"middle"} type={text === "重置密码"?"default":"link"} onClick={()=>setOpen(true)}>
-            {text}
-        </Button>
+        <span onClick={()=>setOpen(true)}>
+            {isButton?button:<Button style={style} size={"middle"} type={text === "重置密码"?"default":"link"}>
+                {text}
+            </Button>}
+        </span>
     </>)
 }
 export default ResetButton;

@@ -51,6 +51,7 @@ const Login = () => {
                     // }
                     setHandleClick(msgSuccess);
                     setTimeout(()=>{setSuccess(true)},1000);
+                    localStorage.setItem("user",response.data.jwt);
                 }else {
                     setHandleClick(errorWrong)
                     handleCaptchaClick();

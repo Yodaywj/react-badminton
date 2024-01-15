@@ -1,16 +1,23 @@
 import {UserContext} from "../index";
-import {useContext, useState} from "react";
-import {Button, Descriptions, Form, Input, message, Radio, Row} from "antd";
+import {useContext, useEffect, useState} from "react";
+import {Avatar, Button, Descriptions, Form, Image, Input, message, Radio, Row, Upload} from "antd";
 import {editUser} from "../../../services/userInfoLoader";
 import ResetButton from "../../../components/resetButton";
+import ImgCrop from 'antd-img-crop';
+import "./index.css"
+import {LoadingOutlined, PlusOutlined} from "@ant-design/icons";
+import {ROOT_URL} from "../../../utils/constant";
 
 const UserInfo = ()=>{
     const deepData = useContext(UserContext);
     const user = deepData[0];
     const setUserInfo = deepData[1];
+    const avatar = deepData[2];
+    const setUserAvatar = deepData[3];
     const {form} = Form.useForm();
     const [isEditing,setIsEditing] = useState(false);
     const {mail,username,nickname,phone,gender} = user
+    const [imageUrl, setImageUrl] = useState();
     const editInfo = ()=>{
         setIsEditing(!isEditing);
     }
@@ -26,10 +33,121 @@ const UserInfo = ()=>{
             }
         })
     }
+    const blobToImage = (blob) => {
+        return new Promise(resolve => {
+            const url = URL.createObjectURL(blob)
+            let img = new Image()
+            img.onload = () => {
+                URL.revokeObjectURL(url)
+                resolve(img)
+            }
+            img.src = url
+        })
+    }
+    /* 头像上传相关函数*/
+    const getBase64 = (img, callback) => {
+        const reader = new FileReader();
+        reader.addEventListener('load', () => callback(reader.result));
+        reader.readAsDataURL(img);
+    };
+    useEffect(()=>{
+        setImageUrl("data:image/jpeg;base64,"+avatar.fileData)
+        const blob = new Blob([avatar.fileData], { type: 'image/jpeg',encoding:'base64' });
+        const reader = new FileReader();
+
+// 设置当读取完成时的回调函数
+        reader.onload = function(event) {
+            // event.target.result 包含Blob的内容
+            const content = event.target.result;
+            setImageUrl(content)
+            console.log(content);
+        };
+
+// 通过FileReader读取Blob的数据
+        reader.readAsDataURL(blob);
+        console.log(blob);
+        const objectURL = URL.createObjectURL(blob);
+
+// 现在，objectURL 可以用作图像的源，例如设置给img标签
+        console.log(objectURL);
+    },[])
+    const beforeUpload = (file) => {
+        const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
+        if (!isJpgOrPng) {
+            message.error('You can only upload JPG/PNG file!').then();
+        }
+        const isLt2M = file.size / 1024 / 1024 < 5;
+        if (!isLt2M) {
+            message.error('Image must smaller than 5MB!').then();
+        }
+        return isJpgOrPng && isLt2M;
+    };
+    const [loading, setLoading] = useState(false);
+    const handleChange = (info) => {
+        if (info.file.status === 'uploading') {
+            setLoading(true);
+            return;
+        }
+        if (info.file.status === 'done') {
+            // Get this url from response in real world.
+            getBase64(info.file.originFileObj, (url) => {
+                setLoading(false);
+                setImageUrl(url);
+            });
+        }
+    };
+    const uploadButton = (
+        <button
+            style={{
+                border: 0,
+                background: 'none',
+                cursor:"pointer",
+            }}
+            type="button"
+        >
+            {loading ? <LoadingOutlined /> : <PlusOutlined />}
+            <div
+                style={{
+                    marginTop: 8,
+                }}
+            >
+                Upload
+            </div>
+        </button>
+    );
+    /* 头像上传相关函数*/
     return (
-        <>
+        <div id={"main-box"}>
             {!isEditing?
-                <Descriptions title="个人信息" column={2}>
+                <Descriptions title="个人信息" column={1}>
+                    <Descriptions.Item>
+                        <ImgCrop rotationSlider>
+                            <Upload
+                                style={{cursor:"pointer"}}
+                                name="avatar"
+                                listType="picture-card"
+                                className="avatar-uploader"
+                                showUploadList={false}
+                                action={`${ROOT_URL}/user/uploadAvatar`}
+                                beforeUpload={beforeUpload}
+                                onChange={handleChange}
+                                data={{username:username}}
+                            >
+                                {avatar ? (
+                                    <img
+                                        src={imageUrl}
+                                        alt="avatar"
+                                        style={{
+                                            cursor:"pointer",
+                                            width: '100%',
+                                        }}
+                                    />
+                                ) : (
+                                    uploadButton
+                                )}
+                            </Upload>
+                        </ImgCrop>
+                    </Descriptions.Item>
                     <Descriptions.Item label="用户名">{username}</Descriptions.Item>
                     <Descriptions.Item label="昵称">{nickname}</Descriptions.Item>
                     <Descriptions.Item label="邮箱">{mail}</Descriptions.Item>
@@ -45,6 +163,33 @@ const UserInfo = ()=>{
                           gender:gender,
                       }}
                 >
+                    <Form.Item
+                        name="avatar"
+                    >
+                        <ImgCrop rotationSlider>
+                            <Upload
+                                name="avatar"
+                                listType="picture-card"
+                                className="avatar-uploader"
+                                showUploadList={false}
+                                action="https://run.mocky.io/v3/435e224c-44fb-4773-9faf-380c5e6a2188"
+                                beforeUpload={beforeUpload}
+                                onChange={handleChange}
+                            >
+                                {imageUrl ? (
+                                    <img
+                                        src={imageUrl}
+                                        alt="avatar"
+                                        style={{
+                                            width: '100%',
+                                        }}
+                                    />
+                                ) : (
+                                    uploadButton
+                                )}
+                            </Upload>
+                        </ImgCrop>
+                    </Form.Item>
                     <Form.Item
                         name="username"
                         label="用户名"
@@ -103,7 +248,7 @@ const UserInfo = ()=>{
                 <ResetButton text = {'重置密码'} user={user}/>
                 <Button style={{marginLeft:`20px`}} type={"primary"} onClick={()=>editInfo()}>{isEditing?`取消`:`编辑信息`}</Button>
             </Row>
-        </>
+        </div>
     );
 }
 

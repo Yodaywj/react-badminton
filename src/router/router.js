@@ -34,6 +34,12 @@ const router = createBrowserRouter([
         loader: homeLoader,
     },
     {
+        path: "/en",
+        element: <Home />,
+        errorElement: <ErrorPage />,
+        loader: homeLoader,
+    },
+    {
         path: "/user",
         element: <User/>,
         loader: userDataLoader,

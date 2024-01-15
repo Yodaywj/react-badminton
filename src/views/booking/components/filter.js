@@ -13,7 +13,10 @@ const CollectionCreateForm =  ({open, onCreate,form,onCancel}) => {
                 form
                     .validateFields()
                     .then((values) => {
-                        const {area,courtNumber,stadiumName} = values;
+                        const {stadiumId,area,courtNumber,stadiumName} = values;
+                        if (stadiumId === undefined || stadiumId === null){
+                            values.stadiumId = ''
+                        }
                         if (area === undefined || area === null){
                             values.area = ["0","0"]
                         }

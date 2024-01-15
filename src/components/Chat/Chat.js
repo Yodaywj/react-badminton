@@ -42,7 +42,7 @@ const Chat = ({user}) => {
         // lastJsonMessage,
         // readyState,
         // getWebSocket,
-    } = useWebSocket( `wss://hiywj.com:8080/chat/${name}/${nickname}/${address}`, {
+    } = useWebSocket( `ws://localhost:8080/chat/${name}/${nickname}/${address}`, {
         onOpen: () => setConnection(true),
         onMessage:(event)=>{
             const uuid = uuidv4();
@@ -58,6 +58,9 @@ const Chat = ({user}) => {
                 newMessage = <MyMessage key={uuid} name={nickname} message={receivedMSG.text}/>
             }else {
                 newMessage = <YourMessage key={uuid} name={receivedMSG.nickname?receivedMSG.nickname:receivedMSG.userId} message={receivedMSG.text}/>
+            }
+            if (receivedMSG.RabbitMQ === true){
+                newMessage = <YourMessage key={uuid} name={"test"} message={receivedMSG.text}/>
             }
             if (receivedMSG.text != null){
                 setContent(content.concat(newMessage))
