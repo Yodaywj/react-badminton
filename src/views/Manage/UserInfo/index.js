@@ -51,25 +51,7 @@ const UserInfo = ()=>{
         reader.readAsDataURL(img);
     };
     useEffect(()=>{
-        setImageUrl("data:image/jpeg;base64,"+avatar.fileData)
-        const blob = new Blob([avatar.fileData], { type: 'image/jpeg',encoding:'base64' });
-        const reader = new FileReader();
 
-// 设置当读取完成时的回调函数
-        reader.onload = function(event) {
-            // event.target.result 包含Blob的内容
-            const content = event.target.result;
-            setImageUrl(content)
-            console.log(content);
-        };
-
-// 通过FileReader读取Blob的数据
-        reader.readAsDataURL(blob);
-        console.log(blob);
-        const objectURL = URL.createObjectURL(blob);
-
-// 现在，objectURL 可以用作图像的源，例如设置给img标签
-        console.log(objectURL);
     },[])
     const beforeUpload = (file) => {
         const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
@@ -133,13 +115,14 @@ const UserInfo = ()=>{
                                 onChange={handleChange}
                                 data={{username:username}}
                             >
-                                {avatar ? (
+                                {!avatar ? (
                                     <img
-                                        src={imageUrl}
+                                        src={"http://localhost:8080/user/getAvatar/Neo_Young"}
                                         alt="avatar"
                                         style={{
                                             cursor:"pointer",
-                                            width: '100%',
+                                            width: '102%',
+                                            borderRadius: '8px',
                                         }}
                                     />
                                 ) : (

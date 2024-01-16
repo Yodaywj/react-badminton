@@ -30,4 +30,12 @@ const resetPassword = (mail,password)=>{
 const quickLogin = (mail)=>{
     return request.post(`/user/quickLogin?mail=${mail}`,{},{withCredentials:true});
 }
-export {editUser,register,getCaptcha,validateCaptcha,resetPassword,quickLogin};
+const getAvatar = async ({params})=>{
+    let result;
+    const username = params.username
+    await request.get(`/user/getAvatar/${username}`).then(response=>{
+        result = response;
+    })
+    return {result}
+}
+export {editUser,register,getCaptcha,validateCaptcha,resetPassword,quickLogin,getAvatar};
